@@ -1,0 +1,88 @@
+language: python
+
+cache: pip
+
+python:
+#  - "2.6"
+#  - "2.7"
+#  - "3.2"
+#  - "3.3"
+#  - "3.4"
+  - "3.5"
+#  - "3.5-dev" # 3.5 development branch
+  - "3.6"
+#  - "3.6-dev" # 3.6 development branch
+#  - "3.7-dev" # 3.7 development branch
+#  - "nightly" # currently points to 3.7-dev
+# PyPy versions
+#  - "pypy"  # PyPy2 2.5.0
+#  - "pypy3" # Pypy3 2.4.0
+#  - "pypy-5.3.1"
+#
+
+env:
+  global:
+  - GH_REF: git@github.com:smarie/python-mini-lambda.git
+
+before_install:
+  - sudo apt-get install pandoc
+  - sudo apt-get install ant
+  - sudo apt-get install ant-optional
+
+install:
+  - pip install -r ci_tools/requirements-setup.txt
+  - pip install -r ci_tools/requirements-test.txt
+  - pip install -r ci_tools/requirements-report.txt
+  - pip install -r ci_tools/requirements-doc.txt
+  - pip install codecov    # https://github.com/codecov/example-python. This is specific to travis integration
+# - pip install coveralls  # this is an alternative to codecov
+
+script:
+#  - coverage run tests.py
+  - python code_generation/mini_lambda_methods_generation.py
+  - pip install .
+
+after_success:
+# ***tests***
+  - pytest --junitxml=reports/junit/junit.xml --html=reports/junit/report.html --cov-report term-missing --cov=./mini_lambda -v mini_lambda/tests/
+# ***reporting***
+#  - junit2html junit.xml testrun.html  output is really not nice
+  - ant -f ci_tools/generate-junit-html.xml  # generates the html for the test results. Actually we dont use it anymore
+  - python ci_tools/generate-junit-badge.py  # generates the badge for the test results
+  - codecov
+  - pylint mini_lambda  # note that at the moment the report is simply lost, we dont transform the result into anything
+# ***documentation***
+  - mkdocs build -f docs/mkdocs.yml
+  - mv reports/junit site/
+  # mkdocs gh-deploy requires special care :
+  # ---grant the possibility to push on the repo---
+  - openssl aes-256-cbc -K $encrypted_fdc2c20d7f8b_key -iv $encrypted_fdc2c20d7f8b_iv -in ci_tools/github_travis_rsa.enc -out ci_tools/github_travis_rsa -d
+  - chmod 600 ci_tools/github_travis_rsa
+  - eval `ssh-agent -s`  # launch the authentication agent
+  - ssh-add ci_tools/github_travis_rsa  # register the key
+  - git config user.name "Automatic Publish"
+  - git config user.email "sylvain.marie@schneider-electric.com"
+  - git remote add gh-remote "${GH_REF}";
+  - git fetch gh-remote && git fetch gh-remote gh-pages:gh-pages;
+  # push but only if this is not a build triggered by a pull request
+  # note: here we use the --dirty flag so that mkdocs does not clean the additional reports that we copied in the site
+  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ] && [ "${TRAVIS_PYTHON_VERSION}" = "3.5" ]; then echo "Pushing to github"; PYTHONPATH=mini_lambda/ mkdocs gh-deploy -v --dirty -f docs/mkdocs.yml --remote-name gh-remote; git push gh-remote gh-pages; fi;
+#  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ] && [ "${TRAVIS_PYTHON_VERSION}" = "3.5" ]; then echo "Pushing to github"; git push gh-remote gh-pages; fi;
+
+deploy:
+  provider: pypi
+  user: "smarie"
+  password:
+    secure: "L4CcfT7Aq4bTiVAkMadR1dHUgU0GEHFphuywP38OpPAofsgf1b/IFIZPT3SDpo5AhbzpDSm0GGgQmITJrFwUlh4K5ubs/QYB3AWQN/w1yEf9T+ON/UcwtJYvjtrMNHV5yNxtDiSmDe6T8pjV0w9210KB7cW0r3Nkjq4A/Vo6bdInMAiK1pSgreuYHqkvDvKytjBnray8UlPQK4Bc1w7ixA91veNvcD+0OlOrSROzb5No0zbZ8+6PVu0Sa6G5gV32cDWxL7sSSbfaFeebZFgoYPaZkPl14IhG/VA9698yZ26owaqI9UqKPnoO/ySisgxmljc0QA7zJksFYCPzjFOUVVmcDnRgJmcMrqg3wrbXJLYAPHoj1jDtd3R6eEXBDV/Z/rdX33YfalfeRiXj2xA6RBeYGscIrfe93PbOfKOl2oAv5So4Guip2gjubXyHH7720PUQu1D8h5kA/GP0OhISwrRc7SVg3gsx31vpQUMMWgryS4B40aVf30VIlruJFD/JNPBEIjH+otZmc1j4PIJ3swWtPgDKijaPkj0isvacCwMH89+DAYR19QyG/fuLZwEm4Vykrruk6s52FPnootWSShluRu6APbPeZ473UV7SaPDDYXt8eZAz4l7GvGz7yVpHLXLS368oUb4L8N3yICtmHha6vRJcFaVsQ6JFFH3S98A="
+  on:
+    tags: true
+    python: 3.5  #only one of the builds have to be deployed
+#  server: https://test.pypi.org/legacy/
+  distributions: "sdist bdist_wheel"
+
+matrix:
+    fast_finish: true
+
+notifications:
+  email:
+    on_success: never  # options: [always|never|change] default: always
