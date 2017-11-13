@@ -6,9 +6,36 @@ Simple lambda functions without `lambda x:` and with string conversion capabilit
 
 This is the readme for developers. The documentation for users is available here: [https://smarie.github.io/python-mini-lambda/](https://smarie.github.io/python-mini-lambda/)
 
-## What's new in the development process
 
-N/A
+## Building from sources + notes on this project's design principles 
+
+This project is basically code generating code generating code :)
+
+The following command performs the first code generation. It updates the `mini_lambda/generated.py` file.
+
+```bash
+python ./code_generation/mini_lambda_methods_generation.py
+```
+
+It is based on a [mako](http://www.makotemplates.org/) template located at `code_generation/mini_lambda_template.mako`.
+
+The generated code contain functions that generate functions when called, such as:
+
+```python
+def __gt__(self, other):
+    """ Returns a new _InputEvaluator performing '<r> > other' on the result <r> of this evaluator's evaluation """
+    def ___gt__(input):
+        # first evaluate the inner function
+        r = self.evaluate(input)
+        # then call the method
+        return r > evaluate(other, input)
+
+    # return a new InputEvaluator of the same type than self, with the new function as inner function
+    return type(self)(___gt__)
+```
+
+So whenever you use the syntax provided, for example when you perform `power2 = x > 2 |_`, it dynamically creates a function (here `___gt__`, that is formally called a 'closure'), that will be called when you will later evaluate the expression on an input, as in `power2(3)`.
+
 
 ## Want to contribute ?
 
