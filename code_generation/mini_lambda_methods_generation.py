@@ -13,9 +13,6 @@ from ordered_set import OrderedSet
 from autoclass import autoclass
 from enforce import runtime_validation
 
-from mini_lambda.base import PRECEDENCE_ADD_SUB, PRECEDENCE_MUL_DIV_ETC, PRECEDENCE_COMPARISON, \
-    PRECEDENCE_EXPONENTIATION, PRECEDENCE_SHIFTS, PRECEDENCE_POS_NEG_BITWISE_NOT
-
 
 @runtime_validation
 @autoclass
@@ -25,7 +22,7 @@ class Override:
                  unbound_method: Optional[Any] = None,
                  pair_operator: Optional[str] = None, is_operator_left: bool = True,
                  uni_operator: Optional[str] = None,
-                 precedence_level: Optional[int] = None
+                 precedence_level: Optional[str] = None
                  ):
         """
         A descriptor for a method to override in _InputEvaluatorGenerated.
@@ -41,8 +38,8 @@ class Override:
         :param pair_operator: for pairwise operators e.g. a * b
         :param is_operator_left:
         :param uni_operator: for self-operator e.g. -x
-        :param precedence_level: the precedence level of the operation. High numbers have higher priority than lower.
-        See https://docs.python.org/3/reference/expressions.html#operator-precedence
+        :param precedence_level: the precedence level of the operation. This is the string representation of the
+        constant in mini_lambda base.py
         """
         pass
 
@@ -186,12 +183,12 @@ def define_what_needs_to_be_written() -> Tuple[Set[Override], Set[OverExc]]:
     # ** Comparable Objects **
     # .__lt__, .__le__, .__eq__, .__ne__, .__gt__, .__ge__
     # to_override.update(__get_all_magic_methods(Set))
-    to_override.update({Override('__lt__', pair_operator='<', precedence_level=PRECEDENCE_COMPARISON),
-                        Override('__le__', pair_operator='<=', precedence_level=PRECEDENCE_COMPARISON),
-                        Override('__eq__', pair_operator='==', precedence_level=PRECEDENCE_COMPARISON),
-                        Override('__ne__', pair_operator='!=', precedence_level=PRECEDENCE_COMPARISON),
-                        Override('__gt__', pair_operator='>', precedence_level=PRECEDENCE_COMPARISON),
-                        Override('__ge__', pair_operator='>=', precedence_level=PRECEDENCE_COMPARISON)})
+    to_override.update({Override('__lt__', pair_operator='<', precedence_level='PRECEDENCE_COMPARISON'),
+                        Override('__le__', pair_operator='<=', precedence_level='PRECEDENCE_COMPARISON'),
+                        Override('__eq__', pair_operator='==', precedence_level='PRECEDENCE_COMPARISON'),
+                        Override('__ne__', pair_operator='!=', precedence_level='PRECEDENCE_COMPARISON'),
+                        Override('__gt__', pair_operator='>', precedence_level='PRECEDENCE_COMPARISON'),
+                        Override('__ge__', pair_operator='>=', precedence_level='PRECEDENCE_COMPARISON')})
 
     # ** Hashable Object **
     # .__hash__
@@ -258,34 +255,34 @@ def define_what_needs_to_be_written() -> Tuple[Set[Override], Set[OverExc]]:
     # .__lshift__, .__rshift__, __rlshift__, __rrshift__
     # .__neg__, .__pos__, .__abs__, .__invert__
     # to_override.update(__get_all_magic_methods(Integral))
-    to_override.update({Override('__add__', pair_operator='+', precedence_level=PRECEDENCE_ADD_SUB),
-                        Override('__radd__', pair_operator='+', is_operator_left=False, precedence_level=PRECEDENCE_ADD_SUB),
-                        Override('__sub__', pair_operator='-', precedence_level=PRECEDENCE_ADD_SUB),
-                        Override('__rsub__', pair_operator='-', is_operator_left=False, precedence_level=PRECEDENCE_ADD_SUB),
-                        Override('__mul__', pair_operator='*', precedence_level=PRECEDENCE_MUL_DIV_ETC),
-                        Override('__rmul__', pair_operator='*', is_operator_left=False, precedence_level=PRECEDENCE_MUL_DIV_ETC),
-                        Override('__truediv__', pair_operator='/', precedence_level=PRECEDENCE_MUL_DIV_ETC),
-                        Override('__rtruediv__', pair_operator='/', is_operator_left=False, precedence_level=PRECEDENCE_MUL_DIV_ETC),
-                        Override('__mod__', pair_operator='%', precedence_level=PRECEDENCE_MUL_DIV_ETC),
-                        Override('__rmod__', pair_operator='%', is_operator_left=False, precedence_level=PRECEDENCE_MUL_DIV_ETC),
+    to_override.update({Override('__add__', pair_operator='+', precedence_level='PRECEDENCE_ADD_SUB'),
+                        Override('__radd__', pair_operator='+', is_operator_left=False, precedence_level='PRECEDENCE_ADD_SUB'),
+                        Override('__sub__', pair_operator='-', precedence_level='PRECEDENCE_ADD_SUB'),
+                        Override('__rsub__', pair_operator='-', is_operator_left=False, precedence_level='PRECEDENCE_ADD_SUB'),
+                        Override('__mul__', pair_operator='*', precedence_level='PRECEDENCE_MUL_DIV_ETC'),
+                        Override('__rmul__', pair_operator='*', is_operator_left=False, precedence_level='PRECEDENCE_MUL_DIV_ETC'),
+                        Override('__truediv__', pair_operator='/', precedence_level='PRECEDENCE_MUL_DIV_ETC'),
+                        Override('__rtruediv__', pair_operator='/', is_operator_left=False, precedence_level='PRECEDENCE_MUL_DIV_ETC'),
+                        Override('__mod__', pair_operator='%', precedence_level='PRECEDENCE_MUL_DIV_ETC'),
+                        Override('__rmod__', pair_operator='%', is_operator_left=False, precedence_level='PRECEDENCE_MUL_DIV_ETC'),
                         Override('__divmod__'),
                         Override('__rdivmod__'),
-                        Override('__pow__', pair_operator='**', precedence_level=PRECEDENCE_EXPONENTIATION),
-                        Override('__rpow__', pair_operator='**', is_operator_left=False, precedence_level=PRECEDENCE_EXPONENTIATION),
-                        Override('__matmul__', pair_operator='@', precedence_level=PRECEDENCE_MUL_DIV_ETC),
+                        Override('__pow__', pair_operator='**', precedence_level='PRECEDENCE_EXPONENTIATION'),
+                        Override('__rpow__', pair_operator='**', is_operator_left=False, precedence_level='PRECEDENCE_EXPONENTIATION'),
+                        Override('__matmul__', pair_operator='@', precedence_level='PRECEDENCE_MUL_DIV_ETC'),
                         # Override('__rmatmul__', operator='@', is_operator_left=False),
-                        Override('__floordiv__', pair_operator='//', precedence_level=PRECEDENCE_MUL_DIV_ETC),
-                        Override('__rfloordiv__', pair_operator='//', is_operator_left=False, precedence_level=PRECEDENCE_MUL_DIV_ETC),
-                        Override('__lshift__', pair_operator='<<', precedence_level=PRECEDENCE_SHIFTS),
-                        Override('__rlshift__', pair_operator='<<', is_operator_left=False, precedence_level=PRECEDENCE_SHIFTS),
-                        Override('__rshift__', pair_operator='>>', precedence_level=PRECEDENCE_SHIFTS),
-                        Override('__rrshift__', pair_operator='>>', is_operator_left=False, precedence_level=PRECEDENCE_SHIFTS),
-                        Override('__rshift__', pair_operator='>>', precedence_level=PRECEDENCE_SHIFTS),
-                        Override('__rshift__', pair_operator='>>', precedence_level=PRECEDENCE_SHIFTS),
-                        Override('__neg__', uni_operator='-', precedence_level=PRECEDENCE_POS_NEG_BITWISE_NOT),
-                        Override('__pos__', uni_operator='+', precedence_level=PRECEDENCE_POS_NEG_BITWISE_NOT),
+                        Override('__floordiv__', pair_operator='//', precedence_level='PRECEDENCE_MUL_DIV_ETC'),
+                        Override('__rfloordiv__', pair_operator='//', is_operator_left=False, precedence_level='PRECEDENCE_MUL_DIV_ETC'),
+                        Override('__lshift__', pair_operator='<<', precedence_level='PRECEDENCE_SHIFTS'),
+                        Override('__rlshift__', pair_operator='<<', is_operator_left=False, precedence_level='PRECEDENCE_SHIFTS'),
+                        Override('__rshift__', pair_operator='>>', precedence_level='PRECEDENCE_SHIFTS'),
+                        Override('__rrshift__', pair_operator='>>', is_operator_left=False, precedence_level='PRECEDENCE_SHIFTS'),
+                        Override('__rshift__', pair_operator='>>', precedence_level='PRECEDENCE_SHIFTS'),
+                        Override('__rshift__', pair_operator='>>', precedence_level='PRECEDENCE_SHIFTS'),
+                        Override('__neg__', uni_operator='-', precedence_level='PRECEDENCE_POS_NEG_BITWISE_NOT'),
+                        Override('__pos__', uni_operator='+', precedence_level='PRECEDENCE_POS_NEG_BITWISE_NOT'),
                         Override('__abs__', unbound_method=abs),
-                        Override('__invert__', uni_operator='~', precedence_level=PRECEDENCE_POS_NEG_BITWISE_NOT),
+                        Override('__invert__', uni_operator='~', precedence_level='PRECEDENCE_POS_NEG_BITWISE_NOT'),
                         })
 
     # ** Boolean types **
