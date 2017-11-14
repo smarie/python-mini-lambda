@@ -37,7 +37,7 @@ numeric_test_1 = -x > x ** 2
 numeric_test_2 = ((1 - 2 * x) <= -x) | (-x > x ** 2)
 ```
 
-If you know python you should feel at home here, except for two things:  `|` is used instead of `or`. We will come back to this later.
+If you know python you should feel at home here, except for the fact that  `|` is used instead of `or`. We will come back to this later.
  
 Once you have created a function, it is still in "edit" mode. It means that calling it will create a new function, it will not evaluate it:
 
