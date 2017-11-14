@@ -5,18 +5,21 @@ import pytest
 import sys
 
 from mini_lambda import InputVar, Len, Str, Int, Repr, Bytes, Sizeof, Hash, Bool, Complex, Float, Oct, Iter, \
-    Any, All, _, Slice, Get, Not
+    Any, All, _, Slice, Get, Not, FunctionDefinitionError
 from math import sin, pi, cos
 from numbers import Real
 
 
 # Iterable: __iter__
+from mini_lambda import L
+
+
 def test_evaluator_iterable():
     """ Iterable: tests that `Iter(li)` leads to a valid evaluator and `iter(li)` raises an exception"""
 
-    li = InputVar(list)
+    li = InputVar('li', list)
 
-    with pytest.raises(NotImplementedError):
+    with pytest.raises(FunctionDefinitionError):
         basic_evaluator = iter(li)
 
     basic_evaluator = Iter(li)
@@ -29,7 +32,7 @@ def test_evaluator_iterable():
 def test_evaluator_iterator():
     """ Iterator/Generator: tests that `next()` leads to a valid evaluator"""
 
-    i = InputVar(Iterator)
+    i = InputVar('i', Iterator)
     next_elt_accessor = next(i)
     next_elt_accessor = next_elt_accessor.as_function()
 
@@ -50,7 +53,7 @@ def test_evaluator_iterator():
 def test_evaluator_iterator_iterable():
     """ Iterable + Iterator: tests that `next(Iter(li))` leads to a valid evaluator"""
 
-    li = InputVar(list)
+    li = InputVar('li', list)
     first_elt_accessor = next(Iter(li))
     first_elt_accessor = first_elt_accessor.as_function()
 
@@ -61,10 +64,10 @@ def test_evaluator_iterator_iterable():
 def test_evaluator_iterable_iterator_and_comparison():
     """ Iterable + Iterator + Comparable : A complex case where the evaluator is `next(Iter(li)) > 0` """
 
-    li = InputVar(list)
+    li = InputVar('li', list)
 
-    first_elt_test = (next(Iter(li)) > 0) | _
-    # first_elt_test = first_elt_test.as_function()
+    first_elt_test = (next(Iter(li)) > 0)
+    first_elt_test = first_elt_test.as_function()
 
     assert first_elt_test([1, 0, 0])
     assert not first_elt_test([0, 0, 0])
@@ -73,9 +76,9 @@ def test_evaluator_iterable_iterator_and_comparison():
 def test_evaluator_comprehension():
     """ List Comprehension : tests that `[i for i in li]` is forbidden and raises the appropriate exception """
 
-    li = InputVar(list)
+    li = InputVar('li', list)
 
-    with pytest.raises(NotImplementedError):
+    with pytest.raises(FunctionDefinitionError):
         a = [i for i in li]
 
 
@@ -83,12 +86,12 @@ def test_evaluator_iterable_any():
     """ Iterable + any operator: Checks that the any operator  raises an exception but that the Any replacement function
     works """
 
-    li = InputVar(list)
+    li = InputVar('li', list)
 
-    with pytest.raises(NotImplementedError):
-        any(li) | _
+    with pytest.raises(FunctionDefinitionError):
+        any(li)
 
-    any_is_true = Any(li) | _
+    any_is_true = _(Any(li))
     assert any_is_true([False, True, False])
     assert not any_is_true([False, False, False])
 
@@ -97,12 +100,12 @@ def test_evaluator_iterable_all():
     """ Iterable + all operator: Checks that the all operator  raises an exception but that the All replacement function
     works """
 
-    li = InputVar(list)
+    li = InputVar('li', list)
 
-    with pytest.raises(NotImplementedError):
-        all(li) | _
+    with pytest.raises(FunctionDefinitionError):
+        all(li)
 
-    all_is_true = All(li) | _
+    all_is_true = _(All(li))
     assert all_is_true([True, True, True])
     assert not all_is_true([False, True, False])
 
@@ -112,10 +115,10 @@ def test_evaluator_repr():
     """ Representable Object : tests that repr() raises the correct error message and that the equivalent Repr()
     works """
 
-    s = InputVar(str)
+    s = InputVar('s', str)
 
     # the repr operator cannot be overloaded
-    with pytest.raises(NotImplementedError):
+    with pytest.raises(FunctionDefinitionError):
         repr(s)
 
     # so we provide this equivalent
@@ -128,7 +131,7 @@ def test_evaluator_repr():
 def test_evaluator_complex_1():
     """ A complex case with a combination of Repr, Len, and comparisons """
 
-    s = InputVar(str)
+    s = InputVar('s', str)
 
     reasonable_string = Repr((2 <= Len(s)) & (Len(s) < 3))
     reasonable_string = reasonable_string.as_function()
@@ -139,10 +142,10 @@ def test_evaluator_complex_1():
 def test_evaluator_str():
     """ Representable Object : tests that str() raises the correct error message and that the equivalent Str() works """
 
-    s = InputVar(str)
+    s = InputVar('s', str)
 
     # the str operator cannot be overloaded
-    with pytest.raises(NotImplementedError):
+    with pytest.raises(FunctionDefinitionError):
         str(s)
 
     # so we provide this equivalent
@@ -156,10 +159,10 @@ def test_evaluator_bytes():
     """ Representable Object : tests that bytes() raises the correct error message and that the equivalent Bytes()
     works """
 
-    s = InputVar(str)
+    s = InputVar('s', str)
 
     # the str operator cannot be overloaded
-    with pytest.raises(NotImplementedError):
+    with pytest.raises(FunctionDefinitionError):
         bytes(s)
 
     # so we provide this equivalent
@@ -173,10 +176,10 @@ def test_evaluator_sizeof():
     """ Object : tests that sys.getsizeof() raises the correct error message and that the equivalent Getsizeof()
     works """
 
-    s = InputVar(str)
+    s = InputVar('s', str)
 
     # the str operator cannot be overloaded
-    with pytest.raises(NotImplementedError):
+    with pytest.raises(FunctionDefinitionError):
         sys.getsizeof(s)
 
     # so we provide this equivalent
@@ -190,16 +193,16 @@ def test_evaluator_sizeof():
 def test_evaluator_comparable():
     """ Comparable Object : tests that lt, le, eq, ne, gt, and ge are correctly supported """
 
-    x = InputVar(float)
+    x = InputVar('x', float)
 
-    is_big = (x > 4.5) | _
+    is_big = _(x > 4.5)
     # is_big = is_big.as_function()
 
     assert is_big(5.2)
     assert not is_big(-1.1)
 
-    is_very_special = ((3.2 <= x) & (x < 4.5) & (x != 4)) | (x == 2) | _
-    # is_very_special = is_very_special.as_function()
+    is_very_special = ((3.2 <= x) & (x < 4.5) & (x != 4)) | (x == 2)
+    is_very_special = is_very_special.as_function()
 
     assert is_very_special(2)
     assert is_very_special(3.4)
@@ -210,7 +213,7 @@ def test_evaluator_comparable():
 def test_evaluator_comparable_normal_function_first():
     """ Tests that the comparison operators works between a function and an evaluator """
 
-    x = InputVar(Real)
+    x = InputVar('x', Real)
 
     hard_validation = cos > x
     hard_validation = hard_validation.as_function()
@@ -220,9 +223,9 @@ def test_evaluator_comparable_normal_function_first():
 
 
 def test_evaluator_comparable_both_evaluators():
-    """ Tests that it works when the first function is not a function converted to valid8 """
+    """ Tests that it works when the first function is not a function converted to mini_lambda """
 
-    x = InputVar(Real)
+    x = InputVar('x', Real)
 
     hard_validation = +x > x ** 2
     hard_validation = hard_validation.as_function()
@@ -235,9 +238,9 @@ def test_evaluator_comparable_both_evaluators():
 def test_evaluator_hashable():
     """ Hashable Object : tests that hash() raises the correct error message and that the equivalent Hash() works """
 
-    x = InputVar(float)
+    x = InputVar('x', float)
 
-    with pytest.raises(NotImplementedError):
+    with pytest.raises(FunctionDefinitionError):
         hash(x)
 
     h = Hash(x)
@@ -252,9 +255,9 @@ def test_evaluator_truth_testable():
     """ Truth-Testable Object : tests that bool() raises the correct error message and that the equivalent Bool()
     works. """
 
-    x = InputVar(float)
+    x = InputVar('x', float)
 
-    with pytest.raises(NotImplementedError):
+    with pytest.raises(FunctionDefinitionError):
         bool(x)
 
     h = Bool(x)
@@ -268,9 +271,9 @@ def test_evaluator_truth_testable_not():
     """ Truth-Testable Object : tests that not x raises the correct error message and that the equivalent x.nnot()
     works. """
 
-    x = InputVar(float)
+    x = InputVar('x', float)
 
-    with pytest.raises(NotImplementedError):
+    with pytest.raises(FunctionDefinitionError):
         not x
 
     h = Not(x)
@@ -283,7 +286,7 @@ def test_evaluator_truth_testable_not():
 def test_evaluator_attribute():
     """ Object: Tests that obj.foo_field works """
 
-    o = InputVar(object)
+    o = InputVar('o', object)
     field_accessor = o.foo_field
     field_accessor = field_accessor.as_function()
 
@@ -303,7 +306,7 @@ def test_evaluator_nonexistent_attribute_2():
     """ Object: Tests that a valid evaluator accessing a nonexistent attribute will behave as expected and raise the
     appropriate exception when evaluated """
 
-    li = InputVar(list)
+    li = InputVar('l', list)
     first_elt_test = li.toto()
     first_elt_test = first_elt_test.as_function()
 
@@ -354,9 +357,9 @@ def test_evaluator_container():
     """ Container Object : tests that `1 in x` raises the correct error message and that the equivalent x.contains()
     works """
 
-    x = InputVar(list)
+    x = InputVar('l', list)
 
-    with pytest.raises(NotImplementedError):
+    with pytest.raises(FunctionDefinitionError):
         is_one_in = 1 in x
 
     is_one_in = x.contains(1)
@@ -370,9 +373,9 @@ def test_evaluator_container():
 def test_evaluator_sized():
     """ Sized Container Object: tests that len() raises the appropriate error but that the equivalent Len() works """
 
-    s = InputVar(str)
+    s = InputVar('s', str)
 
-    with pytest.raises(NotImplementedError):
+    with pytest.raises(FunctionDefinitionError):
         len(s)
 
     string_length = Len(s)
@@ -384,7 +387,7 @@ def test_evaluator_sized():
 def test_evaluator_sized_compared():
     """ Tests that Len(s) > 2 works as well as (2 <= Len(s)) & (Len(s) < 3)"""
 
-    s = InputVar(str)
+    s = InputVar('s', str)
 
     big_string = Len(s) > 2
     big_string = big_string.as_function()
@@ -392,7 +395,7 @@ def test_evaluator_sized_compared():
     assert big_string('tho')
     assert not big_string('r')
 
-    reasonable_string = (2 <= Len(s)) & (Len(s) < 3) | _
+    reasonable_string = L((2 <= Len(s)) & (Len(s) < 3))
     # reasonable_string = reasonable_string.as_function()
 
     assert reasonable_string('th')
@@ -407,7 +410,7 @@ def test_evaluator_sized_compared():
 def test_evaluator_reversible():
     """ Reversible Container Object : tests that `reversed(x)` works """
 
-    x = InputVar(list)
+    x = InputVar('l', list)
 
     reversed_x = reversed(x)
     reversed_x = reversed_x.as_function()
@@ -419,7 +422,7 @@ def test_evaluator_reversible():
 def test_evaluator_mapping():
     """ Mapping Container Object : tests that `x[i]` works"""
 
-    x = InputVar(dict)
+    x = InputVar('d', dict)
 
     item_i_selector = x['i']
     item_i_selector = item_i_selector.as_function()
@@ -445,54 +448,63 @@ def test_evaluator_mapping():
 def test_evaluator_numeric():
     """ Numeric-like Object : tests that +,-,*,/,%,divmod(),pow(),**,@,//,<<,>>,-,+,abs,~ work """
 
-    x = InputVar(int)
+    x = InputVar('x', int)
 
-    add_one = x + 1 |_
+    add_one = _(x + 1)
     assert add_one(1) == 2
 
-    remove_one = x - 1 | _
+    remove_one = _(x - 1)
     assert remove_one(1) == 0
 
-    times_two = x * 2 | _
+    times_two = _(x * 2)
     assert times_two(1) == 2
 
-    div_two = x / 2 | _
+    div_two = _(x / 2)
     assert div_two(1) == 0.5
 
-    neg = x % 2 | _
+    neg = _(x % 2)
     assert neg(3) == 1
 
-    pos = divmod(x, 3) | _
+    pos = _(divmod(x, 3))
     assert pos(16) == (5, 1)
 
-    pow_two = x ** 2 | _
+    pow_two = _(x ** 2)
     assert pow_two(2) == 4
 
-    pow_two = pow(x, 2) | _
+    pow_two = _(pow(x, 2))
     assert pow_two(2) == 4
 
     # TODO matmul : @...
 
-    floor_div_two = x // 2 | _
+    floor_div_two = _(x // 2)
     assert floor_div_two(1) == 0
 
-    lshift_ = 256 << x | _
+    lshift_ = _(256 << x)
     assert lshift_(1) == 512
 
-    rshift_ = 256 >> x | _
+    rshift_ = _(256 >> x)
     assert rshift_(1) == 128
 
-    neg = -x | _
+    neg = _(-x)
     assert neg(3) == -3
 
-    pos = +x | _
+    pos = _(+x)
     assert pos(-16) == -16
 
-    abs_ = abs(x) | _
+    abs_ = _(abs(x))
     assert abs_(-22) == 22
 
-    inv = ~x | _
+    inv = _(~x)
     assert inv(2) == -3
+
+
+def test_evaluator_print_pow():
+    """ Asserts that operator precedence is correctly handled in the case of the power operator which is a bit
+    special, see https://docs.python.org/3/reference/expressions.html#id16 """
+
+    x = InputVar('x', int)
+    po = -x ** -x
+    assert po.to_string() == '-x ** -x'  # and not -x ** (-x)
 
 
 # Type conversion
@@ -500,9 +512,9 @@ def test_evaluator_numeric():
 def test_evaluator_int_convertible():
     """ Int convertible Object : tests that `int` raises the appropriate exception and that equivalent Int() works """
 
-    s = InputVar(float)
+    s = InputVar('x', float)
 
-    with pytest.raises(NotImplementedError):
+    with pytest.raises(FunctionDefinitionError):
         int(s)
 
     to_int = Int(s)
@@ -516,9 +528,9 @@ def test_evaluator_long_convertible():
     """ Long convertible Object : tests that `long` raises the appropriate exception and that equivalent Long()
     works """
 
-    s = InputVar(float)
+    s = InputVar('x', float)
 
-    # with pytest.raises(NotImplementedError):
+    # with pytest.raises(FunctionDefinitionError):
     #     int(s)
 
     to_long = long(s)
@@ -531,9 +543,9 @@ def test_evaluator_float_convertible():
     """ Float convertible Object : tests that `float` raises the appropriate exception and that equivalent Float()
     works """
 
-    s = InputVar(int)
+    s = InputVar('x', int)
 
-    with pytest.raises(NotImplementedError):
+    with pytest.raises(FunctionDefinitionError):
         float(s)
 
     to_float = Float(s)
@@ -546,9 +558,9 @@ def test_evaluator_complex_convertible():
     """ Complex convertible Object : tests that `complex` raises the appropriate exception and that equivalent
     Complex_() works """
 
-    s = InputVar(int)
+    s = InputVar('x', int)
 
-    with pytest.raises(NotImplementedError):
+    with pytest.raises(FunctionDefinitionError):
         complex(s)
 
     to_cpx = Complex(s)
@@ -562,9 +574,9 @@ def test_evaluator_oct_convertible():
     """ oct convertible Object : tests that `oct` raises the appropriate exception and that equivalent Oct()
     works """
 
-    s = InputVar(int)
+    s = InputVar('x', int)
 
-    with pytest.raises(NotImplementedError):
+    with pytest.raises(FunctionDefinitionError):
         oct(s)
 
     to_octal = Oct(s)
@@ -578,9 +590,9 @@ def test_evaluator_index_slice():
     works, and also that Slice works and not slice() """
 
     l = [0,1,2,3,4]
-    x = InputVar(int)
+    x = InputVar('x', int)
 
-    with pytest.raises(NotImplementedError):
+    with pytest.raises(FunctionDefinitionError):
         l[x]
 
     get_view = Get(l,x)
@@ -588,7 +600,7 @@ def test_evaluator_index_slice():
 
     assert get_view(3) == 3
 
-    with pytest.raises(NotImplementedError):
+    with pytest.raises(FunctionDefinitionError):
         l[1:x]
 
     slice_view = Get(l, Slice(1, x))

@@ -19,7 +19,7 @@ python ./code_generation/mini_lambda_methods_generation.py
 
 It is based on a [mako](http://www.makotemplates.org/) template located at `code_generation/mini_lambda_template.mako`.
 
-The generated code contain functions that generate functions when called, such as:
+The generated code contains functions that generate functions when called, such as:
 
 ```python
 def __gt__(self, other):
@@ -34,7 +34,7 @@ def __gt__(self, other):
     return type(self)(___gt__)
 ```
 
-So whenever you use the syntax provided, for example when you perform `power2 = x > 2 |_`, it dynamically creates a function (here `___gt__`, that is formally called a 'closure'), that will be called when you will later evaluate the expression on an input, as in `power2(3)`.
+So whenever you use the syntax provided, for example when you perform `power2 = x > 2 |_`, it dynamically creates a 'closure' function (here `___gt__`), that will be called when you will later evaluate the expression on an input, as in `power2(3)`.
 
 
 ## Want to contribute ?
