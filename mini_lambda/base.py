@@ -21,6 +21,10 @@ PRECEDENCE_BIND_TUP_DISPLAY = 16
 PRECEDENCE_MAX = 17
 
 
+class FunctionDefinitionError(Exception):
+    """ An exception thrown when defining a function incorrectly """
+
+
 class StackableFunctionEvaluator:
     """
     A StackableFunctionEvaluator is a wrapper for a function (self._fun) with a SINGLE argument.
@@ -88,6 +92,18 @@ class StackableFunctionEvaluator:
         """
         return self._str_expr
 
+    def assert_has_same_root_var(self, other: Any):
+        """
+        Asserts that if other is also a StackableFunctionEvaluator, then it has the same root variable
+        :param other:
+        :return:
+        """
+        if isinstance(other, StackableFunctionEvaluator):
+            # check that both work on the same variable
+            if self._root_var != other._root_var:
+                raise FunctionDefinitionError('It is not allowed to combine several variables (x, s, l...) in the same '
+                                              'expression')
+
     def add_unbound_method_to_stack(self, method, *m_args):
         """
         Returns a new StackableFunctionEvaluator whose inner function will be
@@ -98,12 +114,14 @@ class StackableFunctionEvaluator:
         :param m_args: optional args to apply in method calls
         :return:
         """
+        for other in m_args:
+            self.assert_has_same_root_var(other)
 
         def evaluate_inner_function_and_apply_method(input):
             # first evaluate the inner function
             res = self.evaluate(input)
             # then call the method
-            return method(res, *m_args)
+            return method(res, *[evaluate(arg, input) for arg in m_args])
 
         # return a new InputEvaluator of the same type than self, with the new function as inner function
         # Note: we use precedence=None for coma-separated items inside the parenthesis
@@ -124,6 +142,8 @@ class StackableFunctionEvaluator:
         :param m_args: optional args to apply in method calls
         :return:
         """
+        for other in m_args:
+            self.assert_has_same_root_var(other)
 
         def evaluate_inner_function_and_apply_object_method(raw_input):
             # first evaluate the inner function
@@ -131,7 +151,7 @@ class StackableFunctionEvaluator:
             # then retrieve the (bound) method on the result object, from its name
             object_method = getattr(res, method_name)
             # finally call the method
-            return object_method(*m_args)
+            return object_method(*[evaluate(other, input) for other in m_args])
 
         # return a new InputEvaluator of the same type than self, with the new function as inner function
         # Note: we use precedence=None for coma-separated items inside the parenthesis

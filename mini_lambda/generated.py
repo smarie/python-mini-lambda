@@ -3,13 +3,9 @@
 # ----
 from typing import Any
 
-from mini_lambda.base import StackableFunctionEvaluator, evaluate, get_repr
+from mini_lambda.base import StackableFunctionEvaluator, evaluate, get_repr, FunctionDefinitionError
 from mini_lambda.base import PRECEDENCE_ADD_SUB, PRECEDENCE_MUL_DIV_ETC, PRECEDENCE_COMPARISON,     PRECEDENCE_EXPONENTIATION, PRECEDENCE_SHIFTS, PRECEDENCE_POS_NEG_BITWISE_NOT,     PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF
 from sys import getsizeof
-
-
-class FunctionDefinitionError(Exception):
-    """ An exception thrown when defining a function incorrectly """
 
 
 class _LambdaExpressionGenerated(StackableFunctionEvaluator):
@@ -27,18 +23,6 @@ class _LambdaExpressionGenerated(StackableFunctionEvaluator):
      the expected one. For all of them there are two methods: one in the class throwing an exception, and one at
      package-level to provide a replacement (The exception message provides the replacement method name).
     """
-
-    def assert_has_same_root_var(self, other: Any):
-        """
-        Asserts that if other is also a StackableFunctionEvaluator, then it has the same root variable
-        :param other:
-        :return:
-        """
-        if isinstance(other, StackableFunctionEvaluator):
-            # check that both work on the same variable
-            if self._root_var != other._root_var:
-                raise FunctionDefinitionError('It is not allowed to combine several variables (x, s, l...) in the same '
-                                              'expression')
 
     # ******* All magic methods that need to be implemented ********
 
@@ -58,31 +42,31 @@ class _LambdaExpressionGenerated(StackableFunctionEvaluator):
         return type(self)(fun=___next__, precedence_level=PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF, 
                           str_expr=string_expr, root_var=self._root_var)
 
-    def __gt__(self, other):
-        """ Returns a new _LambdaExpression performing '<r> > other' on the result <r> of this evaluator's evaluation """
+    def __lt__(self, other):
+        """ Returns a new _LambdaExpression performing '<r> < other' on the result <r> of this evaluator's evaluation """
         self.assert_has_same_root_var(other)
-        def ___gt__(input):
+        def ___lt__(input):
             # first evaluate the inner function
             r = self.evaluate(input)
             # then call the method
-            return r > evaluate(other, input)
+            return r < evaluate(other, input)
 
         # return a new LambdaExpression of the same type than self, with the new function as inner function
-        string_expr = get_repr(self, PRECEDENCE_COMPARISON) + ' > ' + get_repr(other, PRECEDENCE_COMPARISON)
-        return type(self)(fun=___gt__, precedence_level=PRECEDENCE_COMPARISON, str_expr=string_expr, root_var=self._root_var)
+        string_expr = get_repr(self, PRECEDENCE_COMPARISON) + ' < ' + get_repr(other, PRECEDENCE_COMPARISON)
+        return type(self)(fun=___lt__, precedence_level=PRECEDENCE_COMPARISON, str_expr=string_expr, root_var=self._root_var)
 
-    def __ge__(self, other):
-        """ Returns a new _LambdaExpression performing '<r> >= other' on the result <r> of this evaluator's evaluation """
+    def __le__(self, other):
+        """ Returns a new _LambdaExpression performing '<r> <= other' on the result <r> of this evaluator's evaluation """
         self.assert_has_same_root_var(other)
-        def ___ge__(input):
+        def ___le__(input):
             # first evaluate the inner function
             r = self.evaluate(input)
             # then call the method
-            return r >= evaluate(other, input)
+            return r <= evaluate(other, input)
 
         # return a new LambdaExpression of the same type than self, with the new function as inner function
-        string_expr = get_repr(self, PRECEDENCE_COMPARISON) + ' >= ' + get_repr(other, PRECEDENCE_COMPARISON)
-        return type(self)(fun=___ge__, precedence_level=PRECEDENCE_COMPARISON, str_expr=string_expr, root_var=self._root_var)
+        string_expr = get_repr(self, PRECEDENCE_COMPARISON) + ' <= ' + get_repr(other, PRECEDENCE_COMPARISON)
+        return type(self)(fun=___le__, precedence_level=PRECEDENCE_COMPARISON, str_expr=string_expr, root_var=self._root_var)
 
     def __eq__(self, other):
         """ Returns a new _LambdaExpression performing '<r> == other' on the result <r> of this evaluator's evaluation """
@@ -110,31 +94,31 @@ class _LambdaExpressionGenerated(StackableFunctionEvaluator):
         string_expr = get_repr(self, PRECEDENCE_COMPARISON) + ' != ' + get_repr(other, PRECEDENCE_COMPARISON)
         return type(self)(fun=___ne__, precedence_level=PRECEDENCE_COMPARISON, str_expr=string_expr, root_var=self._root_var)
 
-    def __le__(self, other):
-        """ Returns a new _LambdaExpression performing '<r> <= other' on the result <r> of this evaluator's evaluation """
+    def __gt__(self, other):
+        """ Returns a new _LambdaExpression performing '<r> > other' on the result <r> of this evaluator's evaluation """
         self.assert_has_same_root_var(other)
-        def ___le__(input):
+        def ___gt__(input):
             # first evaluate the inner function
             r = self.evaluate(input)
             # then call the method
-            return r <= evaluate(other, input)
+            return r > evaluate(other, input)
 
         # return a new LambdaExpression of the same type than self, with the new function as inner function
-        string_expr = get_repr(self, PRECEDENCE_COMPARISON) + ' <= ' + get_repr(other, PRECEDENCE_COMPARISON)
-        return type(self)(fun=___le__, precedence_level=PRECEDENCE_COMPARISON, str_expr=string_expr, root_var=self._root_var)
+        string_expr = get_repr(self, PRECEDENCE_COMPARISON) + ' > ' + get_repr(other, PRECEDENCE_COMPARISON)
+        return type(self)(fun=___gt__, precedence_level=PRECEDENCE_COMPARISON, str_expr=string_expr, root_var=self._root_var)
 
-    def __lt__(self, other):
-        """ Returns a new _LambdaExpression performing '<r> < other' on the result <r> of this evaluator's evaluation """
+    def __ge__(self, other):
+        """ Returns a new _LambdaExpression performing '<r> >= other' on the result <r> of this evaluator's evaluation """
         self.assert_has_same_root_var(other)
-        def ___lt__(input):
+        def ___ge__(input):
             # first evaluate the inner function
             r = self.evaluate(input)
             # then call the method
-            return r < evaluate(other, input)
+            return r >= evaluate(other, input)
 
         # return a new LambdaExpression of the same type than self, with the new function as inner function
-        string_expr = get_repr(self, PRECEDENCE_COMPARISON) + ' < ' + get_repr(other, PRECEDENCE_COMPARISON)
-        return type(self)(fun=___lt__, precedence_level=PRECEDENCE_COMPARISON, str_expr=string_expr, root_var=self._root_var)
+        string_expr = get_repr(self, PRECEDENCE_COMPARISON) + ' >= ' + get_repr(other, PRECEDENCE_COMPARISON)
+        return type(self)(fun=___ge__, precedence_level=PRECEDENCE_COMPARISON, str_expr=string_expr, root_var=self._root_var)
 
     def __getattr__(self, *args):
         """ Returns a new _LambdaExpression performing 'getattr(<r>, *args)' on the result <r> of this evaluator's evaluation """
@@ -219,70 +203,18 @@ class _LambdaExpressionGenerated(StackableFunctionEvaluator):
         return type(self)(fun=___missing__, precedence_level=PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF, 
                           str_expr=string_expr, root_var=self._root_var)
 
-    def __truediv__(self, other):
-        """ Returns a new _LambdaExpression performing '<r> / other' on the result <r> of this evaluator's evaluation """
+    def __add__(self, other):
+        """ Returns a new _LambdaExpression performing '<r> + other' on the result <r> of this evaluator's evaluation """
         self.assert_has_same_root_var(other)
-        def ___truediv__(input):
+        def ___add__(input):
             # first evaluate the inner function
             r = self.evaluate(input)
             # then call the method
-            return r / evaluate(other, input)
+            return r + evaluate(other, input)
 
         # return a new LambdaExpression of the same type than self, with the new function as inner function
-        string_expr = get_repr(self, PRECEDENCE_MUL_DIV_ETC) + ' / ' + get_repr(other, PRECEDENCE_MUL_DIV_ETC)
-        return type(self)(fun=___truediv__, precedence_level=PRECEDENCE_MUL_DIV_ETC, str_expr=string_expr, root_var=self._root_var)
-
-    def __rfloordiv__(self, other):
-        """ Returns a new _LambdaExpression performing 'other // <r>' on the result <r> of this evaluator's evaluation """
-        self.assert_has_same_root_var(other)
-        def ___rfloordiv__(input):
-            # first evaluate the inner function
-            r = self.evaluate(input)
-            # then call the method
-            return evaluate(other, input) // r
-
-        # return a new LambdaExpression of the same type than self, with the new function as inner function
-        string_expr = get_repr(other, PRECEDENCE_MUL_DIV_ETC) + ' // ' + get_repr(self, PRECEDENCE_MUL_DIV_ETC)
-        return type(self)(fun=___rfloordiv__, precedence_level=PRECEDENCE_MUL_DIV_ETC, str_expr=string_expr, root_var=self._root_var)
-
-    def __floordiv__(self, other):
-        """ Returns a new _LambdaExpression performing '<r> // other' on the result <r> of this evaluator's evaluation """
-        self.assert_has_same_root_var(other)
-        def ___floordiv__(input):
-            # first evaluate the inner function
-            r = self.evaluate(input)
-            # then call the method
-            return r // evaluate(other, input)
-
-        # return a new LambdaExpression of the same type than self, with the new function as inner function
-        string_expr = get_repr(self, PRECEDENCE_MUL_DIV_ETC) + ' // ' + get_repr(other, PRECEDENCE_MUL_DIV_ETC)
-        return type(self)(fun=___floordiv__, precedence_level=PRECEDENCE_MUL_DIV_ETC, str_expr=string_expr, root_var=self._root_var)
-
-    def __rsub__(self, other):
-        """ Returns a new _LambdaExpression performing 'other - <r>' on the result <r> of this evaluator's evaluation """
-        self.assert_has_same_root_var(other)
-        def ___rsub__(input):
-            # first evaluate the inner function
-            r = self.evaluate(input)
-            # then call the method
-            return evaluate(other, input) - r
-
-        # return a new LambdaExpression of the same type than self, with the new function as inner function
-        string_expr = get_repr(other, PRECEDENCE_ADD_SUB) + ' - ' + get_repr(self, PRECEDENCE_ADD_SUB)
-        return type(self)(fun=___rsub__, precedence_level=PRECEDENCE_ADD_SUB, str_expr=string_expr, root_var=self._root_var)
-
-    def __rpow__(self, other):
-        """ Returns a new _LambdaExpression performing 'other ** <r>' on the result <r> of this evaluator's evaluation """
-        self.assert_has_same_root_var(other)
-        def ___rpow__(input):
-            # first evaluate the inner function
-            r = self.evaluate(input)
-            # then call the method
-            return evaluate(other, input) ** r
-
-        # return a new LambdaExpression of the same type than self, with the new function as inner function
-        string_expr = get_repr(other, PRECEDENCE_EXPONENTIATION) + ' ** ' + get_repr(self, PRECEDENCE_EXPONENTIATION)
-        return type(self)(fun=___rpow__, precedence_level=PRECEDENCE_EXPONENTIATION, str_expr=string_expr, root_var=self._root_var)
+        string_expr = get_repr(self, PRECEDENCE_ADD_SUB) + ' + ' + get_repr(other, PRECEDENCE_ADD_SUB)
+        return type(self)(fun=___add__, precedence_level=PRECEDENCE_ADD_SUB, str_expr=string_expr, root_var=self._root_var)
 
     def __radd__(self, other):
         """ Returns a new _LambdaExpression performing 'other + <r>' on the result <r> of this evaluator's evaluation """
@@ -297,139 +229,31 @@ class _LambdaExpressionGenerated(StackableFunctionEvaluator):
         string_expr = get_repr(other, PRECEDENCE_ADD_SUB) + ' + ' + get_repr(self, PRECEDENCE_ADD_SUB)
         return type(self)(fun=___radd__, precedence_level=PRECEDENCE_ADD_SUB, str_expr=string_expr, root_var=self._root_var)
 
-    def __rdivmod__(self, *args):
-        """ Returns a new _LambdaExpression performing '<r>.__rdivmod__(*args)' on the result <r> of this evaluator's evaluation """
-        # return self.add_bound_method_to_stack('__rdivmod__', *args)
-        for other in args:
-            self.assert_has_same_root_var(other)
-        def ___rdivmod__(input):
-            # first evaluate the inner function
-            r = self.evaluate(input)
-            # then call the method
-            return r.__rdivmod__(*[evaluate(other, input) for other in args])
-
-        # return a new LambdaExpression of the same type than self, with the new function as inner function
-        # Note: we use precedence=None for coma-separated items inside the parenthesis
-        string_expr = get_repr(self, PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF) + '.__rdivmod__(' + ', '.join([get_repr(arg, None) for arg in args]) + ')'
-        return type(self)(fun=___rdivmod__, precedence_level=PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF, 
-                          str_expr=string_expr, root_var=self._root_var)
-
-    def __rmul__(self, other):
-        """ Returns a new _LambdaExpression performing 'other * <r>' on the result <r> of this evaluator's evaluation """
+    def __sub__(self, other):
+        """ Returns a new _LambdaExpression performing '<r> - other' on the result <r> of this evaluator's evaluation """
         self.assert_has_same_root_var(other)
-        def ___rmul__(input):
+        def ___sub__(input):
             # first evaluate the inner function
             r = self.evaluate(input)
             # then call the method
-            return evaluate(other, input) * r
+            return r - evaluate(other, input)
 
         # return a new LambdaExpression of the same type than self, with the new function as inner function
-        string_expr = get_repr(other, PRECEDENCE_MUL_DIV_ETC) + ' * ' + get_repr(self, PRECEDENCE_MUL_DIV_ETC)
-        return type(self)(fun=___rmul__, precedence_level=PRECEDENCE_MUL_DIV_ETC, str_expr=string_expr, root_var=self._root_var)
+        string_expr = get_repr(self, PRECEDENCE_ADD_SUB) + ' - ' + get_repr(other, PRECEDENCE_ADD_SUB)
+        return type(self)(fun=___sub__, precedence_level=PRECEDENCE_ADD_SUB, str_expr=string_expr, root_var=self._root_var)
 
-    def __neg__(self):
-        """ Returns a new _LambdaExpression performing '-<r>' on the result <r> of this evaluator's evaluation """
-        def ___neg__(input):
-            # first evaluate the inner function
-            res = self.evaluate(input)
-            # then call the method
-            return -res
-
-        # return a new LambdaExpression of the same type than self, with the new function as inner function
-        string_expr = '-' + get_repr(self, PRECEDENCE_POS_NEG_BITWISE_NOT)
-        return type(self)(fun=___neg__, precedence_level=PRECEDENCE_POS_NEG_BITWISE_NOT, str_expr=string_expr, root_var=self._root_var)
-
-    def __abs__(self, *args):
-        """ Returns a new _LambdaExpression performing 'abs(<r>, *args)' on the result <r> of this evaluator's evaluation """
-        for other in args:
-            self.assert_has_same_root_var(other)
-        def ___abs__(input):
-            # first evaluate the inner function
-            r = self.evaluate(input)
-            # then call the method
-            return abs(r, *[evaluate(other, input) for other in args])
-
-        # return a new LambdaExpression of the same type than self, with the new function as inner function
-        # Note: we use precedence=None for coma-separated items inside the parenthesis
-        string_expr = 'abs(' + get_repr(self, None) + ', ' + ', '.join([get_repr(arg, None) for arg in args]) + ')'
-        return type(self)(fun=___abs__, precedence_level=PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF, 
-                          str_expr=string_expr, root_var=self._root_var)
-
-    def __pos__(self):
-        """ Returns a new _LambdaExpression performing '+<r>' on the result <r> of this evaluator's evaluation """
-        def ___pos__(input):
-            # first evaluate the inner function
-            res = self.evaluate(input)
-            # then call the method
-            return +res
-
-        # return a new LambdaExpression of the same type than self, with the new function as inner function
-        string_expr = '+' + get_repr(self, PRECEDENCE_POS_NEG_BITWISE_NOT)
-        return type(self)(fun=___pos__, precedence_level=PRECEDENCE_POS_NEG_BITWISE_NOT, str_expr=string_expr, root_var=self._root_var)
-
-    def __matmul__(self, other):
-        """ Returns a new _LambdaExpression performing '<r> @ other' on the result <r> of this evaluator's evaluation """
+    def __rsub__(self, other):
+        """ Returns a new _LambdaExpression performing 'other - <r>' on the result <r> of this evaluator's evaluation """
         self.assert_has_same_root_var(other)
-        def ___matmul__(input):
+        def ___rsub__(input):
             # first evaluate the inner function
             r = self.evaluate(input)
             # then call the method
-            return r @ evaluate(other, input)
+            return evaluate(other, input) - r
 
         # return a new LambdaExpression of the same type than self, with the new function as inner function
-        string_expr = get_repr(self, PRECEDENCE_MUL_DIV_ETC) + ' @ ' + get_repr(other, PRECEDENCE_MUL_DIV_ETC)
-        return type(self)(fun=___matmul__, precedence_level=PRECEDENCE_MUL_DIV_ETC, str_expr=string_expr, root_var=self._root_var)
-
-    def __lshift__(self, other):
-        """ Returns a new _LambdaExpression performing '<r> << other' on the result <r> of this evaluator's evaluation """
-        self.assert_has_same_root_var(other)
-        def ___lshift__(input):
-            # first evaluate the inner function
-            r = self.evaluate(input)
-            # then call the method
-            return r << evaluate(other, input)
-
-        # return a new LambdaExpression of the same type than self, with the new function as inner function
-        string_expr = get_repr(self, PRECEDENCE_SHIFTS) + ' << ' + get_repr(other, PRECEDENCE_SHIFTS)
-        return type(self)(fun=___lshift__, precedence_level=PRECEDENCE_SHIFTS, str_expr=string_expr, root_var=self._root_var)
-
-    def __invert__(self):
-        """ Returns a new _LambdaExpression performing '~<r>' on the result <r> of this evaluator's evaluation """
-        def ___invert__(input):
-            # first evaluate the inner function
-            res = self.evaluate(input)
-            # then call the method
-            return ~res
-
-        # return a new LambdaExpression of the same type than self, with the new function as inner function
-        string_expr = '~' + get_repr(self, PRECEDENCE_POS_NEG_BITWISE_NOT)
-        return type(self)(fun=___invert__, precedence_level=PRECEDENCE_POS_NEG_BITWISE_NOT, str_expr=string_expr, root_var=self._root_var)
-
-    def __rtruediv__(self, other):
-        """ Returns a new _LambdaExpression performing 'other / <r>' on the result <r> of this evaluator's evaluation """
-        self.assert_has_same_root_var(other)
-        def ___rtruediv__(input):
-            # first evaluate the inner function
-            r = self.evaluate(input)
-            # then call the method
-            return evaluate(other, input) / r
-
-        # return a new LambdaExpression of the same type than self, with the new function as inner function
-        string_expr = get_repr(other, PRECEDENCE_MUL_DIV_ETC) + ' / ' + get_repr(self, PRECEDENCE_MUL_DIV_ETC)
-        return type(self)(fun=___rtruediv__, precedence_level=PRECEDENCE_MUL_DIV_ETC, str_expr=string_expr, root_var=self._root_var)
-
-    def __pow__(self, other):
-        """ Returns a new _LambdaExpression performing '<r> ** other' on the result <r> of this evaluator's evaluation """
-        self.assert_has_same_root_var(other)
-        def ___pow__(input):
-            # first evaluate the inner function
-            r = self.evaluate(input)
-            # then call the method
-            return r ** evaluate(other, input)
-
-        # return a new LambdaExpression of the same type than self, with the new function as inner function
-        string_expr = get_repr(self, PRECEDENCE_EXPONENTIATION) + ' ** ' + get_repr(other, PRECEDENCE_EXPONENTIATION)
-        return type(self)(fun=___pow__, precedence_level=PRECEDENCE_EXPONENTIATION, str_expr=string_expr, root_var=self._root_var)
+        string_expr = get_repr(other, PRECEDENCE_ADD_SUB) + ' - ' + get_repr(self, PRECEDENCE_ADD_SUB)
+        return type(self)(fun=___rsub__, precedence_level=PRECEDENCE_ADD_SUB, str_expr=string_expr, root_var=self._root_var)
 
     def __mul__(self, other):
         """ Returns a new _LambdaExpression performing '<r> * other' on the result <r> of this evaluator's evaluation """
@@ -444,31 +268,44 @@ class _LambdaExpressionGenerated(StackableFunctionEvaluator):
         string_expr = get_repr(self, PRECEDENCE_MUL_DIV_ETC) + ' * ' + get_repr(other, PRECEDENCE_MUL_DIV_ETC)
         return type(self)(fun=___mul__, precedence_level=PRECEDENCE_MUL_DIV_ETC, str_expr=string_expr, root_var=self._root_var)
 
-    def __rshift__(self, other):
-        """ Returns a new _LambdaExpression performing '<r> >> other' on the result <r> of this evaluator's evaluation """
+    def __rmul__(self, other):
+        """ Returns a new _LambdaExpression performing 'other * <r>' on the result <r> of this evaluator's evaluation """
         self.assert_has_same_root_var(other)
-        def ___rshift__(input):
+        def ___rmul__(input):
             # first evaluate the inner function
             r = self.evaluate(input)
             # then call the method
-            return r >> evaluate(other, input)
+            return evaluate(other, input) * r
 
         # return a new LambdaExpression of the same type than self, with the new function as inner function
-        string_expr = get_repr(self, PRECEDENCE_SHIFTS) + ' >> ' + get_repr(other, PRECEDENCE_SHIFTS)
-        return type(self)(fun=___rshift__, precedence_level=PRECEDENCE_SHIFTS, str_expr=string_expr, root_var=self._root_var)
+        string_expr = get_repr(other, PRECEDENCE_MUL_DIV_ETC) + ' * ' + get_repr(self, PRECEDENCE_MUL_DIV_ETC)
+        return type(self)(fun=___rmul__, precedence_level=PRECEDENCE_MUL_DIV_ETC, str_expr=string_expr, root_var=self._root_var)
 
-    def __add__(self, other):
-        """ Returns a new _LambdaExpression performing '<r> + other' on the result <r> of this evaluator's evaluation """
+    def __truediv__(self, other):
+        """ Returns a new _LambdaExpression performing '<r> / other' on the result <r> of this evaluator's evaluation """
         self.assert_has_same_root_var(other)
-        def ___add__(input):
+        def ___truediv__(input):
             # first evaluate the inner function
             r = self.evaluate(input)
             # then call the method
-            return r + evaluate(other, input)
+            return r / evaluate(other, input)
 
         # return a new LambdaExpression of the same type than self, with the new function as inner function
-        string_expr = get_repr(self, PRECEDENCE_ADD_SUB) + ' + ' + get_repr(other, PRECEDENCE_ADD_SUB)
-        return type(self)(fun=___add__, precedence_level=PRECEDENCE_ADD_SUB, str_expr=string_expr, root_var=self._root_var)
+        string_expr = get_repr(self, PRECEDENCE_MUL_DIV_ETC) + ' / ' + get_repr(other, PRECEDENCE_MUL_DIV_ETC)
+        return type(self)(fun=___truediv__, precedence_level=PRECEDENCE_MUL_DIV_ETC, str_expr=string_expr, root_var=self._root_var)
+
+    def __rtruediv__(self, other):
+        """ Returns a new _LambdaExpression performing 'other / <r>' on the result <r> of this evaluator's evaluation """
+        self.assert_has_same_root_var(other)
+        def ___rtruediv__(input):
+            # first evaluate the inner function
+            r = self.evaluate(input)
+            # then call the method
+            return evaluate(other, input) / r
+
+        # return a new LambdaExpression of the same type than self, with the new function as inner function
+        string_expr = get_repr(other, PRECEDENCE_MUL_DIV_ETC) + ' / ' + get_repr(self, PRECEDENCE_MUL_DIV_ETC)
+        return type(self)(fun=___rtruediv__, precedence_level=PRECEDENCE_MUL_DIV_ETC, str_expr=string_expr, root_var=self._root_var)
 
     def __mod__(self, other):
         """ Returns a new _LambdaExpression performing '<r> % other' on the result <r> of this evaluator's evaluation """
@@ -482,6 +319,19 @@ class _LambdaExpressionGenerated(StackableFunctionEvaluator):
         # return a new LambdaExpression of the same type than self, with the new function as inner function
         string_expr = get_repr(self, PRECEDENCE_MUL_DIV_ETC) + ' % ' + get_repr(other, PRECEDENCE_MUL_DIV_ETC)
         return type(self)(fun=___mod__, precedence_level=PRECEDENCE_MUL_DIV_ETC, str_expr=string_expr, root_var=self._root_var)
+
+    def __rmod__(self, other):
+        """ Returns a new _LambdaExpression performing 'other % <r>' on the result <r> of this evaluator's evaluation """
+        self.assert_has_same_root_var(other)
+        def ___rmod__(input):
+            # first evaluate the inner function
+            r = self.evaluate(input)
+            # then call the method
+            return evaluate(other, input) % r
+
+        # return a new LambdaExpression of the same type than self, with the new function as inner function
+        string_expr = get_repr(other, PRECEDENCE_MUL_DIV_ETC) + ' % ' + get_repr(self, PRECEDENCE_MUL_DIV_ETC)
+        return type(self)(fun=___rmod__, precedence_level=PRECEDENCE_MUL_DIV_ETC, str_expr=string_expr, root_var=self._root_var)
 
     def __divmod__(self, *args):
         """ Returns a new _LambdaExpression performing '<r>.__divmod__(*args)' on the result <r> of this evaluator's evaluation """
@@ -500,31 +350,100 @@ class _LambdaExpressionGenerated(StackableFunctionEvaluator):
         return type(self)(fun=___divmod__, precedence_level=PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF, 
                           str_expr=string_expr, root_var=self._root_var)
 
-    def __sub__(self, other):
-        """ Returns a new _LambdaExpression performing '<r> - other' on the result <r> of this evaluator's evaluation """
-        self.assert_has_same_root_var(other)
-        def ___sub__(input):
+    def __rdivmod__(self, *args):
+        """ Returns a new _LambdaExpression performing '<r>.__rdivmod__(*args)' on the result <r> of this evaluator's evaluation """
+        # return self.add_bound_method_to_stack('__rdivmod__', *args)
+        for other in args:
+            self.assert_has_same_root_var(other)
+        def ___rdivmod__(input):
             # first evaluate the inner function
             r = self.evaluate(input)
             # then call the method
-            return r - evaluate(other, input)
+            return r.__rdivmod__(*[evaluate(other, input) for other in args])
 
         # return a new LambdaExpression of the same type than self, with the new function as inner function
-        string_expr = get_repr(self, PRECEDENCE_ADD_SUB) + ' - ' + get_repr(other, PRECEDENCE_ADD_SUB)
-        return type(self)(fun=___sub__, precedence_level=PRECEDENCE_ADD_SUB, str_expr=string_expr, root_var=self._root_var)
+        # Note: we use precedence=None for coma-separated items inside the parenthesis
+        string_expr = get_repr(self, PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF) + '.__rdivmod__(' + ', '.join([get_repr(arg, None) for arg in args]) + ')'
+        return type(self)(fun=___rdivmod__, precedence_level=PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF, 
+                          str_expr=string_expr, root_var=self._root_var)
 
-    def __rrshift__(self, other):
-        """ Returns a new _LambdaExpression performing 'other >> <r>' on the result <r> of this evaluator's evaluation """
+    def __pow__(self, other):
+        """ Returns a new _LambdaExpression performing '<r> ** other' on the result <r> of this evaluator's evaluation """
         self.assert_has_same_root_var(other)
-        def ___rrshift__(input):
+        def ___pow__(input):
             # first evaluate the inner function
             r = self.evaluate(input)
             # then call the method
-            return evaluate(other, input) >> r
+            return r ** evaluate(other, input)
 
         # return a new LambdaExpression of the same type than self, with the new function as inner function
-        string_expr = get_repr(other, PRECEDENCE_SHIFTS) + ' >> ' + get_repr(self, PRECEDENCE_SHIFTS)
-        return type(self)(fun=___rrshift__, precedence_level=PRECEDENCE_SHIFTS, str_expr=string_expr, root_var=self._root_var)
+        string_expr = get_repr(self, PRECEDENCE_EXPONENTIATION) + ' ** ' + get_repr(other, PRECEDENCE_EXPONENTIATION)
+        return type(self)(fun=___pow__, precedence_level=PRECEDENCE_EXPONENTIATION, str_expr=string_expr, root_var=self._root_var)
+
+    def __rpow__(self, other):
+        """ Returns a new _LambdaExpression performing 'other ** <r>' on the result <r> of this evaluator's evaluation """
+        self.assert_has_same_root_var(other)
+        def ___rpow__(input):
+            # first evaluate the inner function
+            r = self.evaluate(input)
+            # then call the method
+            return evaluate(other, input) ** r
+
+        # return a new LambdaExpression of the same type than self, with the new function as inner function
+        string_expr = get_repr(other, PRECEDENCE_EXPONENTIATION) + ' ** ' + get_repr(self, PRECEDENCE_EXPONENTIATION)
+        return type(self)(fun=___rpow__, precedence_level=PRECEDENCE_EXPONENTIATION, str_expr=string_expr, root_var=self._root_var)
+
+    def __matmul__(self, other):
+        """ Returns a new _LambdaExpression performing '<r> @ other' on the result <r> of this evaluator's evaluation """
+        self.assert_has_same_root_var(other)
+        def ___matmul__(input):
+            # first evaluate the inner function
+            r = self.evaluate(input)
+            # then call the method
+            return r @ evaluate(other, input)
+
+        # return a new LambdaExpression of the same type than self, with the new function as inner function
+        string_expr = get_repr(self, PRECEDENCE_MUL_DIV_ETC) + ' @ ' + get_repr(other, PRECEDENCE_MUL_DIV_ETC)
+        return type(self)(fun=___matmul__, precedence_level=PRECEDENCE_MUL_DIV_ETC, str_expr=string_expr, root_var=self._root_var)
+
+    def __floordiv__(self, other):
+        """ Returns a new _LambdaExpression performing '<r> // other' on the result <r> of this evaluator's evaluation """
+        self.assert_has_same_root_var(other)
+        def ___floordiv__(input):
+            # first evaluate the inner function
+            r = self.evaluate(input)
+            # then call the method
+            return r // evaluate(other, input)
+
+        # return a new LambdaExpression of the same type than self, with the new function as inner function
+        string_expr = get_repr(self, PRECEDENCE_MUL_DIV_ETC) + ' // ' + get_repr(other, PRECEDENCE_MUL_DIV_ETC)
+        return type(self)(fun=___floordiv__, precedence_level=PRECEDENCE_MUL_DIV_ETC, str_expr=string_expr, root_var=self._root_var)
+
+    def __rfloordiv__(self, other):
+        """ Returns a new _LambdaExpression performing 'other // <r>' on the result <r> of this evaluator's evaluation """
+        self.assert_has_same_root_var(other)
+        def ___rfloordiv__(input):
+            # first evaluate the inner function
+            r = self.evaluate(input)
+            # then call the method
+            return evaluate(other, input) // r
+
+        # return a new LambdaExpression of the same type than self, with the new function as inner function
+        string_expr = get_repr(other, PRECEDENCE_MUL_DIV_ETC) + ' // ' + get_repr(self, PRECEDENCE_MUL_DIV_ETC)
+        return type(self)(fun=___rfloordiv__, precedence_level=PRECEDENCE_MUL_DIV_ETC, str_expr=string_expr, root_var=self._root_var)
+
+    def __lshift__(self, other):
+        """ Returns a new _LambdaExpression performing '<r> << other' on the result <r> of this evaluator's evaluation """
+        self.assert_has_same_root_var(other)
+        def ___lshift__(input):
+            # first evaluate the inner function
+            r = self.evaluate(input)
+            # then call the method
+            return r << evaluate(other, input)
+
+        # return a new LambdaExpression of the same type than self, with the new function as inner function
+        string_expr = get_repr(self, PRECEDENCE_SHIFTS) + ' << ' + get_repr(other, PRECEDENCE_SHIFTS)
+        return type(self)(fun=___lshift__, precedence_level=PRECEDENCE_SHIFTS, str_expr=string_expr, root_var=self._root_var)
 
     def __rlshift__(self, other):
         """ Returns a new _LambdaExpression performing 'other << <r>' on the result <r> of this evaluator's evaluation """
@@ -539,35 +458,83 @@ class _LambdaExpressionGenerated(StackableFunctionEvaluator):
         string_expr = get_repr(other, PRECEDENCE_SHIFTS) + ' << ' + get_repr(self, PRECEDENCE_SHIFTS)
         return type(self)(fun=___rlshift__, precedence_level=PRECEDENCE_SHIFTS, str_expr=string_expr, root_var=self._root_var)
 
-    def __rmod__(self, other):
-        """ Returns a new _LambdaExpression performing 'other % <r>' on the result <r> of this evaluator's evaluation """
+    def __rshift__(self, other):
+        """ Returns a new _LambdaExpression performing '<r> >> other' on the result <r> of this evaluator's evaluation """
         self.assert_has_same_root_var(other)
-        def ___rmod__(input):
+        def ___rshift__(input):
             # first evaluate the inner function
             r = self.evaluate(input)
             # then call the method
-            return evaluate(other, input) % r
+            return r >> evaluate(other, input)
 
         # return a new LambdaExpression of the same type than self, with the new function as inner function
-        string_expr = get_repr(other, PRECEDENCE_MUL_DIV_ETC) + ' % ' + get_repr(self, PRECEDENCE_MUL_DIV_ETC)
-        return type(self)(fun=___rmod__, precedence_level=PRECEDENCE_MUL_DIV_ETC, str_expr=string_expr, root_var=self._root_var)
+        string_expr = get_repr(self, PRECEDENCE_SHIFTS) + ' >> ' + get_repr(other, PRECEDENCE_SHIFTS)
+        return type(self)(fun=___rshift__, precedence_level=PRECEDENCE_SHIFTS, str_expr=string_expr, root_var=self._root_var)
 
-    def __coerce__(self, *args):
-        """ Returns a new _LambdaExpression performing '<r>.__coerce__(*args)' on the result <r> of this evaluator's evaluation """
-        # return self.add_bound_method_to_stack('__coerce__', *args)
-        for other in args:
-            self.assert_has_same_root_var(other)
-        def ___coerce__(input):
+    def __rrshift__(self, other):
+        """ Returns a new _LambdaExpression performing 'other >> <r>' on the result <r> of this evaluator's evaluation """
+        self.assert_has_same_root_var(other)
+        def ___rrshift__(input):
             # first evaluate the inner function
             r = self.evaluate(input)
             # then call the method
-            return r.__coerce__(*[evaluate(other, input) for other in args])
+            return evaluate(other, input) >> r
+
+        # return a new LambdaExpression of the same type than self, with the new function as inner function
+        string_expr = get_repr(other, PRECEDENCE_SHIFTS) + ' >> ' + get_repr(self, PRECEDENCE_SHIFTS)
+        return type(self)(fun=___rrshift__, precedence_level=PRECEDENCE_SHIFTS, str_expr=string_expr, root_var=self._root_var)
+
+    def __neg__(self):
+        """ Returns a new _LambdaExpression performing '-<r>' on the result <r> of this evaluator's evaluation """
+        def ___neg__(input):
+            # first evaluate the inner function
+            res = self.evaluate(input)
+            # then call the method
+            return -res
+
+        # return a new LambdaExpression of the same type than self, with the new function as inner function
+        string_expr = '-' + get_repr(self, PRECEDENCE_POS_NEG_BITWISE_NOT)
+        return type(self)(fun=___neg__, precedence_level=PRECEDENCE_POS_NEG_BITWISE_NOT, str_expr=string_expr, root_var=self._root_var)
+
+    def __pos__(self):
+        """ Returns a new _LambdaExpression performing '+<r>' on the result <r> of this evaluator's evaluation """
+        def ___pos__(input):
+            # first evaluate the inner function
+            res = self.evaluate(input)
+            # then call the method
+            return +res
+
+        # return a new LambdaExpression of the same type than self, with the new function as inner function
+        string_expr = '+' + get_repr(self, PRECEDENCE_POS_NEG_BITWISE_NOT)
+        return type(self)(fun=___pos__, precedence_level=PRECEDENCE_POS_NEG_BITWISE_NOT, str_expr=string_expr, root_var=self._root_var)
+
+    def __abs__(self, *args):
+        """ Returns a new _LambdaExpression performing 'abs(<r>, *args)' on the result <r> of this evaluator's evaluation """
+        for other in args:
+            self.assert_has_same_root_var(other)
+        def ___abs__(input):
+            # first evaluate the inner function
+            r = self.evaluate(input)
+            # then call the method
+            return abs(r, *[evaluate(other, input) for other in args])
 
         # return a new LambdaExpression of the same type than self, with the new function as inner function
         # Note: we use precedence=None for coma-separated items inside the parenthesis
-        string_expr = get_repr(self, PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF) + '.__coerce__(' + ', '.join([get_repr(arg, None) for arg in args]) + ')'
-        return type(self)(fun=___coerce__, precedence_level=PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF, 
+        string_expr = 'abs(' + get_repr(self, None) + ', ' + ', '.join([get_repr(arg, None) for arg in args]) + ')'
+        return type(self)(fun=___abs__, precedence_level=PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF, 
                           str_expr=string_expr, root_var=self._root_var)
+
+    def __invert__(self):
+        """ Returns a new _LambdaExpression performing '~<r>' on the result <r> of this evaluator's evaluation """
+        def ___invert__(input):
+            # first evaluate the inner function
+            res = self.evaluate(input)
+            # then call the method
+            return ~res
+
+        # return a new LambdaExpression of the same type than self, with the new function as inner function
+        string_expr = '~' + get_repr(self, PRECEDENCE_POS_NEG_BITWISE_NOT)
+        return type(self)(fun=___invert__, precedence_level=PRECEDENCE_POS_NEG_BITWISE_NOT, str_expr=string_expr, root_var=self._root_var)
 
     def __trunc__(self, *args):
         """ Returns a new _LambdaExpression performing '<r>.__trunc__(*args)' on the result <r> of this evaluator's evaluation """
@@ -586,6 +553,23 @@ class _LambdaExpressionGenerated(StackableFunctionEvaluator):
         return type(self)(fun=___trunc__, precedence_level=PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF, 
                           str_expr=string_expr, root_var=self._root_var)
 
+    def __coerce__(self, *args):
+        """ Returns a new _LambdaExpression performing '<r>.__coerce__(*args)' on the result <r> of this evaluator's evaluation """
+        # return self.add_bound_method_to_stack('__coerce__', *args)
+        for other in args:
+            self.assert_has_same_root_var(other)
+        def ___coerce__(input):
+            # first evaluate the inner function
+            r = self.evaluate(input)
+            # then call the method
+            return r.__coerce__(*[evaluate(other, input) for other in args])
+
+        # return a new LambdaExpression of the same type than self, with the new function as inner function
+        # Note: we use precedence=None for coma-separated items inside the parenthesis
+        string_expr = get_repr(self, PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF) + '.__coerce__(' + ', '.join([get_repr(arg, None) for arg in args]) + ')'
+        return type(self)(fun=___coerce__, precedence_level=PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF, 
+                          str_expr=string_expr, root_var=self._root_var)
+
     # ******* All magic methods that need to raise an exception ********
     def __iter__(self, *args):
         """
@@ -596,6 +580,19 @@ class _LambdaExpressionGenerated(StackableFunctionEvaluator):
                                       ' error when its output is not directly an object of the type it expects.'
                                       'Please use the Iter() method provided at mini_lambda package'
                                       ' level instead. If you did not use __iter__ in your expression, you '
+                                      'probably used a standard method such as math.log(x) instead of a method '
+                                      ' converted to mini_lambda such as Log(x). Please check the documentation for '
+                                      'details.')
+
+    def __str__(self, *args):
+        """
+        This magic method can not be used on an _LambdaExpression, because unfortunately python checks the
+        result type and does not allow it to be a custom type.
+        """
+        raise FunctionDefinitionError('__str__ is not supported by _LambdaExpression, since python raises an'
+                                      ' error when its output is not directly an object of the type it expects.'
+                                      'Please use the Str() method provided at mini_lambda package'
+                                      ' level instead. If you did not use __str__ in your expression, you '
                                       'probably used a standard method such as math.log(x) instead of a method '
                                       ' converted to mini_lambda such as Log(x). Please check the documentation for '
                                       'details.')
@@ -613,15 +610,15 @@ class _LambdaExpressionGenerated(StackableFunctionEvaluator):
                                       ' converted to mini_lambda such as Log(x). Please check the documentation for '
                                       'details.')
 
-    def __str__(self, *args):
+    def __bytes__(self, *args):
         """
         This magic method can not be used on an _LambdaExpression, because unfortunately python checks the
         result type and does not allow it to be a custom type.
         """
-        raise FunctionDefinitionError('__str__ is not supported by _LambdaExpression, since python raises an'
+        raise FunctionDefinitionError('__bytes__ is not supported by _LambdaExpression, since python raises an'
                                       ' error when its output is not directly an object of the type it expects.'
-                                      'Please use the Str() method provided at mini_lambda package'
-                                      ' level instead. If you did not use __str__ in your expression, you '
+                                      'Please use the Bytes() method provided at mini_lambda package'
+                                      ' level instead. If you did not use __bytes__ in your expression, you '
                                       'probably used a standard method such as math.log(x) instead of a method '
                                       ' converted to mini_lambda such as Log(x). Please check the documentation for '
                                       'details.')
@@ -648,19 +645,6 @@ class _LambdaExpressionGenerated(StackableFunctionEvaluator):
                                       ' error when its output is not directly an object of the type it expects.'
                                       'Please use the Sizeof() method provided at mini_lambda package'
                                       ' level instead. If you did not use __sizeof__ in your expression, you '
-                                      'probably used a standard method such as math.log(x) instead of a method '
-                                      ' converted to mini_lambda such as Log(x). Please check the documentation for '
-                                      'details.')
-
-    def __bytes__(self, *args):
-        """
-        This magic method can not be used on an _LambdaExpression, because unfortunately python checks the
-        result type and does not allow it to be a custom type.
-        """
-        raise FunctionDefinitionError('__bytes__ is not supported by _LambdaExpression, since python raises an'
-                                      ' error when its output is not directly an object of the type it expects.'
-                                      'Please use the Bytes() method provided at mini_lambda package'
-                                      ' level instead. If you did not use __bytes__ in your expression, you '
                                       'probably used a standard method such as math.log(x) instead of a method '
                                       ' converted to mini_lambda such as Log(x). Please check the documentation for '
                                       'details.')
@@ -704,15 +688,15 @@ class _LambdaExpressionGenerated(StackableFunctionEvaluator):
                                       ' converted to mini_lambda such as Log(x). Please check the documentation for '
                                       'details.')
 
-    def __oct__(self, *args):
+    def __int__(self, *args):
         """
         This magic method can not be used on an _LambdaExpression, because unfortunately python checks the
         result type and does not allow it to be a custom type.
         """
-        raise FunctionDefinitionError('__oct__ is not supported by _LambdaExpression, since python raises an'
+        raise FunctionDefinitionError('__int__ is not supported by _LambdaExpression, since python raises an'
                                       ' error when its output is not directly an object of the type it expects.'
-                                      'Please use the Oct() method provided at mini_lambda package'
-                                      ' level instead. If you did not use __oct__ in your expression, you '
+                                      'Please use the Int() method provided at mini_lambda package'
+                                      ' level instead. If you did not use __int__ in your expression, you '
                                       'probably used a standard method such as math.log(x) instead of a method '
                                       ' converted to mini_lambda such as Log(x). Please check the documentation for '
                                       'details.')
@@ -730,32 +714,6 @@ class _LambdaExpressionGenerated(StackableFunctionEvaluator):
                                       ' converted to mini_lambda such as Log(x). Please check the documentation for '
                                       'details.')
 
-    def __hex__(self, *args):
-        """
-        This magic method can not be used on an _LambdaExpression, because unfortunately python checks the
-        result type and does not allow it to be a custom type.
-        """
-        raise FunctionDefinitionError('__hex__ is not supported by _LambdaExpression, since python raises an'
-                                      ' error when its output is not directly an object of the type it expects.'
-                                      'Please use the Hex() method provided at mini_lambda package'
-                                      ' level instead. If you did not use __hex__ in your expression, you '
-                                      'probably used a standard method such as math.log(x) instead of a method '
-                                      ' converted to mini_lambda such as Log(x). Please check the documentation for '
-                                      'details.')
-
-    def __int__(self, *args):
-        """
-        This magic method can not be used on an _LambdaExpression, because unfortunately python checks the
-        result type and does not allow it to be a custom type.
-        """
-        raise FunctionDefinitionError('__int__ is not supported by _LambdaExpression, since python raises an'
-                                      ' error when its output is not directly an object of the type it expects.'
-                                      'Please use the Int() method provided at mini_lambda package'
-                                      ' level instead. If you did not use __int__ in your expression, you '
-                                      'probably used a standard method such as math.log(x) instead of a method '
-                                      ' converted to mini_lambda such as Log(x). Please check the documentation for '
-                                      'details.')
-
     def __complex__(self, *args):
         """
         This magic method can not be used on an _LambdaExpression, because unfortunately python checks the
@@ -769,6 +727,32 @@ class _LambdaExpressionGenerated(StackableFunctionEvaluator):
                                       ' converted to mini_lambda such as Log(x). Please check the documentation for '
                                       'details.')
 
+    def __oct__(self, *args):
+        """
+        This magic method can not be used on an _LambdaExpression, because unfortunately python checks the
+        result type and does not allow it to be a custom type.
+        """
+        raise FunctionDefinitionError('__oct__ is not supported by _LambdaExpression, since python raises an'
+                                      ' error when its output is not directly an object of the type it expects.'
+                                      'Please use the Oct() method provided at mini_lambda package'
+                                      ' level instead. If you did not use __oct__ in your expression, you '
+                                      'probably used a standard method such as math.log(x) instead of a method '
+                                      ' converted to mini_lambda such as Log(x). Please check the documentation for '
+                                      'details.')
+
+    def __hex__(self, *args):
+        """
+        This magic method can not be used on an _LambdaExpression, because unfortunately python checks the
+        result type and does not allow it to be a custom type.
+        """
+        raise FunctionDefinitionError('__hex__ is not supported by _LambdaExpression, since python raises an'
+                                      ' error when its output is not directly an object of the type it expects.'
+                                      'Please use the Hex() method provided at mini_lambda package'
+                                      ' level instead. If you did not use __hex__ in your expression, you '
+                                      'probably used a standard method such as math.log(x) instead of a method '
+                                      ' converted to mini_lambda such as Log(x). Please check the documentation for '
+                                      'details.')
+
 
 # ******* All replacement methods for the magic methods throwing exceptions ********
 def Iter(evaluator: _LambdaExpressionGenerated):
@@ -776,14 +760,19 @@ def Iter(evaluator: _LambdaExpressionGenerated):
     return evaluator.add_bound_method_to_stack('__iter__')
 
 
+def Str(evaluator: _LambdaExpressionGenerated):
+    """ This is a replacement method for _LambdaExpression '__str__' magic method """
+    return evaluator.add_unbound_method_to_stack(str)
+
+
 def Repr(evaluator: _LambdaExpressionGenerated):
     """ This is a replacement method for _LambdaExpression '__repr__' magic method """
     return evaluator.add_unbound_method_to_stack(repr)
 
 
-def Str(evaluator: _LambdaExpressionGenerated):
-    """ This is a replacement method for _LambdaExpression '__str__' magic method """
-    return evaluator.add_unbound_method_to_stack(str)
+def Bytes(evaluator: _LambdaExpressionGenerated):
+    """ This is a replacement method for _LambdaExpression '__bytes__' magic method """
+    return evaluator.add_unbound_method_to_stack(bytes)
 
 
 def Format(evaluator: _LambdaExpressionGenerated):
@@ -794,11 +783,6 @@ def Format(evaluator: _LambdaExpressionGenerated):
 def Sizeof(evaluator: _LambdaExpressionGenerated):
     """ This is a replacement method for _LambdaExpression '__sizeof__' magic method """
     return evaluator.add_unbound_method_to_stack(getsizeof)
-
-
-def Bytes(evaluator: _LambdaExpressionGenerated):
-    """ This is a replacement method for _LambdaExpression '__bytes__' magic method """
-    return evaluator.add_unbound_method_to_stack(bytes)
 
 
 def Hash(evaluator: _LambdaExpressionGenerated):
@@ -816,9 +800,9 @@ def Len(evaluator: _LambdaExpressionGenerated):
     return evaluator.add_bound_method_to_stack('__len__')
 
 
-def Oct(evaluator: _LambdaExpressionGenerated):
-    """ This is a replacement method for _LambdaExpression '__oct__' magic method """
-    return evaluator.add_unbound_method_to_stack(oct)
+def Int(evaluator: _LambdaExpressionGenerated):
+    """ This is a replacement method for _LambdaExpression '__int__' magic method """
+    return evaluator.add_unbound_method_to_stack(int)
 
 
 def Float(evaluator: _LambdaExpressionGenerated):
@@ -826,18 +810,18 @@ def Float(evaluator: _LambdaExpressionGenerated):
     return evaluator.add_unbound_method_to_stack(float)
 
 
-def Hex(evaluator: _LambdaExpressionGenerated):
-    """ This is a replacement method for _LambdaExpression '__hex__' magic method """
-    return evaluator.add_unbound_method_to_stack(hex)
-
-
-def Int(evaluator: _LambdaExpressionGenerated):
-    """ This is a replacement method for _LambdaExpression '__int__' magic method """
-    return evaluator.add_unbound_method_to_stack(int)
-
-
 def Complex(evaluator: _LambdaExpressionGenerated):
     """ This is a replacement method for _LambdaExpression '__complex__' magic method """
     return evaluator.add_unbound_method_to_stack(complex)
+
+
+def Oct(evaluator: _LambdaExpressionGenerated):
+    """ This is a replacement method for _LambdaExpression '__oct__' magic method """
+    return evaluator.add_unbound_method_to_stack(oct)
+
+
+def Hex(evaluator: _LambdaExpressionGenerated):
+    """ This is a replacement method for _LambdaExpression '__hex__' magic method """
+    return evaluator.add_unbound_method_to_stack(hex)
 
 

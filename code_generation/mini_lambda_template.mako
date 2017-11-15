@@ -3,15 +3,11 @@
 # ----
 from typing import Any
 
-from mini_lambda.base import StackableFunctionEvaluator, evaluate, get_repr
+from mini_lambda.base import StackableFunctionEvaluator, evaluate, get_repr, FunctionDefinitionError
 from mini_lambda.base import PRECEDENCE_ADD_SUB, PRECEDENCE_MUL_DIV_ETC, PRECEDENCE_COMPARISON, \
     PRECEDENCE_EXPONENTIATION, PRECEDENCE_SHIFTS, PRECEDENCE_POS_NEG_BITWISE_NOT, \
     PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF
 from sys import getsizeof
-
-
-class FunctionDefinitionError(Exception):
-    """ An exception thrown when defining a function incorrectly """
 
 
 class _LambdaExpressionGenerated(StackableFunctionEvaluator):
@@ -29,18 +25,6 @@ class _LambdaExpressionGenerated(StackableFunctionEvaluator):
      the expected one. For all of them there are two methods: one in the class throwing an exception, and one at
      package-level to provide a replacement (The exception message provides the replacement method name).
     """
-
-    def assert_has_same_root_var(self, other: Any):
-        """
-        Asserts that if other is also a StackableFunctionEvaluator, then it has the same root variable
-        :param other:
-        :return:
-        """
-        if isinstance(other, StackableFunctionEvaluator):
-            # check that both work on the same variable
-            if self._root_var != other._root_var:
-                raise FunctionDefinitionError('It is not allowed to combine several variables (x, s, l...) in the same '
-                                              'expression')
 
     # ******* All magic methods that need to be implemented ********
 
