@@ -174,21 +174,21 @@ def define_what_needs_to_be_written() -> Tuple[Set[Override], Set[OverExc]]:
     # ** Representable Object **
     # .__repr__, .__str__, .__bytes__, .__format__,
     # __sizeof__
-    to_override_with_exception.update({OverExc('__str__', unbound_method=str),
-                                       OverExc('__repr__', unbound_method=repr),
-                                       OverExc('__bytes__', unbound_method=bytes),
-                                       OverExc('__format__', unbound_method=format),
-                                       OverExc('__sizeof__', unbound_method=getsizeof)})
+    to_override_with_exception.add(OverExc('__str__', unbound_method=str))
+    to_override_with_exception.add(OverExc('__repr__', unbound_method=repr))
+    to_override_with_exception.add(OverExc('__bytes__', unbound_method=bytes))
+    to_override_with_exception.add(OverExc('__format__', unbound_method=format))
+    to_override_with_exception.add(OverExc('__sizeof__', unbound_method=getsizeof))
 
     # ** Comparable Objects **
     # .__lt__, .__le__, .__eq__, .__ne__, .__gt__, .__ge__
     # to_override.update(__get_all_magic_methods(Set))
-    to_override.update({Override('__lt__', pair_operator='<', precedence_level='PRECEDENCE_COMPARISON'),
-                        Override('__le__', pair_operator='<=', precedence_level='PRECEDENCE_COMPARISON'),
-                        Override('__eq__', pair_operator='==', precedence_level='PRECEDENCE_COMPARISON'),
-                        Override('__ne__', pair_operator='!=', precedence_level='PRECEDENCE_COMPARISON'),
-                        Override('__gt__', pair_operator='>', precedence_level='PRECEDENCE_COMPARISON'),
-                        Override('__ge__', pair_operator='>=', precedence_level='PRECEDENCE_COMPARISON')})
+    to_override.add(Override('__lt__', pair_operator='<', precedence_level='PRECEDENCE_COMPARISON'))
+    to_override.add(Override('__le__', pair_operator='<=', precedence_level='PRECEDENCE_COMPARISON'))
+    to_override.add(Override('__eq__', pair_operator='==', precedence_level='PRECEDENCE_COMPARISON'))
+    to_override.add(Override('__ne__', pair_operator='!=', precedence_level='PRECEDENCE_COMPARISON'))
+    to_override.add(Override('__gt__', pair_operator='>', precedence_level='PRECEDENCE_COMPARISON'))
+    to_override.add(Override('__ge__', pair_operator='>=', precedence_level='PRECEDENCE_COMPARISON'))
 
     # ** Hashable Object **
     # .__hash__
@@ -244,8 +244,8 @@ def define_what_needs_to_be_written() -> Tuple[Set[Override], Set[OverExc]]:
     # ** Subscriptable / Mapping Container **
     # .__getitem__, .__missing__, .__setitem__, .__delitem__,
     # to_override.update(__get_all_magic_methods(Mapping))
-    to_override.update({Override('__getitem__'),
-                        Override('__missing__')})
+    to_override.add(Override('__getitem__'))
+    to_override.add(Override('__missing__'))
     to_skip.update({'__setitem__', '__delitem__'})
 
     # ** Numeric types **
@@ -255,35 +255,34 @@ def define_what_needs_to_be_written() -> Tuple[Set[Override], Set[OverExc]]:
     # .__lshift__, .__rshift__, __rlshift__, __rrshift__
     # .__neg__, .__pos__, .__abs__, .__invert__
     # to_override.update(__get_all_magic_methods(Integral))
-    to_override.update({Override('__add__', pair_operator='+', precedence_level='PRECEDENCE_ADD_SUB'),
-                        Override('__radd__', pair_operator='+', is_operator_left=False, precedence_level='PRECEDENCE_ADD_SUB'),
-                        Override('__sub__', pair_operator='-', precedence_level='PRECEDENCE_ADD_SUB'),
-                        Override('__rsub__', pair_operator='-', is_operator_left=False, precedence_level='PRECEDENCE_ADD_SUB'),
-                        Override('__mul__', pair_operator='*', precedence_level='PRECEDENCE_MUL_DIV_ETC'),
-                        Override('__rmul__', pair_operator='*', is_operator_left=False, precedence_level='PRECEDENCE_MUL_DIV_ETC'),
-                        Override('__truediv__', pair_operator='/', precedence_level='PRECEDENCE_MUL_DIV_ETC'),
-                        Override('__rtruediv__', pair_operator='/', is_operator_left=False, precedence_level='PRECEDENCE_MUL_DIV_ETC'),
-                        Override('__mod__', pair_operator='%', precedence_level='PRECEDENCE_MUL_DIV_ETC'),
-                        Override('__rmod__', pair_operator='%', is_operator_left=False, precedence_level='PRECEDENCE_MUL_DIV_ETC'),
-                        Override('__divmod__'),
-                        Override('__rdivmod__'),
-                        Override('__pow__', pair_operator='**', precedence_level='PRECEDENCE_EXPONENTIATION'),
-                        Override('__rpow__', pair_operator='**', is_operator_left=False, precedence_level='PRECEDENCE_EXPONENTIATION'),
-                        Override('__matmul__', pair_operator='@', precedence_level='PRECEDENCE_MUL_DIV_ETC'),
-                        # Override('__rmatmul__', operator='@', is_operator_left=False),
-                        Override('__floordiv__', pair_operator='//', precedence_level='PRECEDENCE_MUL_DIV_ETC'),
-                        Override('__rfloordiv__', pair_operator='//', is_operator_left=False, precedence_level='PRECEDENCE_MUL_DIV_ETC'),
-                        Override('__lshift__', pair_operator='<<', precedence_level='PRECEDENCE_SHIFTS'),
-                        Override('__rlshift__', pair_operator='<<', is_operator_left=False, precedence_level='PRECEDENCE_SHIFTS'),
-                        Override('__rshift__', pair_operator='>>', precedence_level='PRECEDENCE_SHIFTS'),
-                        Override('__rrshift__', pair_operator='>>', is_operator_left=False, precedence_level='PRECEDENCE_SHIFTS'),
-                        Override('__rshift__', pair_operator='>>', precedence_level='PRECEDENCE_SHIFTS'),
-                        Override('__rshift__', pair_operator='>>', precedence_level='PRECEDENCE_SHIFTS'),
-                        Override('__neg__', uni_operator='-', precedence_level='PRECEDENCE_POS_NEG_BITWISE_NOT'),
-                        Override('__pos__', uni_operator='+', precedence_level='PRECEDENCE_POS_NEG_BITWISE_NOT'),
-                        Override('__abs__', unbound_method=abs),
-                        Override('__invert__', uni_operator='~', precedence_level='PRECEDENCE_POS_NEG_BITWISE_NOT'),
-                        })
+    to_override.add(Override('__add__', pair_operator='+', precedence_level='PRECEDENCE_ADD_SUB'))
+    to_override.add(Override('__radd__', pair_operator='+', is_operator_left=False, precedence_level='PRECEDENCE_ADD_SUB'))
+    to_override.add(Override('__sub__', pair_operator='-', precedence_level='PRECEDENCE_ADD_SUB'))
+    to_override.add(Override('__rsub__', pair_operator='-', is_operator_left=False, precedence_level='PRECEDENCE_ADD_SUB'))
+    to_override.add(Override('__mul__', pair_operator='*', precedence_level='PRECEDENCE_MUL_DIV_ETC'))
+    to_override.add(Override('__rmul__', pair_operator='*', is_operator_left=False, precedence_level='PRECEDENCE_MUL_DIV_ETC'))
+    to_override.add(Override('__truediv__', pair_operator='/', precedence_level='PRECEDENCE_MUL_DIV_ETC'))
+    to_override.add(Override('__rtruediv__', pair_operator='/', is_operator_left=False, precedence_level='PRECEDENCE_MUL_DIV_ETC'))
+    to_override.add(Override('__mod__', pair_operator='%', precedence_level='PRECEDENCE_MUL_DIV_ETC'))
+    to_override.add(Override('__rmod__', pair_operator='%', is_operator_left=False, precedence_level='PRECEDENCE_MUL_DIV_ETC'))
+    to_override.add(Override('__divmod__'))
+    to_override.add(Override('__rdivmod__'))
+    to_override.add(Override('__pow__', pair_operator='**', precedence_level='PRECEDENCE_EXPONENTIATION'))
+    to_override.add(Override('__rpow__', pair_operator='**', is_operator_left=False, precedence_level='PRECEDENCE_EXPONENTIATION'))
+    to_override.add(Override('__matmul__', pair_operator='@', precedence_level='PRECEDENCE_MUL_DIV_ETC'))
+    # Override('__rmatmul__', operator='@', is_operator_left=False),
+    to_override.add(Override('__floordiv__', pair_operator='//', precedence_level='PRECEDENCE_MUL_DIV_ETC'))
+    to_override.add(Override('__rfloordiv__', pair_operator='//', is_operator_left=False, precedence_level='PRECEDENCE_MUL_DIV_ETC'))
+    to_override.add(Override('__lshift__', pair_operator='<<', precedence_level='PRECEDENCE_SHIFTS'))
+    to_override.add(Override('__rlshift__', pair_operator='<<', is_operator_left=False, precedence_level='PRECEDENCE_SHIFTS'))
+    to_override.add(Override('__rshift__', pair_operator='>>', precedence_level='PRECEDENCE_SHIFTS'))
+    to_override.add(Override('__rrshift__', pair_operator='>>', is_operator_left=False, precedence_level='PRECEDENCE_SHIFTS'))
+    to_override.add(Override('__rshift__', pair_operator='>>', precedence_level='PRECEDENCE_SHIFTS'))
+    to_override.add(Override('__rshift__', pair_operator='>>', precedence_level='PRECEDENCE_SHIFTS'))
+    to_override.add(Override('__neg__', uni_operator='-', precedence_level='PRECEDENCE_POS_NEG_BITWISE_NOT'))
+    to_override.add(Override('__pos__', uni_operator='+', precedence_level='PRECEDENCE_POS_NEG_BITWISE_NOT'))
+    to_override.add(Override('__abs__', unbound_method=abs))
+    to_override.add(Override('__invert__', uni_operator='~', precedence_level='PRECEDENCE_POS_NEG_BITWISE_NOT'))
 
     # ** Boolean types **
     # .__and__, .__xor__, .__or__, __rand__, __rxor__, __ror__
@@ -291,17 +290,17 @@ def define_what_needs_to_be_written() -> Tuple[Set[Override], Set[OverExc]]:
 
     # ** Type conversion **
     # __int__, __long__, __float__, __complex__, __oct__, __hex__, __index__, __trunc__, __coerce__
-    to_override.update({Override('__trunc__'),
-                        Override('__coerce__')})
+    to_override.add(Override('__trunc__'))
+    to_override.add(Override('__coerce__'))
     to_skip.update({'__index__'})
-    to_override_with_exception.update({OverExc('__int__', unbound_method=int),
+    to_override_with_exception.add(OverExc('__int__', unbound_method=int))
                                        # OverExc('__long__', unbound_method=long),
-                                       OverExc('__float__', unbound_method=float),
-                                       OverExc('__complex__', unbound_method=complex),
-                                       OverExc('__oct__', unbound_method=oct),
-                                       OverExc('__hex__', unbound_method=hex),
+    to_override_with_exception.add(OverExc('__float__', unbound_method=float))
+    to_override_with_exception.add(OverExc('__complex__', unbound_method=complex))
+    to_override_with_exception.add(OverExc('__oct__', unbound_method=oct))
+    to_override_with_exception.add(OverExc('__hex__', unbound_method=hex))
                                        # ('Index', '__index__', None)
-                                       })
+
     # ** Pickle **
     # __reduce__, __reduce_ex__
     to_skip.update({'__reduce__', '__reduce_ex__'})
