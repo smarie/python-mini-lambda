@@ -23,14 +23,14 @@ The generated code contains functions that generate functions when called, such 
 
 ```python
 def __gt__(self, other):
-    """ Returns a new _InputEvaluator performing '<r> > other' on the result <r> of this evaluator's evaluation """
+    """ Returns a new _LambdaExpression performing '<r> > other' on the result <r> of this evaluator's evaluation """
     def ___gt__(input):
         # first evaluate the inner function
         r = self.evaluate(input)
         # then call the method
         return r > evaluate(other, input)
 
-    # return a new InputEvaluator of the same type than self, with the new function as inner function
+    # return a new _LambdaExpression of the same type than self, with the new function as inner function
     return type(self)(___gt__)
 ```
 

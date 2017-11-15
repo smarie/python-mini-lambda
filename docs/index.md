@@ -10,7 +10,7 @@ This idea initially comes from the [valid8](https://smarie.github.io/python-vali
  * or to provide users with the capability to write custom validation functions, in particular using lambdas. *Drawback*: the `lambda x:` prefix has to be present everywhere, and users still have to write the exception messages for validation failures.
 
 
-The `mini_lambda` library provides an answer to the second item: it allows developers to write simple functions 
+The `mini_lambda` library provides an answer to the second item: it allows developers to write simple functions with a subset of standard python syntax, without the `lambda x:` prefix.
 
 Although initially developed in the context of validation, this library is now fully independent and can serve other use cases.
 
@@ -23,69 +23,54 @@ Although initially developed in the context of validation, this library is now f
 
 ## Usage
 
-The idea is that you start from a magic variable such as `x`, `s`, `l`, `df`... and you write expressions using it:
+Three basic steps:
+
+ * import or create a 'magic variable' such as `x`, `s`, `l`, `df`...
+ * write an expression using it
+ * transform the expression into a function by wrapping it with `_()` or its alias `L()`.
 
 ```python
-from mini_lambda import x, s
-from math import log
+# create or import a magic variable, here we import 's' 
+from mini_lambda import s
 
-# here are some lambda functions:
-is_lowercase = s.islower()
-say_hello = 'Hello, ' + s + ' !'
-get_prefix_upper_shebang = s[0:4].upper() + ' !'
-numeric_test_1 = -x > x ** 2
-numeric_test_2 = ((1 - 2 * x) <= -x) | (-x > x ** 2)
+# write an expression and wrap it with _() to make a function
+from mini_lambda import _
+say_hello_function = _('Hello, ' + s + ' !')
+
+# use the function with any input
+say_hello_function('world')     # Returns "Hello, world !"
+
+# the function's string representation is available
+print(say_hello_function)       # "'Hello, ' + s + ' !'"
 ```
 
-If you know python you should feel at home here, except for the fact that  `|` is used instead of `or`. We will come back to this later.
- 
-Once you have created a function, it is still in "edit" mode. It means that calling it will create a new function, it will not evaluate it:
+Most of python syntax can be used in an expression:
 
 ```python
-say_hello_hardcoded = say_hello('world')
+from mini_lambda import x, s, _
 
-type(say_hello_hardcoded)   # <class 'mini_lambda.main._InputEvaluator'>: still a function!
-print(say_hello_hardcoded)  # NotImplementedError: __str__ is not supported by _InputEvaluator
-```
+# various lambda functions
+is_lowercase             = _( s.islower() )
+get_prefix_upper_shebang = _( s[0:4].upper() + ' !' )
+numeric_test_1           = _( -x > x ** 2 )
+numeric_test_2           = _( ((1 - 2 * x) <= -x) | (-x > x ** 2) )
 
-That's the first main difference with traditional python lambda functions. In order to use your functions, you can either use the explicit `evaluate` method :
-
-```python
-is_lowercase.evaluate('Hello')              # returns False
-say_hello.evaluate('world')                 # returns 'Hello, world !'
-get_prefix_upper_shebang.evaluate('hello')  # returns 'HELL !'
-numeric_test_1.evaluate(0.5)                # returns False
-numeric_test_2.evaluate(1)                  # returns True
-```
-
-Or you can get a real function from the lambda function, and then call it. There are several ways to do that:
-
-```python
-from mini_lambda import _, L
-
-is_lowercase = is_lowercase.as_function()               # explicitly
-say_hello = _(say_hello)                                # _() is a handy operator to do the same thing
-get_prefix_upper_shebang = L(get_prefix_upper_shebang)  # L() is an alias for _()
-numeric_test_1, numeric_test_2 = _(numeric_test_1, numeric_test_2)  # both accept multiple inputs
-
-# you can now use the functions directly
+# use the functions
 is_lowercase('Hello')              # returns False
-say_hello('world')                 # returns 'Hello, world !'
 get_prefix_upper_shebang('hello')  # returns 'HELL !'
 numeric_test_1(0.5)                # returns False
-```
+numeric_test_2(1)                  # returns True
 
-Finally, the functions that you have created are printable:
-
-```python
+# string representation
 print(is_lowercase)             # s.islower()
-print(say_hello)                # 'Hello, ' + s + ' !'
 print(get_prefix_upper_shebang) # s[0:4].upper() + ' !'
 print(numeric_test_1)           # -x > x ** 2
 print(numeric_test_2)           # (1 - 2 * x <= -x) | (-x > x ** 2)
 ```
 
-Note that the printed version of `numeric_test_2` got rid of my useless parenthesis :)
+If you know python you should feel at home here, except for the fact that `or` and `and` should be replaced with their bitwise equivalents `|` and `&`.
+
+Note that the printed version provides the minimal equivalent representation taking into account the operator precedence. Hence `numeric_test_2` got rid of my useless parenthesis. This is **not** a mathematical simplification like in SymPy, i.e. `x - x` will not be simplified to `0`.
 
 There are of course a few limitations to `mini_lambda` as compared to full-flavoured python `lambda` functions, the main one being that you can't mix more than one variable in the same expression for now. Check the [Usage](./usage/) page for more details.
 
