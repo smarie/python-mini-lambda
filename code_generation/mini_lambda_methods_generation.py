@@ -160,7 +160,7 @@ def define_what_needs_to_be_written() -> Tuple[Set[Override], Set[OverExc]]:
     # Actually this COULD work but creates infinite loops when a list comprehension is used in the expression [i for i in x]
     # so we prefer to raise an exception and tell users that list comprehensions are forbidden
     # to_skip.update({'__iter__'})
-    to_override_with_exception.update({OverExc('__iter__')})
+    to_override_with_exception.update({OverExc('__iter__', unbound_method=iter)})
 
     # ** Iterator and Generator **
     # .__next__
@@ -193,11 +193,11 @@ def define_what_needs_to_be_written() -> Tuple[Set[Override], Set[OverExc]]:
     # ** Hashable Object **
     # .__hash__
     # to_override.update(__get_all_magic_methods(Hashable))
-    to_override_with_exception.update({OverExc('__hash__')})
+    to_override_with_exception.update({OverExc('__hash__', unbound_method=hash)})
 
     # ** Truth-testable Object **
     # .__bool__
-    to_override_with_exception.update({OverExc('__bool__')})
+    to_override_with_exception.update({OverExc('__bool__', unbound_method=bool)})
 
     # ** Object = Field container **
     #  .__getattribute__ (to avoid)
@@ -233,7 +233,7 @@ def define_what_needs_to_be_written() -> Tuple[Set[Override], Set[OverExc]]:
 
     # ** Sized Container **
     # .__len__, .__length_hint__
-    to_override_with_exception.add(OverExc('__len__'))
+    to_override_with_exception.add(OverExc('__len__', unbound_method=len))
 
     # ** Iterable Container : see Iterable **
     # ** Reversible Container **

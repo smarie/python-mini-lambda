@@ -757,7 +757,7 @@ class _LambdaExpressionGenerated(StackableFunctionEvaluator):
 # ******* All replacement methods for the magic methods throwing exceptions ********
 def Iter(evaluator: _LambdaExpressionGenerated):
     """ This is a replacement method for _LambdaExpression '__iter__' magic method """
-    return evaluator.add_bound_method_to_stack('__iter__')
+    return evaluator.add_unbound_method_to_stack(iter)
 
 
 def Str(evaluator: _LambdaExpressionGenerated):
@@ -787,17 +787,17 @@ def Sizeof(evaluator: _LambdaExpressionGenerated):
 
 def Hash(evaluator: _LambdaExpressionGenerated):
     """ This is a replacement method for _LambdaExpression '__hash__' magic method """
-    return evaluator.add_bound_method_to_stack('__hash__')
+    return evaluator.add_unbound_method_to_stack(hash)
 
 
 def Bool(evaluator: _LambdaExpressionGenerated):
     """ This is a replacement method for _LambdaExpression '__bool__' magic method """
-    return evaluator.add_bound_method_to_stack('__bool__')
+    return evaluator.add_unbound_method_to_stack(bool)
 
 
 def Len(evaluator: _LambdaExpressionGenerated):
     """ This is a replacement method for _LambdaExpression '__len__' magic method """
-    return evaluator.add_bound_method_to_stack('__len__')
+    return evaluator.add_unbound_method_to_stack(len)
 
 
 def Int(evaluator: _LambdaExpressionGenerated):
