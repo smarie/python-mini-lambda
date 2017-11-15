@@ -1,4 +1,5 @@
-from typing import Type, TypeVar, Union, Tuple
+from copy import copy
+from typing import Type, TypeVar, Union, Tuple, Callable
 from warnings import warn
 import sys
 
@@ -543,6 +544,43 @@ L = _
 """ Alias for '_' """
 
 
+def make_lambda_friendly(method: Callable, name: str = None):
+    """
+    Utility method to transform any standard method, for example math.log, into a method usable inside lambda
+    expressions. For example
+
+    ```python
+    from mini_lambda import x, _
+    from math import log, e
+
+    Log = make_lambda_friendly(log)
+
+    # now you can use Log in your expressions
+    complex_identity = _(Log(e ** x))
+    ```
+
+    :param method:
+    :param name: an optional name for the method when used to display the expressions.
+    :return:
+    """
+
+    # If the provided method does not have a name then name is mandatory
+    if not hasattr(method, '__name__') and name is None:
+            raise ValueError('This method does not have a name (it is either a partial or a lambda) so you have to '
+                             'provide one: the \'name\' argument is mandatory')
+
+    # create a named method if a new name is provided
+    if name is not None:
+        method = copy(method)  # work on a copy just in case
+        method.__name__ = name
+
+    def lambda_friendly_method(evaluator: _LambdaExpression):
+        """ This is a replacement method for your method """
+        return evaluator.add_unbound_method_to_stack(method)
+
+    return lambda_friendly_method
+
+
 def InputVar(symbol: str = None, typ: Type[T] = None) -> Union[T, _LambdaExpression]:
     """
     Creates a variable to use in validator expression. The optional `typ` argument may be used to get a variable with
@@ -557,9 +595,3 @@ def InputVar(symbol: str = None, typ: Type[T] = None) -> Union[T, _LambdaExpress
         raise TypeError("symbol should be a string. It is recommended to use a very small string that is identical "
                         "to the python variable name, for example  s = InputVar('s')")
     return _LambdaExpression(symbol)
-
-
-# Useful input variables
-s = InputVar('s', str)
-x = InputVar('x', int)
-l = InputVar('l', list)

@@ -125,7 +125,7 @@ class StackableFunctionEvaluator:
 
         # return a new InputEvaluator of the same type than self, with the new function as inner function
         # Note: we use precedence=None for coma-separated items inside the parenthesis
-        string_expr = method.__name__ + '(' + get_repr(self, None) + ', ' \
+        string_expr = method.__name__ + '(' + get_repr(self, None) + (', ' if len(m_args) > 0 else '') \
                       + ', '.join([get_repr(arg, None) for arg in m_args]) + ')'
         return type(self)(fun=evaluate_inner_function_and_apply_method,
                           precedence_level=PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF,
