@@ -24,30 +24,34 @@ def test_doc_index_1():
 def test_doc_index_2():
     """ Tests that the second example in the documentation main page works """
 
-    from mini_lambda import s, x, _
+    from mini_lambda import s, x, _, Log2
 
     # various lambda functions
     is_lowercase = _(s.islower())
     get_prefix_upper_shebang = _(s[0:4].upper() + ' !')
     numeric_test_1 = _(-x > x ** 2)
     numeric_test_2 = _(((1 - 2 * x) <= -x) | (-x > x ** 2))
+    complex_identity = _(Log2(2 ** x))
 
     # use the functions
     assert is_lowercase('Hello') is False
     assert get_prefix_upper_shebang('hello') == 'HELL !'
     assert numeric_test_1(0.5) is False
     assert numeric_test_2(1) is True
+    assert complex_identity(10) == 10
 
     # string representation
     print(is_lowercase)  # s.islower()
     print(get_prefix_upper_shebang)  # s[0:4].upper() + ' !'
     print(numeric_test_1)  # -x > x ** 2
     print(numeric_test_2)  # (1 - 2 * x <= -x) | (-x > x ** 2)
+    print(complex_identity)  # log2(2 ** x)
 
     assert str(is_lowercase) == 's.islower()'
     assert str(get_prefix_upper_shebang) == "s[0:4].upper() + ' !'"
     assert str(numeric_test_1) == '-x > x ** 2'
     assert str(numeric_test_2) == '(1 - 2 * x <= -x) | (-x > x ** 2)'
+    assert str(complex_identity) == 'log2(2 ** x)'
 
 
 # def test_readme_1():

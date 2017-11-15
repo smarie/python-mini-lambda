@@ -47,44 +47,56 @@ print(say_hello_function)       # "'Hello, ' + s + ' !'"
 Most of python syntax can be used in an expression:
 
 ```python
-from mini_lambda import x, s, _
+from mini_lambda import x, s, _, Log2
 
 # various lambda functions
 is_lowercase             = _( s.islower() )
 get_prefix_upper_shebang = _( s[0:4].upper() + ' !' )
 numeric_test_1           = _( -x > x ** 2 )
 numeric_test_2           = _( ((1 - 2 * x) <= -x) | (-x > x ** 2) )
+complex_identity         = _( Log2(2 ** x) )
 
 # use the functions
 is_lowercase('Hello')              # returns False
 get_prefix_upper_shebang('hello')  # returns 'HELL !'
 numeric_test_1(0.5)                # returns False
 numeric_test_2(1)                  # returns True
+complex_identity(10)               # returns 10
 
 # string representation
 print(is_lowercase)             # s.islower()
 print(get_prefix_upper_shebang) # s[0:4].upper() + ' !'
 print(numeric_test_1)           # -x > x ** 2
 print(numeric_test_2)           # (1 - 2 * x <= -x) | (-x > x ** 2)
+print(complex_identity)         # log2(2 ** x)
 ```
 
-If you know python you should feel at home here, except for the fact that `or` and `and` should be replaced with their bitwise equivalents `|` and `&`.
+If you know python you should feel at home here, except for two things:
 
-Note that the printed version provides the minimal equivalent representation taking into account the operator precedence. Hence `numeric_test_2` got rid of my useless parenthesis. This is **not** a mathematical simplification like in SymPy, i.e. `x - x` will not be simplified to `0`.
+ * `or` and `and` should be replaced with their bitwise equivalents `|` and `&`
+ * standard unbound (=package-level) methods need to be made lambda-friendly before use. For convenience all of the methods from the `math.py` module are provided in a lambda-friendly way by this package, hence the `from mini_lambda import Log2` above.
 
-There are of course a few limitations to `mini_lambda` as compared to full-flavoured python `lambda` functions, the main one being that you can't mix more than one variable in the same expression for now. Check the [Usage](./usage/) page for more details.
+Note that the printed version provides the minimal equivalent representation taking into account the operator precedence. Hence `numeric_test_2` got rid of my useless parenthesis. This is **not** a mathematical simplification like in [SymPy](http://www.sympy.org/fr/), i.e. `x - x` will **not** be simplified to `0`.
+
+There are of course a few limitations to `mini_lambda` as compared to full-flavoured python `lambda` functions, the main ones being that 
+
+ * you can't mix more than one variable in the same expression for now. 
+ * `list`/`tuple`/`set`/`dict` comprehensions are not supported
+ * `... if ... else ...` ternary conditional expressions are not supported either
+ 
+Check the [Usage](./usage/) page for more details.
 
 
 ## Main features
 
  * More compact lambda expressions for single-variable functions
  * Overriding all operators that can be overriden as of today in python 3.6: the remaining limits come from the language itself, for example chained comparisons are not supported as python casts the partial results to boolean.
- * printability: expressions can be turned to string representation in order to (hopefully) get interpretable messages more easily, for example when the expression is used in a validation context (see [valid8](https://github.com/smarie/python-valid8)) 
+ * printability: expressions can be turned to string representation in order to (hopefully) get interpretable messages more easily, for example when the expression is used in a validation context (that is what I try to do with [valid8](https://github.com/smarie/python-valid8)) 
 
 
 ## See Also
 
-The much-broader debate in the python community about alernate lambda syntaxes is interesting, see [here](https://wiki.python.org/moin/AlternateLambdaSyntax)
+The much-broader debate in the python community about alternate lambda syntaxes is interesting, see [here](https://wiki.python.org/moin/AlternateLambdaSyntax)
 
 ### Equivalent (python-first)
 
@@ -107,6 +119,7 @@ A bit far from the topic but related:
 These libraries create functions from string expressions. Therefore you cannot rely on your favourite IDE to check your expressions, but it might not be a problem for some users/use cases.
 
  * [simpleeval](https://github.com/danthedeckie/simpleeval) 
+ * ...
 
 
 ### Others
