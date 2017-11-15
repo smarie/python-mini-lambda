@@ -607,3 +607,37 @@ def test_evaluator_index_slice():
     slice_view = slice_view.as_function()
 
     assert slice_view(3) == [1,2]
+
+
+def test_evaluator_different_vars():
+    """ Tests that two different variables cannot be used in the same expression, even with the same symbol """
+    a = InputVar('x', int)
+    b = InputVar('x', int)
+
+    with pytest.raises(FunctionDefinitionError):
+        a + b
+
+    with pytest.raises(FunctionDefinitionError):
+        a - b
+
+    with pytest.raises(FunctionDefinitionError):
+        a * b
+
+    with pytest.raises(FunctionDefinitionError):
+        a ** b
+
+    with pytest.raises(FunctionDefinitionError):
+        a > b
+
+    with pytest.raises(FunctionDefinitionError):
+        a == b
+
+    with pytest.raises(FunctionDefinitionError):
+        divmod(a, b)
+
+    with pytest.raises(FunctionDefinitionError):
+        a[b]
+
+    with pytest.raises(FunctionDefinitionError):
+        # getattr(a, b)  # getattr(): attribute name must be string
+        a.__getattr__(b)
