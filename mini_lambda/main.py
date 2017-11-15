@@ -134,20 +134,15 @@ class _InputEvaluator(_InputEvaluatorGenerated):
                                               'expression')
 
             # create a new _InputEvaluator able to evaluate both sides with short-circuit capability
-            def evaluate_both_inner_functions_and_combine(*args, **kwargs):
+            def evaluate_both_inner_functions_and_combine(input):
                 # first evaluate self
-                left = self.evaluate(*args, **kwargs)
+                left = self.evaluate(input)
                 if not left:
                     # short-circuit: the left part is False, no need to evaluate the right part
                     return False
                 else:
                     # evaluate the right part
-                    if isinstance(other, _InputEvaluator):
-                        right = other.evaluate(*args, **kwargs)
-                    else:
-                        # standard callable
-                        right = other(*args, **kwargs)
-                    return bool(right)
+                    return bool(evaluate(other, input))
 
             string_expr = get_repr(self, PRECEDENCE_BITWISE_AND) + ' & ' + get_repr(other, PRECEDENCE_BITWISE_AND)
             return _InputEvaluator(fun=evaluate_both_inner_functions_and_combine,
@@ -191,20 +186,15 @@ class _InputEvaluator(_InputEvaluatorGenerated):
                                               'expression')
 
             # create a new _InputEvaluator able to evaluate both sides with short-circuit capability
-            def evaluate_both_inner_functions_and_combine(*args, **kwargs):
+            def evaluate_both_inner_functions_and_combine(input):
                 # first evaluate self
-                left = self.evaluate(*args, **kwargs)
+                left = self.evaluate(input)
                 if left:
                     # short-circuit: the left part is True, no need to evaluate the right part
                     return True
                 else:
                     # evaluate the right part
-                    if isinstance(other, _InputEvaluator):
-                        right = other.evaluate(*args, **kwargs)
-                    else:
-                        # standard callable
-                        right = other(*args, **kwargs)
-                    return bool(right)
+                    return bool(evaluate(other, input))
 
             string_expr = get_repr(self, PRECEDENCE_BITWISE_OR) + ' | ' + get_repr(other, PRECEDENCE_BITWISE_OR)
             return _InputEvaluator(fun=evaluate_both_inner_functions_and_combine,
@@ -240,18 +230,16 @@ class _InputEvaluator(_InputEvaluatorGenerated):
                                               'expression')
 
             # create a new _InputEvaluator able to evaluate both sides
-            def evaluate_both_inner_functions_and_combine(*args, **kwargs):
+            def evaluate_both_inner_functions_and_combine(input):
                 # first evaluate self
-                left = self.evaluate(*args, **kwargs)
-                # evaluate the right part
-                if isinstance(other, _InputEvaluator):
-                    right = other.evaluate(*args, **kwargs)
-                else:
-                    # standard callable
-                    right = other(*args, **kwargs)
-                return left ^ right
+                left = self.evaluate(input)
 
-            string_expr = get_repr(self, PRECEDENCE_BITWISE_XOR) + ' | ' + get_repr(other, PRECEDENCE_BITWISE_XOR)
+                # evaluate the right part
+                right = evaluate(other, input)
+
+                return (left and not right) or (not left and right)
+
+            string_expr = get_repr(self, PRECEDENCE_BITWISE_XOR) + ' ^ ' + get_repr(other, PRECEDENCE_BITWISE_XOR)
             return _InputEvaluator(fun=evaluate_both_inner_functions_and_combine,
                                    precedence_level=PRECEDENCE_BITWISE_XOR,
                                    str_expr=string_expr,
@@ -276,15 +264,15 @@ class _InputEvaluator(_InputEvaluatorGenerated):
     def __index__(self):
         """ This magic method is forbidden because python casts the result before returning """
         raise FunctionDefinitionError('It is not currently possible to use an _InputEvaluator as an index, e.g.'
-                                      'o[x], where x is the input variable. Instead, please use the equivalent operator '
-                                      'provided in mini_lambda : Get(o, x)')
+                                      'o[x], where x is the input variable. Instead, please use the equivalent operator'
+                                      ' provided in mini_lambda : Get(o, x)')
 
     # Special case: membership testing
     def __contains__(self, item):
         """ This magic method is forbidden because python casts the result before returning """
         raise FunctionDefinitionError('membership operators in/ not in cannot be used with an _InputEvaluator because '
-                                      'python casts the result as a bool. Therefore this __contains__ method is forbidden. '
-                                      'An alternate x.contains() method is provided to replace it')
+                                      'python casts the result as a bool. Therefore this __contains__ method is '
+                                      'forbidden. An alternate x.contains() method is provided to replace it')
 
     def contains(self, item):
         """ Returns a new _InputEvaluator performing '__contains__' on the result of this evaluator's evaluation """
@@ -319,7 +307,8 @@ class _InputEvaluator(_InputEvaluatorGenerated):
 
         # return a new InputEvaluator of the same type than self, with the new function as inner function
         # Note: we use precedence=None for coma-separated items inside the parenthesis
-        string_expr = get_repr(self, PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF) + '(' + ', '.join([get_repr(arg, None) for arg in args]) + ')'
+        string_expr = get_repr(self, PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF) \
+                      + '(' + ', '.join([get_repr(arg, None) for arg in args]) + ')'
         return type(self)(fun=___call__, precedence_level=PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF,
                           str_expr=string_expr, root_var=self._root_var)
 
@@ -335,7 +324,8 @@ class _InputEvaluator(_InputEvaluatorGenerated):
 
         # return a new InputEvaluator of the same type than self, with the new function as inner function
         # Note: we use precedence=None for coma-separated items inside the parenthesis
-        string_expr = get_repr(self, PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF) + '[' + ', '.join([get_repr(arg, None) for arg in args]) + ']'
+        string_expr = get_repr(self, PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF) \
+                      + '[' + ', '.join([get_repr(arg, None) for arg in args]) + ']'
         return type(self)(fun=___getitem__, precedence_level=PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF,
                           str_expr=string_expr, root_var=self._root_var)
 
@@ -349,7 +339,8 @@ class _InputEvaluator(_InputEvaluatorGenerated):
             return r ** evaluate(other, input)
 
         # return a new InputEvaluator of the same type than self, with the new function as inner function
-        string_expr = get_repr(self, PRECEDENCE_EXPONENTIATION) + ' ** ' + get_repr(other, PRECEDENCE_POS_NEG_BITWISE_NOT)
+        string_expr = get_repr(self, PRECEDENCE_EXPONENTIATION) + ' ** ' \
+                      + get_repr(other, PRECEDENCE_POS_NEG_BITWISE_NOT)
         return type(self)(fun=___pow__, precedence_level=13, str_expr=string_expr, root_var=self._root_var)
 
     # Special case for string representation because pow is asymetric in precedence
@@ -362,7 +353,8 @@ class _InputEvaluator(_InputEvaluatorGenerated):
             return evaluate(other, input) ** r
 
         # return a new InputEvaluator of the same type than self, with the new function as inner function
-        string_expr = get_repr(other, PRECEDENCE_EXPONENTIATION) + ' ** ' + get_repr(self, PRECEDENCE_POS_NEG_BITWISE_NOT)
+        string_expr = get_repr(other, PRECEDENCE_EXPONENTIATION) + ' ** ' \
+                      + get_repr(self, PRECEDENCE_POS_NEG_BITWISE_NOT)
         return type(self)(fun=___rpow__, precedence_level=13, str_expr=string_expr, root_var=self._root_var)
 
     # Special case : unbound function call but with left/right
@@ -567,4 +559,3 @@ def InputVar(var_name: str = None, typ: Type[T] = None) -> Union[T, _InputEvalua
 s = InputVar('s', str)
 x = InputVar('x', int)
 l = InputVar('l', list)
-
