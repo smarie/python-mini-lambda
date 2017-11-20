@@ -5,8 +5,8 @@ import pytest
 import sys
 
 from mini_lambda import InputVar, Len, Str, Int, Repr, Bytes, Sizeof, Hash, Bool, Complex, Float, Oct, Iter, \
-    Any, All, _, Slice, Get, Not, FunctionDefinitionError, make_lambda_friendly
-from math import sin, pi, cos
+    Any, All, _, Slice, Get, Not, FunctionDefinitionError, Format
+from math import cos
 from numbers import Real
 
 
@@ -172,6 +172,28 @@ def test_evaluator_bytes():
     assert reasonable_string(1) == bytes(1)
 
 
+def test_evaluator_format():
+    """ Representable Object : tests that format() works """
+
+    s = InputVar('s', str)
+
+    # the str operator cannot be overloaded
+    formatted_string = s.format('yes')
+    formatted_string = formatted_string.as_function()
+
+    assert formatted_string('{}') == 'yes'
+
+    # the str operator cannot be overloaded
+    with pytest.raises(FunctionDefinitionError):
+        '{} {}'.format(s, s)
+
+    # so we provide this equivalent
+    reasonable_string = Format('{} {}', s, s)
+    reasonable_string = reasonable_string.as_function()
+
+    assert reasonable_string('hello') == 'hello hello'
+
+
 def test_evaluator_sizeof():
     """ Object : tests that sys.getsizeof() raises the correct error message and that the equivalent Getsizeof()
     works """
@@ -210,6 +232,7 @@ def test_evaluator_comparable():
     assert not is_very_special(4)
 
 
+@pytest.mark.skip(reason="it is not possible anymore to use functions as expressions, they need to be converted first")
 def test_evaluator_comparable_normal_function_first():
     """ Tests that the comparison operators works between a function and an evaluator """
 
@@ -268,7 +291,7 @@ def test_evaluator_truth_testable():
 
 
 def test_evaluator_truth_testable_not():
-    """ Truth-Testable Object : tests that not x raises the correct error message and that the equivalent x.nnot()
+    """ Truth-Testable Object : tests that not x raises the correct error message and that the equivalent x.not_()
     works. """
 
     x = InputVar('x', float)
@@ -420,7 +443,7 @@ def test_evaluator_reversible():
 
 # Subscriptable / Mapping Container .__getitem__, .__missing__,
 def test_evaluator_mapping():
-    """ Mapping Container Object : tests that `x[i]` works"""
+    """ Mapping Container Object : tests that slicing with `x[i]` works"""
 
     x = InputVar('d', dict)
 
@@ -437,6 +460,31 @@ def test_evaluator_mapping():
     c = Custom(a=1)
     assert c['i'] == 0
     assert item_i_selector(c) == 0
+
+
+def test_evaluator_mapping_key():
+    """ Mapping key Object : tests that dict[s] raises an exception but the workaround works"""
+
+    s = InputVar('s', str)
+
+    with pytest.raises(FunctionDefinitionError):
+        {'a': 1}[s]
+
+    item_s_selector = Get({'a': 1}, s)
+    item_s_selector = item_s_selector.as_function()
+
+    assert item_s_selector('a') == 1
+
+
+def test_evaluator_list_slice():
+    """ Mapping Container Object : tests that slicing with `x[i]` works"""
+
+    l = InputVar('l', list)
+
+    items_selector = l[0:2]
+    items_selector = items_selector.as_function()
+
+    assert items_selector([1, 2, 3]) == [1, 2]
 
 
 # Numeric types
@@ -508,7 +556,7 @@ def test_evaluator_print_pow():
 
 
 # Type conversion
-# __int__,  __long__, __float__, __complex__, __oct__, __hex__, __index__, __trunc__, __coerce__
+# __int__,  __long__, __float__, __complex__, __oct__, __hex__, __index__, __trunc__, __coerce__, __round__, __floor__, __ceil__,
 def test_evaluator_int_convertible():
     """ Int convertible Object : tests that `int` raises the appropriate exception and that equivalent Int() works """
 
@@ -521,6 +569,26 @@ def test_evaluator_int_convertible():
     to_int = to_int.as_function()
 
     assert to_int(5.5) == 5
+
+
+def test_evaluator_maths():
+    """ """
+    from mini_lambda import Floor, Ceil
+    from math import floor, ceil, trunc
+
+    x = InputVar('x', float)
+
+    assert round(x).evaluate(5.5) == 6
+    assert trunc(x).evaluate(5.5) == 5
+
+    with pytest.raises(FunctionDefinitionError):
+        floor(x)
+    assert Floor(x).evaluate(5.5) == 5
+
+    with pytest.raises(FunctionDefinitionError):
+        ceil(x)
+    assert Ceil(x).evaluate(5.5) == 6
+
 
 
 @pytest.mark.skip(reason="long seems not to be around anymore...")
@@ -643,55 +711,16 @@ def test_evaluator_different_vars():
         a.__getattr__(b)
 
 
-def test_add_new_simple():
-    """ Tests that the mechanism provided to support additional functions works, by testing that log2 can be
-    converted """
+def test_constants_named():
+    """ This test demonstrates the possibility to create constants """
 
-    from mini_lambda import x, _
-    from math import log, e
+    from mini_lambda import x, _, C
+    from math import e
 
-    with pytest.raises(FunctionDefinitionError):
-        log(x)
-
-    Log = make_lambda_friendly(log)
-    complex_identity = _(Log(e ** x))
-
-    assert abs(complex_identity(3.5) - 3.5) < 10e-5
-    print(complex_identity)
-    # this is the remaining issue: the value of math.e is displayed instead of 'e'. We have to define 'constants'
-    assert str(complex_identity) == "log(" + str(e) + " ** x)"
-
-
-def test_add_new_complex_partial():
-    """ Tests that the mechanism provided to support additional functions works with partial functions. """
-
-    from functools import partial
-
-    from mini_lambda import x, _
-    from math import log
-
-    with pytest.raises(FunctionDefinitionError):
-        log(x, 10)
-
-    # option 1
-    def log10(x):
-        return log(x, 10)
-    LogBase10 = make_lambda_friendly(log10)
-    complex_identity = _(LogBase10(10 ** x))
-    assert complex_identity(3.5) == 3.5
-    assert str(complex_identity) == 'log10(10 ** x)'
-
-    # option 2: partial (only to fix keyword arguments or to leftmost positional arguments)
-    Log15BaseX = make_lambda_friendly(partial(log, 15), name='log15baseX')
-    complex_identity = _(1 / Log15BaseX(15 ** x))
-    assert complex_identity(3.5) == 3.5
-    assert str(complex_identity) == '1 / log15baseX(15 ** x)'
-
-    # option 3: lambda !  :)
-    LogBase10 = make_lambda_friendly(lambda x: log(x, 10), name='log10')
-    complex_identity = _(LogBase10(10 ** x))
-    assert complex_identity(3.5) == 3.5
-    assert str(complex_identity) == 'log10(10 ** x)'
+    E = C(e, 'e')
+    assert str(_(x + e)) == 'x + 2.718281828459045'
+    assert str(_(x + E)) == 'x + e'
+    assert str(_(E + E)) == 'e + e'
 
 
 def test_generated_methods():

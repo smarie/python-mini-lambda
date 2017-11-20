@@ -1,22 +1,38 @@
-import math
+from typing import Callable
 
-from mini_lambda.main import InputVar, make_lambda_friendly
-from inspect import getmembers
+from mini_lambda.main import InputVar
 
-# Useful input variables
+# ******* Useful input variables ***********
+# text/string
 s = InputVar('s', str)
-x = InputVar('x', int)
+
+# numbers
+b = InputVar('b', bool)
+x = InputVar('x', float)
+y = InputVar('y', float)
+i = InputVar('i', int)
+j = InputVar('j', int)
+n = InputVar('n', int)
+
+# containers
 l = InputVar('l', list)
+d = InputVar('d', dict)
 
+# callables
+f = InputVar('f', Callable)
 
-# Useful functions
-for package in [math]:
-    # import pprint
-    # pprint(getmembers(math, callable))
-    for method_name, method in getmembers(package, callable):
-        if not method_name.startswith('_'):
-            # TODO maybe further filter only on methods with a single argument using signature ?
+try:
+    import numpy as np
+    # matrices/arrays
+    X = InputVar('X', np.ndarray)
+    Y = InputVar('Y', np.ndarray)
+    M = InputVar('M', np.ndarray)
+except:
+    pass
 
-            # create an equivalent method compliant with lambda expressions
-            print('Creating method ' + method_name.capitalize())
-            globals()[method_name.capitalize()] = make_lambda_friendly(method)
+try:
+    # data frames
+    import pandas as pd
+    df = InputVar('df', pd.DataFrame)
+except:
+    pass
