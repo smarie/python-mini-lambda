@@ -3,17 +3,18 @@
 # ----
 from typing import Any
 
-from mini_lambda.base import StackableFunctionEvaluator, evaluate, get_repr, FunctionDefinitionError
-from mini_lambda.base import PRECEDENCE_ADD_SUB, PRECEDENCE_MUL_DIV_ETC, PRECEDENCE_COMPARISON, \
-    PRECEDENCE_EXPONENTIATION, PRECEDENCE_SHIFTS, PRECEDENCE_POS_NEG_BITWISE_NOT, \
-    PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF
+from mini_lambda.base import _LambdaExpressionBase, evaluate, get_repr, FunctionDefinitionError, \
+    _get_expr_or_result_for_method, _get_root_var
+from mini_lambda.base import _PRECEDENCE_ADD_SUB, _PRECEDENCE_MUL_DIV_ETC, _PRECEDENCE_COMPARISON, \
+    _PRECEDENCE_EXPONENTIATION, _PRECEDENCE_SHIFTS, _PRECEDENCE_POS_NEG_BITWISE_NOT, \
+    _PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF
 from sys import getsizeof
 
 
-class _LambdaExpressionGenerated(StackableFunctionEvaluator):
+class _LambdaExpressionGenerated(_LambdaExpressionBase):
     """
     This generated class implements a bunch of magic methods, so that calling these magic methods on an object will
-    result in adding that magic method to the StackableFunctionEvaluator's stack.
+    result in adding that magic method to the _LambdaExpressionBase's stack.
     This allows for example x[1] to return a new _LambdaExpressionGenerated whose stack is able to call [1] (getitem(1))
     on the result of the current stack's evaluation
 
@@ -56,7 +57,7 @@ class _LambdaExpressionGenerated(StackableFunctionEvaluator):
         ## def _${o.method_name}(r, input):
         ##    return r ${o.pair_operator} evaluate(other, input)
         ## return self.add_unbound_method_to_stack(_${o.method_name})
-        self.assert_has_same_root_var(other)
+        root_var, _ = _get_root_var(self, other)
         def _${o.method_name}(input):
             # first evaluate the inner function
             r = self.evaluate(input)
@@ -65,7 +66,7 @@ class _LambdaExpressionGenerated(StackableFunctionEvaluator):
 
         # return a new LambdaExpression of the same type than self, with the new function as inner function
         string_expr = get_repr(self, ${o.precedence_level}) + ' ${o.pair_operator} ' + get_repr(other, ${o.precedence_level})
-        return type(self)(fun=_${o.method_name}, precedence_level=${o.precedence_level}, str_expr=string_expr, root_var=self._root_var)
+        return type(self)(fun=_${o.method_name}, precedence_level=${o.precedence_level}, str_expr=string_expr, root_var=root_var)
 
     ## -----------------------------
             % else:
@@ -75,7 +76,7 @@ class _LambdaExpressionGenerated(StackableFunctionEvaluator):
         ## def _${o.method_name}(r, input):
         ##     return evaluate(other, input) ${o.pair_operator} r
         ## return self.add_unbound_method_to_stack(_${o.method_name})
-        self.assert_has_same_root_var(other)
+        root_var, _ = _get_root_var(self, other)
         def _${o.method_name}(input):
             # first evaluate the inner function
             r = self.evaluate(input)
@@ -84,50 +85,58 @@ class _LambdaExpressionGenerated(StackableFunctionEvaluator):
 
         # return a new LambdaExpression of the same type than self, with the new function as inner function
         string_expr = get_repr(other, ${o.precedence_level}) + ' ${o.pair_operator} ' + get_repr(self, ${o.precedence_level})
-        return type(self)(fun=_${o.method_name}, precedence_level=${o.precedence_level}, str_expr=string_expr, root_var=self._root_var)
+        return type(self)(fun=_${o.method_name}, precedence_level=${o.precedence_level}, str_expr=string_expr, root_var=root_var)
 
     ## -----------------------------
             % endif
         % elif o.unbound_method:
     ## --------unbound method---------------------
-    def ${o.method_name}(self, *args):
-        """ Returns a new _LambdaExpression performing '${o.unbound_method.__name__}(<r>, *args)' on the result <r> of this evaluator's evaluation """
-        ## def _${o.method_name}(r, input, *args):
-        ##     return ${o.unbound_method.__name__}(r, input, *args)
-        ## return self.add_unbound_method_to_stack(_${o.method_name}, *args)
-        for other in args:
-            self.assert_has_same_root_var(other)
+    def ${o.method_name}(self, *args, **kwargs):
+        """ Returns a new _LambdaExpression performing '${o.unbound_method.__name__}(<r>, *args, **kwargs)' on the result <r> of this evaluator's evaluation """
+        ## def _${o.method_name}(r, input, *args, **kwargs):
+        ##     return ${o.unbound_method.__name__}(r, input, *args, **kwargs)
+        ## return self.add_unbound_method_to_stack(_${o.method_name}, *args, **kwargs)
+        root_var, _ = _get_root_var(self, *args, **kwargs)
         def _${o.method_name}(input):
             # first evaluate the inner function
             r = self.evaluate(input)
             # then call the method
-            return ${o.unbound_method.__name__}(r, *[evaluate(other, input) for other in args])
+            return ${o.unbound_method.__name__}(r, *[evaluate(other, input) for other in args],
+                                                **{arg_name: evaluate(other, input) for arg_name, other in kwargs.items()})
 
         # return a new LambdaExpression of the same type than self, with the new function as inner function
         # Note: we use precedence=None for coma-separated items inside the parenthesis
-        string_expr = '${o.unbound_method.__name__}(' + get_repr(self, None) + ', ' + ', '.join([get_repr(arg, None) for arg in args]) + ')'
-        return type(self)(fun=_${o.method_name}, precedence_level=PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF, 
-                          str_expr=string_expr, root_var=self._root_var)
+        string_expr = '${o.unbound_method.__name__}(' + get_repr(self, None) \
+                      + (', ' if (len(args) > 0 and len(kwargs) > 0) else '') \
+                      + ', '.join([get_repr(arg, None) for arg in args]) \
+                      + ', '.join([arg_name + '=' + get_repr(arg, None) for arg_name, arg in kwargs.items()]) \
+                      + ')'
+        return type(self)(fun=_${o.method_name}, precedence_level=_PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF,
+                          str_expr=string_expr, root_var=root_var)
 
     ## -----------------------------
         % else:
     ## --------general case---------------------
-    def ${o.method_name}(self, *args):
-        """ Returns a new _LambdaExpression performing '<r>.${o.method_name}(*args)' on the result <r> of this evaluator's evaluation """
-        # return self.add_bound_method_to_stack('${o.method_name}', *args)
-        for other in args:
-            self.assert_has_same_root_var(other)
+    def ${o.method_name}(self, *args, **kwargs):
+        """ Returns a new _LambdaExpression performing '<r>.${o.method_name}(*args, **kwargs)' on the result <r> of this evaluator's evaluation """
+        # return self.add_bound_method_to_stack('${o.method_name}', *args, **kwargs)
+        root_var, _ = _get_root_var(self, *args, **kwargs)
         def _${o.method_name}(input):
             # first evaluate the inner function
             r = self.evaluate(input)
             # then call the method
-            return r.${o.method_name}(*[evaluate(other, input) for other in args])
+            return r.${o.method_name}(*[evaluate(other, input) for other in args],
+                                      **{arg_name: evaluate(other, input) for arg_name, other in kwargs.items()})
 
         # return a new LambdaExpression of the same type than self, with the new function as inner function
         # Note: we use precedence=None for coma-separated items inside the parenthesis
-        string_expr = get_repr(self, PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF) + '.${o.method_name}(' + ', '.join([get_repr(arg, None) for arg in args]) + ')'
-        return type(self)(fun=_${o.method_name}, precedence_level=PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF, 
-                          str_expr=string_expr, root_var=self._root_var)
+        string_expr = get_repr(self, _PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF) + '.${o.method_name}(' \
+                      + ', '.join([get_repr(arg, None) for arg in args]) \
+                      + (', ' if (len(args) > 0 and len(kwargs) > 0) else '') \
+                      + ', '.join([arg_name + '=' + get_repr(arg, None) for arg_name, arg in kwargs.items()]) \
+                      + ')'
+        return type(self)(fun=_${o.method_name}, precedence_level=_PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF,
+                          str_expr=string_expr, root_var=root_var)
 
     ## -----------------------------
         % endif
@@ -135,7 +144,7 @@ class _LambdaExpressionGenerated(StackableFunctionEvaluator):
     # ******* All magic methods that need to raise an exception ********
     ## For each method to override
     % for o in to_override_with_exception:
-    def ${o.method_name}(self, *args):
+    def ${o.method_name}(self, *args, **kwargs):
         """
         This magic method can not be used on an _LambdaExpression, because unfortunately python checks the
         result type and does not allow it to be a custom type.
@@ -152,12 +161,15 @@ class _LambdaExpressionGenerated(StackableFunctionEvaluator):
 
 # ******* All replacement methods for the magic methods throwing exceptions ********
 % for o in to_override_with_exception:
-def ${o.module_method_name}(evaluator: _LambdaExpressionGenerated):
-    """ This is a replacement method for _LambdaExpression '${o.method_name}' magic method """
     % if o.unbound_method:
-    return evaluator.add_unbound_method_to_stack(${o.unbound_method.__name__})
+def ${o.module_method_name}(*args, **kwargs):
+    """ This is a replacement method for _LambdaExpression '${o.method_name}' magic method """
+    ## return evaluator.add_unbound_method_to_stack(${o.unbound_method.__name__})
+    return _get_expr_or_result_for_method(${o.unbound_method.__name__}, *args, **kwargs)
     % else:
-    return evaluator.add_bound_method_to_stack('${o.method_name}')
+def ${o.module_method_name}(expr: _LambdaExpressionGenerated, *args, **kwargs):
+    """ This is a replacement method for _LambdaExpression '${o.method_name}' magic method """
+    return expr.add_bound_method_to_stack('${o.method_name}', *args, **kwargs)
     % endif
 
 
