@@ -28,7 +28,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-0.17.1, mkdocs-material-2.0.4">
+      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.1.0">
     
     
       
@@ -36,7 +36,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application-709eec9410.css">
+      <link rel="stylesheet" href="../assets/stylesheets/application-3368aa6b74.css">
       
     
     
@@ -81,14 +81,18 @@
         <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
-        <span class="md-flex__ellipsis md-header-nav__title">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           
             
-              
+              <span class="md-header-nav__topic">
+                mini_lambda
+              </span>
+              <span class="md-header-nav__topic">
+                Usage details
+              </span>
             
-            Usage details
           
-        </span>
+        </div>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
@@ -216,9 +220,132 @@
       
     
     
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Usage details
+      </label>
+    
     <a href="./" title="Usage details" class="md-nav__link md-nav__link--active">
       Usage details
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#input-variables" title="Input Variables" class="md-nav__link">
+    Input Variables
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lambda-expressions-vs-lambda-functions" title="Lambda Expressions vs Lambda Functions" class="md-nav__link">
+    Lambda Expressions vs Lambda Functions
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#creating-an-expression-and-evaluating-it" title="Creating an expression and Evaluating it" class="md-nav__link">
+    Creating an expression and Evaluating it
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#string-representation" title="String Representation" class="md-nav__link">
+    String Representation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from-expression-edit-mode-to-function-apply-mode" title="From expression (edit mode) to function (apply mode)" class="md-nav__link">
+    From expression (edit mode) to function (apply mode)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#all-at-once" title="All at once" class="md-nav__link">
+    All at once
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lambda-expression-syntax" title="Lambda Expression Syntax" class="md-nav__link">
+    Lambda Expression Syntax
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#supporting-any-other-methods-and-classes" title="Supporting any other methods and classes" class="md-nav__link">
+    Supporting any other methods and classes
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#constants" title="Constants" class="md-nav__link">
+    Constants
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#functions" title="Functions" class="md-nav__link">
+    Functions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#classes" title="Classes" class="md-nav__link">
+    Classes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#anything" title="Anything" class="md-nav__link">
+    Anything
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pre-converted-constants-methods-and-classes" title="Pre-converted constants, methods and classes" class="md-nav__link">
+    Pre-converted constants, methods and classes
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
     
   </li>
 
@@ -252,6 +379,116 @@
     
   
   
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#input-variables" title="Input Variables" class="md-nav__link">
+    Input Variables
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lambda-expressions-vs-lambda-functions" title="Lambda Expressions vs Lambda Functions" class="md-nav__link">
+    Lambda Expressions vs Lambda Functions
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#creating-an-expression-and-evaluating-it" title="Creating an expression and Evaluating it" class="md-nav__link">
+    Creating an expression and Evaluating it
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#string-representation" title="String Representation" class="md-nav__link">
+    String Representation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from-expression-edit-mode-to-function-apply-mode" title="From expression (edit mode) to function (apply mode)" class="md-nav__link">
+    From expression (edit mode) to function (apply mode)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#all-at-once" title="All at once" class="md-nav__link">
+    All at once
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lambda-expression-syntax" title="Lambda Expression Syntax" class="md-nav__link">
+    Lambda Expression Syntax
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#supporting-any-other-methods-and-classes" title="Supporting any other methods and classes" class="md-nav__link">
+    Supporting any other methods and classes
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#constants" title="Constants" class="md-nav__link">
+    Constants
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#functions" title="Functions" class="md-nav__link">
+    Functions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#classes" title="Classes" class="md-nav__link">
+    Classes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#anything" title="Anything" class="md-nav__link">
+    Anything
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pre-converted-constants-methods-and-classes" title="Pre-converted constants, methods and classes" class="md-nav__link">
+    Pre-converted constants, methods and classes
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -266,7 +503,347 @@
                 
                 
                 <h1 id="usage-details">Usage details<a class="headerlink" href="#usage-details" title="Permanent link">&para;</a></h1>
-<p>TODO</p>
+<h2 id="input-variables">Input Variables<a class="headerlink" href="#input-variables" title="Permanent link">&para;</a></h2>
+<p>An input <strong>variable</strong> is basically a symbolic string that you will use in your expressions. For example <code>x</code>, <code>t</code>, <code>foo</code>, ... It is created with the <code>InputVar()</code> method. It is recommended that your use the same string for the variable name and for its symbolic name, for example:</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">InputVar</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">InputVar</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>In addition, the <code>InputVar</code> method has a second optional <code>typ</code> argument. This argument is completely useless to <code>mini_lambda</code>, but it allows your IDE to provide you with useful autocompletion when writing expressions.</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">InputVar</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">InputVar</span><span class="p">(</span><span class="s1">&#39;df&#39;</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="c1">#... enjoy IDE autocompletion when using df in your expressions!</span>
+</pre></div>
+
+
+<p>For convenience, <code>mini_lambda</code> comes bundled with the following predefined input variables:</p>
+<ul>
+<li>text/string: <code>s</code></li>
+<li>boolean/int/float numbers: <code>b</code> / <code>i</code>, <code>j</code>, <code>n</code> / <code>x</code>, <code>y</code></li>
+<li>lists/mappings: <code>l</code> / <code>d</code></li>
+<li>callables: <code>f</code></li>
+<li>numpy arrays (if numpy is present): <code>X</code>, <code>Y</code>, <code>M</code></li>
+<li>pandas dataframes (if pandas is present): <code>df</code></li>
+</ul>
+<h2 id="lambda-expressions-vs-lambda-functions">Lambda Expressions vs Lambda Functions<a class="headerlink" href="#lambda-expressions-vs-lambda-functions" title="Permanent link">&para;</a></h2>
+<h3 id="creating-an-expression-and-evaluating-it">Creating an expression and Evaluating it<a class="headerlink" href="#creating-an-expression-and-evaluating-it" title="Permanent link">&para;</a></h3>
+<p>Lambda <strong>expressions</strong> are obtained by using python syntax on variables. For example <code>2 * x + 1</code> is a valid expression.</p>
+<p>The simplest lambda expression is the variable itself. It is implemented with the identity function: when <strong>evaluated</strong> on some input, it directly returns that input. </p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">x</span>
+
+<span class="c1"># A variable is a lambda expression</span>
+<span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>           <span class="c1"># &lt;class &#39;mini_lambda.main._LambdaExpression&#39;&gt;</span>
+
+<span class="c1"># Evaluating the lambda expression applies the identity function</span>
+<span class="n">x</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>  <span class="c1"># 1234</span>
+</pre></div>
+
+
+<p>Obviously you want to construct expressions that are a bit more complex than the identity. Here is a slightly more complex example:</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">x</span>
+
+<span class="c1"># An expression is built using python syntax with a variable</span>
+<span class="n">my_first_expr</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="mi">0</span>
+
+<span class="n">my_first_expr</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># False</span>
+</pre></div>
+
+
+<p>As seen above, an expression can be <strong>evaluated</strong> on an input by calling <code>&lt;expr&gt;.evaluate(input)</code>. The following steps happen:</p>
+<ul>
+<li>when <code>my_first_expr</code> is created, the python syntax simplifies itself automatically, as usual. So <code>my_first_expr = (1 + 1) * x + 1 &gt; 0</code> becomes <code>my_first_expr = 2 * x + 1 &gt; 0</code> before the expression is actually created.</li>
+<li>before entering <code>evaluate</code>, the arguments are also simplified automatically as usual. So <code>my_first_expr.evaluate(-1/2)</code> becomes <code>my_first_expr.evaluate(-0.5)</code></li>
+<li>the first step in <code>evaluate</code> is that the value <code>-0.5</code> is assigned to all parts of the expression containing the variable. Everywhere, <code>x</code> is replaced with <code>-0.5</code></li>
+<li>the second step in <code>evaluate</code> is to resolve the rest of the formula using plain old python. So <code>2 * -0.5 + 1 &gt; 0</code> is executed, which yields <code>False</code>.</li>
+</ul>
+<h3 id="string-representation">String Representation<a class="headerlink" href="#string-representation" title="Permanent link">&para;</a></h3>
+<p>A string representation of an expression can be obtained through the <code>&lt;expr&gt;.to_string()</code> method. This is one of the added values of <code>mini_lambda</code> with respect to standard lambda functions:</p>
+<div class="codehilite"><pre><span></span><span class="n">x</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span>              <span class="c1"># &quot;x&quot;</span>
+<span class="n">my_first_expr</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span>  <span class="c1"># &quot;2 * x + 1 &gt; 0&quot;</span>
+</pre></div>
+
+
+<h3 id="from-expression-edit-mode-to-function-apply-mode">From expression (edit mode) to function (apply mode)<a class="headerlink" href="#from-expression-edit-mode-to-function-apply-mode" title="Permanent link">&para;</a></h3>
+<p>An expression is in <strong>edit mode</strong> until you explicitly transform it to a <strong>function</strong>. That is why we had to use the <code>evaluate</code> and <code>to_string</code> functions explicitly in previous section, instead of the more pythonic <code>&lt;expr&gt;(input)</code> and <code>str(&lt;expr&gt;)</code>. </p>
+<p>Indeed, <code>&lt;expr&gt;(input)</code> would create a new expression instead of evaluating it:</p>
+<div class="codehilite"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">my_first_expr</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># still an expression !</span>
+<span class="nb">type</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>        <span class="c1"># &lt;class &#39;mini_lambda.main._LambdaExpression&#39;&gt;</span>
+<span class="n">result</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span>  <span class="c1"># &quot;(2 * x + 1 &gt; 0)(-0.5)&quot;</span>
+</pre></div>
+
+
+<p>There are several ways to transform an expression to a plain old function:</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">_</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">F</span>
+
+<span class="n">one</span> <span class="o">=</span> <span class="n">my_first_expr</span><span class="o">.</span><span class="n">as_function</span><span class="p">()</span>   <span class="c1"># explicit conversion</span>
+<span class="n">two</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="n">my_first_expr</span><span class="p">)</span>              <span class="c1"># _() does the same thing</span>
+<span class="n">three</span> <span class="o">=</span> <span class="n">L</span><span class="p">(</span><span class="n">my_first_expr</span><span class="p">)</span>            <span class="c1"># L() is an alias for _()</span>
+<span class="n">four</span> <span class="o">=</span> <span class="n">F</span><span class="p">(</span><span class="n">my_first_expr</span><span class="p">)</span>             <span class="c1"># F() is another alias for _()</span>
+<span class="n">five</span><span class="p">,</span> <span class="n">six</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="n">my_first_expr</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>     <span class="c1"># both accept multiple arguments</span>
+</pre></div>
+
+
+<p>After converting an expression to a function, it is straightforward to use:</p>
+<div class="codehilite"><pre><span></span><span class="c1"># evaluation = calling the function</span>
+<span class="n">one</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="n">two</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="n">three</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="n">four</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="n">five</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>    <span class="c1"># all return False</span>
+<span class="n">six</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>   <span class="c1"># returns -0.5</span>
+
+<span class="c1"># string representation = str()</span>
+<span class="nb">str</span><span class="p">(</span><span class="n">one</span><span class="p">)</span>   <span class="c1"># &quot;2 * x + 1 &gt; 0&quot;</span>
+<span class="nb">str</span><span class="p">(</span><span class="n">six</span><span class="p">)</span>   <span class="c1"># &quot;x&quot;</span>
+</pre></div>
+
+
+<h3 id="all-at-once">All at once<a class="headerlink" href="#all-at-once" title="Permanent link">&para;</a></h3>
+<p>Obviously you may wish to define a function directly in one line:</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">Print</span>
+<span class="n">say_hello</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="n">Print</span><span class="p">(</span><span class="s1">&#39;Hello, &#39;</span> <span class="o">+</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39; !&#39;</span><span class="p">))</span>
+<span class="n">say_hello</span><span class="p">(</span><span class="s1">&#39;world&#39;</span><span class="p">)</span>  <span class="c1"># &quot;Hello, world !&quot; </span>
+</pre></div>
+
+
+<h2 id="lambda-expression-syntax">Lambda Expression Syntax<a class="headerlink" href="#lambda-expression-syntax" title="Permanent link">&para;</a></h2>
+<p>Let's now focus on how you can edit more complex expressions. Basically, most of python syntax is supported, either directly:</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">x</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">trunc</span>
+
+<span class="n">expr</span> <span class="o">=</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">5</span>                      <span class="c1"># comparing (&lt;, &gt;, &lt;=, &gt;=, ==, !=)</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>                  <span class="c1"># accessing fields and methods (recursive)</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>                      <span class="c1"># calling</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>                <span class="c1"># reversing</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">]</span>                   <span class="c1"># getting</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>                     <span class="c1"># slicing</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">i</span> <span class="o">**</span> <span class="mi">5</span> <span class="o">%</span> <span class="mi">2</span>             <span class="c1"># calc-ing (+,-,/,//,%,divmod,**,@,&lt;&lt;,&gt;&gt;,abs,~)</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">trunc</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>                   <span class="c1"># calculating (round, math.trunc)</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>             <span class="c1"># formatting</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">)</span>          <span class="c1"># boolean logic: &amp;,|,^</span>
+</pre></div>
+
+
+<p>or through provided workarounds :</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">b</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">x</span>
+<span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">Slice</span><span class="p">,</span> <span class="n">Get</span><span class="p">,</span> <span class="n">Not</span><span class="p">,</span> <span class="n">In</span>
+<span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">Iter</span><span class="p">,</span> <span class="n">Repr</span><span class="p">,</span> <span class="n">Format</span><span class="p">,</span> <span class="n">Len</span><span class="p">,</span> <span class="n">Int</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Log</span><span class="p">,</span> <span class="n">DDecimal</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">log</span>
+<span class="kn">from</span> <span class="nn">decimal</span> <span class="kn">import</span> <span class="n">Decimal</span>
+
+<span class="c1"># boolean logic</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">)</span>            <span class="c1"># fails</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">)</span>              <span class="c1"># OK</span>
+<span class="c1"># iterating</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>                  <span class="c1"># fails</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">Iter</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>                  <span class="c1"># OK</span>
+<span class="c1"># calling with the variable as arg</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">log</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>                         <span class="c1"># fails</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">Log</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>                         <span class="c1"># OK</span>
+<span class="c1"># constructing with the variable as arg</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>                     <span class="c1"># fails</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">DDecimal</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>                    <span class="c1"># OK</span>
+<span class="c1"># getting with the variable as the key</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}[</span><span class="n">s</span><span class="p">]</span>                    <span class="c1"># fails</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">Get</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span> <span class="n">s</span><span class="p">)</span>               <span class="c1"># OK</span>
+<span class="c1"># slicing with the variable as index</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="s1">&#39;hello&#39;</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">i</span><span class="p">]</span>                   <span class="c1"># fails</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">Get</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">,</span> <span class="n">Slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>      <span class="c1"># OK</span>
+<span class="c1"># representing: Repr/Str/Bytes/Sizeof/Hash</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>                        <span class="c1"># fails</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">Repr</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>                        <span class="c1"># OK</span>
+<span class="c1"># formatting with the variable in the args</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="s1">&#39;{} {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>           <span class="c1"># fails</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">Format</span><span class="p">(</span><span class="s1">&#39;{} {}&#39;</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>          <span class="c1"># OK</span>
+<span class="c1"># sizing</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>                         <span class="c1"># fails</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">Len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>                         <span class="c1"># OK</span>
+<span class="c1"># casting (Bool, Int, Float, Complex, Hex, Oct)</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>                         <span class="c1"># fails</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">Int</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>                         <span class="c1"># OK</span>
+<span class="c1"># not</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">b</span>                          <span class="c1"># fails</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">not_</span><span class="p">()</span>                       <span class="c1"># OK</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">Not</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>                         <span class="c1"># OK</span>
+<span class="c1"># any/all</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>                         <span class="c1"># fails</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">any_</span><span class="p">()</span>                        <span class="c1"># OK</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">Any</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>                         <span class="c1"># OK</span>
+<span class="c1"># membership testing (variable as container)</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="s1">&#39;f&#39;</span> <span class="ow">in</span> <span class="n">l</span>                       <span class="c1"># fails</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">)</span>                <span class="c1"># OK</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">In</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span>                     <span class="c1"># OK</span>
+<span class="c1"># membership testing (variable as item)</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>                    <span class="c1"># fails</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">is_in</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>                <span class="c1"># OK</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">In</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>                  <span class="c1"># OK</span>
+</pre></div>
+
+
+<p>As seen above, there are several types of defective behaviours:</p>
+<ul>
+<li>
+<p>built-in behaviours such as <code>len</code>, <code>int</code>, ... for which the behaviour <strong>can</strong> be overridden according to the <a href="https://docs.python.org/3/reference/datamodel.html">data model</a> but for which the python framework unfortunately force checks the return type. For these methods even if we override the methods, since we return a lambda expression, the type checking fails. So we provide instead an implementation that always raises an exception, and provide a workaround function named with a similar name i.e. <code>Int()</code> to replace <code>int()</code>.</p>
+</li>
+<li>
+<p>built-in behaviours with special syntax (<code>not b</code>, <code>{'a': 1}[s]</code>, <code>x in y</code>, <code>any_(x)</code>). In which case an equivalent explicit method is provided: <code>Not</code>, <code>Get</code>, <code>Slice</code>, <code>In</code>, <code>Any</code>, <code>All</code>. In addition, equivalent methods <code>&lt;expr&gt;.contains()</code>, <code>&lt;expr&gt;.is_in()</code>, <code>&lt;expr&gt;.not_()</code>, <code>&lt;expr&gt;.any_()</code>, and <code>&lt;expr&gt;.all_()</code> are provided.</p>
+</li>
+<li>
+<p>the shortcircuit boolean operators <code>and/or</code> can not be overriden and check the return type, so you should use <code>&amp;</code> or <code>|</code> instead</p>
+</li>
+<li>
+<p>any other 'standard' methods, whether they are object constructors <code>Decimal()</code> or functions such as <code>log()</code>. We will see in the next section how you can convert any existing class or method to a lambda-friendly one. <code>mini_lambda</code> comes bundled with a few of them, namely all constants, functions and classes defined in <code>math</code> and <code>decimal</code> modules.</p>
+</li>
+</ul>
+<p>Finally, the following python constructs can <strong>not</strong> be used at all</p>
+<div class="codehilite"><pre><span></span><span class="n">expr</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">1</span>            <span class="c1"># chained comparisons (use parenthesis and &amp; instead)</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">l</span><span class="p">]</span>       <span class="c1"># list/tuple/set/dict comprehensions (no workaround)</span>
+</pre></div>
+
+
+<h2 id="supporting-any-other-methods-and-classes">Supporting any other methods and classes<a class="headerlink" href="#supporting-any-other-methods-and-classes" title="Permanent link">&para;</a></h2>
+<p>Now you might wonder how to use all of this in practice, where you manipulate specific data types such as numpy arrays, pandas dataframes, etc. Here is how you convert items to lambda-friendly items</p>
+<h3 id="constants">Constants<a class="headerlink" href="#constants" title="Permanent link">&para;</a></h3>
+<p>A constant is for example <code>math.e</code> or <code>math.pi</code>. Using constants in expressions can obviously be done without intervention, but they will not appear as named when printing the expression:</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">x</span><span class="p">,</span> <span class="n">_</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">e</span>
+
+<span class="c1"># we can use any constant in an expression, but it will be evaluated when printed</span>
+<span class="nb">str</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">e</span><span class="p">))</span>  <span class="c1"># &#39;x + 2.718281828459045&#39;</span>
+</pre></div>
+
+
+<p>For this reason <code>mini_lambda</code> provides a <code>Constant()</code> method with alias <code>C()</code> to define a constant and assign it with a symbol.</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">x</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">C</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">e</span>
+
+<span class="c1"># define the constant</span>
+<span class="n">E</span> <span class="o">=</span> <span class="n">C</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">)</span>
+
+<span class="c1"># use it in expressions. The name appears when printed</span>
+<span class="nb">str</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">E</span><span class="p">))</span>  <span class="c1"># &#39;x + e&#39;</span>
+</pre></div>
+
+
+<h3 id="functions">Functions<a class="headerlink" href="#functions" title="Permanent link">&para;</a></h3>
+<p>Standard functions can be easily converted to be usable in expressions, through the <code>make_lambda_friendly_method</code> helper function:</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">x</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">make_lambda_friendly_method</span>
+
+<span class="c1"># (a) standard function</span>
+<span class="k">def</span> <span class="nf">divide</span><span class="p">(</span><span class="n">dummy</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="n">den</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; This is an existing function that you want to convert &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">times</span> <span class="o">*</span> <span class="n">num</span> <span class="o">/</span> <span class="n">den</span>
+
+<span class="c1"># let&#39;s make the function lambda-friendly !</span>
+<span class="n">Divide</span> <span class="o">=</span> <span class="n">make_lambda_friendly_method</span><span class="p">(</span><span class="n">divide</span><span class="p">)</span>
+
+<span class="c1"># you can now use the function in an expression</span>
+<span class="n">complex_constant</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">Divide</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">den</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">complex_constant</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>   <span class="c1"># 2</span>
+<span class="nb">str</span><span class="p">(</span><span class="n">complex_constant</span><span class="p">)</span>  <span class="c1"># &#39;1 + divide(None, x, den=x, num=1)&#39;</span>
+</pre></div>
+
+
+<p>Note that by default the name appearing in the expression is <code>func.__name__</code>. It can be changed by setting the <code>name</code> parameter of <code>make_lambda_friendly_method</code>.</p>
+<p>Anonymous functions such as standard lambdas and functools partial functions can be converted too, but you'll have to explicitly provide a name:</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">x</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">make_lambda_friendly_method</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">log</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+
+<span class="c1"># (b) partial function (to fix leftmost positional args and/or keyword args)</span>
+<span class="n">is_superclass_of_bool</span> <span class="o">=</span> <span class="n">make_lambda_friendly_method</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="nb">issubclass</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span> 
+                                                    <span class="n">name</span><span class="o">=</span><span class="s1">&#39;is_superclass_of_bool&#39;</span><span class="p">)</span>
+
+<span class="c1"># now you can use it in your lambda expressions</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="n">is_superclass_of_bool</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="n">expr</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>    <span class="c1"># True</span>
+<span class="n">expr</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>    <span class="c1"># False</span>
+<span class="k">print</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>  <span class="c1"># &quot;is_superclass_of_bool(x)&quot;</span>
+
+<span class="c1"># (c) lambda function</span>
+<span class="n">Log10</span> <span class="o">=</span> <span class="n">make_lambda_friendly_method</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">log</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;log10&#39;</span><span class="p">)</span>
+
+<span class="c1"># now you can use it in your lambda expressions</span>
+<span class="n">complex_identity</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="n">Log10</span><span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="n">x</span><span class="p">))</span>
+<span class="n">complex_identity</span><span class="p">(</span><span class="mf">3.5</span><span class="p">)</span>    <span class="c1"># 3.5</span>
+<span class="k">print</span><span class="p">(</span><span class="n">complex_identity</span><span class="p">)</span>  <span class="c1"># &quot;log10(10 ** x)&quot;</span>
+</pre></div>
+
+
+<p>Finally, it is possible to convert functions from classes in a similar way:</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">x</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">make_lambda_friendly_method</span>
+
+<span class="c1"># (d) standard function str.startswith (from class str)</span>
+<span class="n">StartsWith</span> <span class="o">=</span> <span class="n">make_lambda_friendly_method</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">startswith</span><span class="p">)</span>
+
+<span class="c1"># now you can use it in your lambda expressions</span>
+<span class="n">str_tester</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="n">StartsWith</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">,</span> <span class="s1">&#39;el&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
+<span class="n">str_tester</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>      <span class="c1"># False</span>
+<span class="n">str_tester</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>      <span class="c1"># True</span>
+<span class="k">print</span><span class="p">(</span><span class="n">str_tester</span><span class="p">)</span>  <span class="c1"># &quot;startswith(&#39;hello&#39;, &#39;el&#39;, x)&quot;</span>
+
+<span class="c1"># -- static and class functions</span>
+<span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">bar1</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="n">den</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">times</span> <span class="o">*</span> <span class="n">num</span> <span class="o">/</span> <span class="n">den</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">bar2</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="n">den</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">times</span> <span class="o">*</span> <span class="n">num</span> <span class="o">/</span> <span class="n">den</span>
+
+<span class="c1"># (e) static functions</span>
+<span class="n">FooBar1</span> <span class="o">=</span> <span class="n">make_lambda_friendly_method</span><span class="p">(</span><span class="n">Foo</span><span class="o">.</span><span class="n">bar1</span><span class="p">)</span>
+<span class="n">fun1</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span> <span class="n">FooBar1</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">den</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="p">)</span>
+
+<span class="c1"># (f) class functions - with hardcoded cls argument</span>
+<span class="n">FooBar2a</span> <span class="o">=</span> <span class="n">make_lambda_friendly_method</span><span class="p">(</span><span class="n">Foo</span><span class="o">.</span><span class="n">bar2</span><span class="p">)</span>
+<span class="n">fun2a</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span> <span class="n">FooBar2a</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">den</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="p">)</span>
+
+<span class="c1"># (g) class functions - with free cls argument</span>
+<span class="n">FooBar2b</span> <span class="o">=</span> <span class="n">make_lambda_friendly_method</span><span class="p">(</span><span class="n">Foo</span><span class="o">.</span><span class="n">bar2</span><span class="o">.</span><span class="vm">__func__</span><span class="p">)</span>
+<span class="n">fun2b</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span> <span class="n">FooBar2b</span><span class="p">(</span><span class="n">Foo</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">den</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="p">)</span>
+</pre></div>
+
+
+<p>Note: although the above is valid, it is much more recommended to convert the whole class as we'll see in the next section.</p>
+<h3 id="classes">Classes<a class="headerlink" href="#classes" title="Permanent link">&para;</a></h3>
+<p>Classes can be entirely made lambda-friendly at once. This will convert the constructor, as well as any other method that would be available.</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">X</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">make_lambda_friendly_class</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+
+<span class="n">DDataframe</span> <span class="o">=</span> <span class="n">make_lambda_friendly_class</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span> <span class="n">DDataframe</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
+
+<span class="n">expr</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]))</span>  <span class="c1"># 2</span>
+<span class="nb">str</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>               <span class="c1"># &#39;DataFrame(X).max().values[0]&#39;</span>
+</pre></div>
+
+
+<h3 id="anything">Anything<a class="headerlink" href="#anything" title="Permanent link">&para;</a></h3>
+<p>Actually the <code>Constant()</code> (alias <code>C()</code>) function that we saw above to convert constants, is also able to convert methods ans classes. So if there is only a single conversion operator to remember, remember this one.</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">_</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">X</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+
+<span class="n">all_at_once</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span> <span class="n">C</span><span class="p">(</span><span class="k">print</span><span class="p">)(</span><span class="n">C</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span> <span class="p">)</span>
+
+<span class="n">all_at_once</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]))</span>
+<span class="c1"># prints</span>
+<span class="c1">#    0  1</span>
+<span class="c1"># 0  1  2</span>
+<span class="nb">str</span><span class="p">(</span><span class="n">all_at_once</span><span class="p">)</span>  <span class="c1"># &#39;print(DataFrame(X).transpose())&#39;</span>
+</pre></div>
+
+
+<h3 id="pre-converted-constants-methods-and-classes">Pre-converted constants, methods and classes<a class="headerlink" href="#pre-converted-constants-methods-and-classes" title="Permanent link">&para;</a></h3>
+<p>For convenience all of the <a href="https://docs.python.org/3/library/functions.html">built-in functions</a> as well as constants, methods and classes from the <code>math.py</code> and <code>decimal.py</code> modules are provided in a lambda-friendly way by this package. The naming rule is to capitalize lower-case names, and for already capitalized names to duplicate the first letter:</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">DDecimal</span>  <span class="c1"># Decimal class</span>
+<span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">Print</span>     <span class="c1"># print() function</span>
+<span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">Pi</span>        <span class="c1"># math.pi constant</span>
+</pre></div>
                 
                   
                 
@@ -322,9 +899,9 @@
       <div class="md-footer-copyright">
         
         powered by
-        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
+        <a href="http://www.mkdocs.org">MkDocs</a>
         and
-        <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs">
+        <a href="https://squidfunk.github.io/mkdocs-material/">
           Material for MkDocs</a>
       </div>
       
@@ -336,9 +913,9 @@
       
     </div>
     
-      <script src="../assets/javascripts/application-8e4952e681.js"></script>
+      <script src="../assets/javascripts/application-a5397a53ce.js"></script>
       
-      <script>app.initialize({version:"0.17.1",url:{base:".."}})</script>
+      <script>app.initialize({version:"0.17.2",url:{base:".."}})</script>
       
     
     

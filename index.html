@@ -28,7 +28,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="./assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-0.17.1, mkdocs-material-2.0.4">
+      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.1.0">
     
     
       
@@ -36,7 +36,7 @@
       
     
     
-      <link rel="stylesheet" href="./assets/stylesheets/application-709eec9410.css">
+      <link rel="stylesheet" href="./assets/stylesheets/application-3368aa6b74.css">
       
     
     
@@ -81,14 +81,18 @@
         <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
-        <span class="md-flex__ellipsis md-header-nav__title">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           
             
-              
+              <span class="md-header-nav__topic">
+                mini_lambda
+              </span>
+              <span class="md-header-nav__topic">
+                Home
+              </span>
             
-            Home
           
-        </span>
+        </div>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
@@ -422,82 +426,83 @@
 <p>This idea initially comes from the <a href="https://smarie.github.io/python-valid8/">valid8</a> validation library. I ended up understanding that there were two complementary ways to provide users with easy-to-use validation functions:</p>
 <ul>
 <li>either to provide a very exhaustive catalog of functions to cover most use cases (is greater than, is between, etc.). <em>Drawback</em>: we need to reinvent all functions that exist already.</li>
-<li>or to provide users with the capability to write custom validation functions, in particular using lambdas. <em>Drawback</em>: the <code>lambda x:</code> prefix has to be present everywhere, and users still have to write the exception messages for validation failures.</li>
+<li>or to provide users with the capability to write custom validation functions, in particular using lambdas. <em>Drawback</em>: the <code>lambda x:</code> prefix has to be present everywhere, and users still have to write explicit exception messages for validation failures.</li>
 </ul>
-<p>The <code>mini_lambda</code> library provides an answer to the second item: it allows developers to write simple functions </p>
-<p>Although initially developed in the context of validation, this library is now fully independent and can serve other use cases.</p>
+<p>The <code>mini_lambda</code> library provides an answer to the second item: it allows developers to write simple functions with a subset of standard python syntax, without the <code>lambda x:</code> prefix. It is possible to get a string representation of these functions in order for example to automatically generate validation exception messages as done in <a href="https://smarie.github.io/python-valid8/">valid8</a>. But it can also be used for other use cases: indeed, although initially developed in the context of validation, this library is now fully independent.</p>
 <h2 id="installing">Installing<a class="headerlink" href="#installing" title="Permanent link">&para;</a></h2>
 <div class="codehilite"><pre><span></span>&gt; pip install mini_lambda
 </pre></div>
 
 
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
-<p>The idea is that you start from a magic variable such as <code>x</code>, <code>s</code>, <code>l</code>, <code>df</code>... and you write expressions using it:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">x</span><span class="p">,</span> <span class="n">s</span>
-<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">log</span>
+<p>Three basic steps:</p>
+<ul>
+<li>import or create a 'magic variable' such as <code>x</code>, <code>s</code>, <code>l</code>, <code>df</code>...</li>
+<li>write an expression using it.</li>
+<li>transform the expression into a function by wrapping it with <code>_()</code> or its aliases <code>L()</code> and<code>F()</code>.</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="c1"># create or import a magic variable, here we import &#39;s&#39; </span>
+<span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">s</span>
 
-<span class="c1"># here are some lambda functions:</span>
-<span class="n">is_lowercase</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">islower</span><span class="p">()</span>
-<span class="n">say_hello</span> <span class="o">=</span> <span class="s1">&#39;Hello, &#39;</span> <span class="o">+</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39; !&#39;</span>
-<span class="n">get_prefix_upper_shebang</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39; !&#39;</span>
-<span class="n">numeric_test_1</span> <span class="o">=</span> <span class="o">-</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">2</span>
-<span class="n">numeric_test_2</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="o">-</span><span class="n">x</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="o">-</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+<span class="c1"># write an expression and wrap it with _() to make a function</span>
+<span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">_</span>
+<span class="n">say_hello_function</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Hello, &#39;</span> <span class="o">+</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39; !&#39;</span><span class="p">)</span>
+
+<span class="c1"># use the function with any input</span>
+<span class="n">say_hello_function</span><span class="p">(</span><span class="s1">&#39;world&#39;</span><span class="p">)</span>     <span class="c1"># Returns &quot;Hello, world !&quot;</span>
+
+<span class="c1"># the function&#39;s string representation is available</span>
+<span class="k">print</span><span class="p">(</span><span class="n">say_hello_function</span><span class="p">)</span>       <span class="c1"># &quot;&#39;Hello, &#39; + s + &#39; !&#39;&quot;</span>
 </pre></div>
 
 
-<p>If you know python you should feel at home here, except for the fact that  <code>|</code> is used instead of <code>or</code>. We will come back to this later.</p>
-<p>Once you have created a function, it is still in "edit" mode. It means that calling it will create a new function, it will not evaluate it:</p>
-<div class="codehilite"><pre><span></span><span class="n">say_hello_hardcoded</span> <span class="o">=</span> <span class="n">say_hello</span><span class="p">(</span><span class="s1">&#39;world&#39;</span><span class="p">)</span>
+<p>Most of python syntax can be used in an expression:</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">x</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">Log</span>
 
-<span class="nb">type</span><span class="p">(</span><span class="n">say_hello_hardcoded</span><span class="p">)</span>   <span class="c1"># &lt;class &#39;mini_lambda.main._InputEvaluator&#39;&gt;: still a function!</span>
-<span class="k">print</span><span class="p">(</span><span class="n">say_hello_hardcoded</span><span class="p">)</span>  <span class="c1"># NotImplementedError: __str__ is not supported by _InputEvaluator</span>
-</pre></div>
+<span class="c1"># various lambda functions</span>
+<span class="n">is_lowercase</span>             <span class="o">=</span> <span class="n">_</span><span class="p">(</span> <span class="n">s</span><span class="o">.</span><span class="n">islower</span><span class="p">()</span> <span class="p">)</span>
+<span class="n">get_prefix_upper_shebang</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39; !&#39;</span> <span class="p">)</span>
+<span class="n">numeric_test_1</span>           <span class="o">=</span> <span class="n">_</span><span class="p">(</span> <span class="o">-</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">2</span> <span class="p">)</span>
+<span class="n">numeric_test_2</span>           <span class="o">=</span> <span class="n">_</span><span class="p">(</span> <span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="o">-</span><span class="n">x</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="o">-</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="p">)</span>
+<span class="n">complex_identity</span>         <span class="o">=</span> <span class="n">_</span><span class="p">(</span> <span class="n">Log</span><span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="n">x</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="p">)</span>
 
-
-<p>That's the first main difference with traditional python lambda functions. In order to use your functions, you can either use the explicit <code>evaluate</code> method :</p>
-<div class="codehilite"><pre><span></span><span class="n">is_lowercase</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="s1">&#39;Hello&#39;</span><span class="p">)</span>              <span class="c1"># returns False</span>
-<span class="n">say_hello</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="s1">&#39;world&#39;</span><span class="p">)</span>                 <span class="c1"># returns &#39;Hello, world !&#39;</span>
-<span class="n">get_prefix_upper_shebang</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">)</span>  <span class="c1"># returns &#39;HELL !&#39;</span>
-<span class="n">numeric_test_1</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>                <span class="c1"># returns False</span>
-<span class="n">numeric_test_2</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>                  <span class="c1"># returns True</span>
-</pre></div>
-
-
-<p>Or you can get a real function from the lambda function, and then call it. There are several ways to do that:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">_</span><span class="p">,</span> <span class="n">L</span>
-
-<span class="n">is_lowercase</span> <span class="o">=</span> <span class="n">is_lowercase</span><span class="o">.</span><span class="n">as_function</span><span class="p">()</span>               <span class="c1"># explicitly</span>
-<span class="n">say_hello</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="n">say_hello</span><span class="p">)</span>                                <span class="c1"># _() is a handy operator to do the same thing</span>
-<span class="n">get_prefix_upper_shebang</span> <span class="o">=</span> <span class="n">L</span><span class="p">(</span><span class="n">get_prefix_upper_shebang</span><span class="p">)</span>  <span class="c1"># L() is an alias for _()</span>
-<span class="n">numeric_test_1</span><span class="p">,</span> <span class="n">numeric_test_2</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="n">numeric_test_1</span><span class="p">,</span> <span class="n">numeric_test_2</span><span class="p">)</span>  <span class="c1"># both accept multiple inputs</span>
-
-<span class="c1"># you can now use the functions directly</span>
+<span class="c1"># use the functions</span>
 <span class="n">is_lowercase</span><span class="p">(</span><span class="s1">&#39;Hello&#39;</span><span class="p">)</span>              <span class="c1"># returns False</span>
-<span class="n">say_hello</span><span class="p">(</span><span class="s1">&#39;world&#39;</span><span class="p">)</span>                 <span class="c1"># returns &#39;Hello, world !&#39;</span>
 <span class="n">get_prefix_upper_shebang</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">)</span>  <span class="c1"># returns &#39;HELL !&#39;</span>
 <span class="n">numeric_test_1</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>                <span class="c1"># returns False</span>
-</pre></div>
+<span class="n">numeric_test_2</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>                  <span class="c1"># returns True</span>
+<span class="n">complex_identity</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>               <span class="c1"># returns 10</span>
 
-
-<p>Finally, the functions that you have created are printable:</p>
-<div class="codehilite"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">is_lowercase</span><span class="p">)</span>             <span class="c1"># s.islower()</span>
-<span class="k">print</span><span class="p">(</span><span class="n">say_hello</span><span class="p">)</span>                <span class="c1"># &#39;Hello, &#39; + s + &#39; !&#39;</span>
+<span class="c1"># string representation</span>
+<span class="k">print</span><span class="p">(</span><span class="n">is_lowercase</span><span class="p">)</span>             <span class="c1"># s.islower()</span>
 <span class="k">print</span><span class="p">(</span><span class="n">get_prefix_upper_shebang</span><span class="p">)</span> <span class="c1"># s[0:4].upper() + &#39; !&#39;</span>
 <span class="k">print</span><span class="p">(</span><span class="n">numeric_test_1</span><span class="p">)</span>           <span class="c1"># -x &gt; x ** 2</span>
 <span class="k">print</span><span class="p">(</span><span class="n">numeric_test_2</span><span class="p">)</span>           <span class="c1"># (1 - 2 * x &lt;= -x) | (-x &gt; x ** 2)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">complex_identity</span><span class="p">)</span>         <span class="c1"># log(10 ** x, 10)</span>
 </pre></div>
 
 
-<p>Note that the printed version of <code>numeric_test_2</code> got rid of my useless parenthesis :)</p>
-<p>There are of course a few limitations to <code>mini_lambda</code> as compared to full-flavoured python <code>lambda</code> functions, the main one being that you can't mix more than one variable in the same expression for now. Check the <a href="./usage/">Usage</a> page for more details.</p>
+<p>If you know python you should feel at home here, except for two things:</p>
+<ul>
+<li><code>or</code> and <code>and</code> should be replaced with their bitwise equivalents <code>|</code> and <code>&amp;</code></li>
+<li>additional constants, methods and classes need to be made lambda-friendly before use. For convenience all of the <a href="https://docs.python.org/3/library/functions.html">built-in functions</a> as well as constants, methods and classes from the <code>math.py</code> and <code>decimal.py</code> modules are provided in a lambda-friendly way by this package, hence the <code>from mini_lambda import Log</code> above.</li>
+</ul>
+<p>Note that the printed version provides the minimal equivalent representation taking into account operator precedence. Hence <code>numeric_test_2</code> got rid of the useless parenthesis. This is <strong>not</strong> a mathematical simplification like in <a href="http://www.sympy.org/fr/">SymPy</a>, i.e. <code>x - x</code> will <strong>not</strong> be simplified to <code>0</code>.</p>
+<p>There are of course a few limitations to <code>mini_lambda</code> as compared to full-flavoured python <code>lambda</code> functions, the main ones being that </p>
+<ul>
+<li>you can't mix more than one variable in the same expression for now. The resulting functions therefore have a single argument only.</li>
+<li><code>list</code>/<code>tuple</code>/<code>set</code>/<code>dict</code> comprehensions are not supported</li>
+<li><code>... if ... else ...</code> ternary conditional expressions are not supported either</li>
+</ul>
+<p>Check the <a href="./usage/">Usage</a> page for more details.</p>
 <h2 id="main-features">Main features<a class="headerlink" href="#main-features" title="Permanent link">&para;</a></h2>
 <ul>
 <li>More compact lambda expressions for single-variable functions</li>
-<li>Overriding all operators that can be overriden as of today in python 3.6: the remaining limits come from the language itself, for example chained comparisons are not supported as python casts the partial results to boolean.</li>
-<li>printability: expressions can be turned to string representation in order to (hopefully) get interpretable messages more easily, for example when the expression is used in a validation context (see <a href="https://github.com/smarie/python-valid8">valid8</a>) </li>
+<li>As close to python syntax as technically possible: the base type for lambda expressions in <code>mini_lambda</code>, <code>_LambdaExpression</code>, overrides all operators that can be overriden as of today in <a href="https://docs.python.org/3/reference/datamodel.html">python 3.6</a>. The remaining limits come from the language itself, for example chained comparisons and <code>and/or</code> are not supported as python casts the partial results to boolean to enable short-circuits. Details <a href="./usage#lambda-expression-syntax">here</a>.</li>
+<li>Printability: expressions can be turned to string representation in order to (hopefully) get interpretable messages more easily, for example when the expression is used in a <a href="https://github.com/smarie/python-valid8">validation context</a></li>
 </ul>
 <h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
-<p>The much-broader debate in the python community about alernate lambda syntaxes is interesting, see <a href="https://wiki.python.org/moin/AlternateLambdaSyntax">here</a></p>
+<p>The much-broader debate in the python community about alternate lambda syntaxes is interesting, see <a href="https://wiki.python.org/moin/AlternateLambdaSyntax">here</a></p>
 <h3 id="equivalent-python-first">Equivalent (python-first)<a class="headerlink" href="#equivalent-python-first" title="Permanent link">&para;</a></h3>
 <p>I found the following libraries somehow covering the same use case, with more or less success/features:  </p>
 <ul>
@@ -516,6 +521,7 @@
 <p>These libraries create functions from string expressions. Therefore you cannot rely on your favourite IDE to check your expressions, but it might not be a problem for some users/use cases.</p>
 <ul>
 <li><a href="https://github.com/danthedeckie/simpleeval">simpleeval</a> </li>
+<li>... (feel free to suggest more) ...</li>
 </ul>
 <h3 id="others">Others<a class="headerlink" href="#others" title="Permanent link">&para;</a></h3>
 <p><em>Do you like this library ? You might also like <a href="https://github.com/smarie?utf8=%E2%9C%93&amp;tab=repositories&amp;q=&amp;type=&amp;language=python">these</a></em> </p>
@@ -562,9 +568,9 @@
       <div class="md-footer-copyright">
         
         powered by
-        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
+        <a href="http://www.mkdocs.org">MkDocs</a>
         and
-        <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs">
+        <a href="https://squidfunk.github.io/mkdocs-material/">
           Material for MkDocs</a>
       </div>
       
@@ -576,9 +582,9 @@
       
     </div>
     
-      <script src="./assets/javascripts/application-8e4952e681.js"></script>
+      <script src="./assets/javascripts/application-a5397a53ce.js"></script>
       
-      <script>app.initialize({version:"0.17.1",url:{base:"."}})</script>
+      <script>app.initialize({version:"0.17.2",url:{base:"."}})</script>
       
     
     
