@@ -228,7 +228,7 @@ function filter_table(elem) {
     not_found_message.hidden = !all_rows_hidden;
 }
 </script>
-    <p>Report generated on 20-Nov-2017 at 10:53:12 by<a href="https://pypi.python.org/pypi/pytest-html"> pytest-html</a> v1.16.0</p>
+    <p>Report generated on 20-Nov-2017 at 11:06:20 by<a href="https://pypi.python.org/pypi/pytest-html"> pytest-html</a> v1.16.0</p>
     <h2>Environment</h2>
     <table id="environment">
       <tr>
@@ -239,13 +239,13 @@ function filter_table(elem) {
         <td>/usr/lib/jvm/java-8-oracle</td></tr>
       <tr>
         <td>Packages</td>
-        <td>{&apos;py&apos;: &apos;1.4.34&apos;, &apos;pluggy&apos;: &apos;0.4.0&apos;, &apos;pytest&apos;: &apos;3.2.1&apos;}</td></tr>
+        <td>{&apos;pluggy&apos;: &apos;0.4.0&apos;, &apos;py&apos;: &apos;1.4.34&apos;, &apos;pytest&apos;: &apos;3.2.1&apos;}</td></tr>
       <tr>
         <td>Platform</td>
         <td>Linux-4.4.0-93-generic-x86_64-with-debian-jessie-sid</td></tr>
       <tr>
         <td>Plugins</td>
-        <td>{&apos;cov&apos;: &apos;2.5.1&apos;, &apos;html&apos;: &apos;1.16.0&apos;, &apos;metadata&apos;: &apos;1.5.0&apos;, &apos;logging&apos;: &apos;2015.11.4&apos;}</td></tr>
+        <td>{&apos;metadata&apos;: &apos;1.5.0&apos;, &apos;html&apos;: &apos;1.16.0&apos;, &apos;cov&apos;: &apos;2.5.1&apos;, &apos;logging&apos;: &apos;2015.11.4&apos;}</td></tr>
       <tr>
         <td>Python</td>
         <td>3.5.3</td></tr>
@@ -254,62 +254,32 @@ function filter_table(elem) {
         <td>master</td></tr>
       <tr>
         <td>TRAVIS_BUILD_ID</td>
-        <td>304675337</td></tr>
+        <td>304680476</td></tr>
       <tr>
         <td>TRAVIS_BUILD_NUMBER</td>
-        <td>6</td></tr>
+        <td>7</td></tr>
       <tr>
         <td>TRAVIS_COMMIT</td>
-        <td>c59ad06005d0ba1a6898aa9c179257114470fb40</td></tr>
+        <td>22ff9ff7193d9f38b76cf389448b79a7a2b0361e</td></tr>
       <tr>
         <td>TRAVIS_COMMIT_MESSAGE</td>
-        <td>1.1.0 - Compatibility with standard functions
+        <td>Merge branch &apos;master&apos; of https://github.com/smarie/python-mini-lambda
 
- * It is now possible to use any function in a lambda expression, through use of the `make_lambda_friendly_...` methods
- * All `built-in` methods as well as all constants, methods and classes from the `math.py` and `decimal.py` modules are provided in a lambda-friendly way by the package for convenience
- * Updated documentation accordingly, and made main page clearer
- * Renamed class `_InputEvaluator` into `_LambdaExpression`
- * A few bugfixes in particular support for keyword arguments when a function call is made in a lambda expression
- * `&lt;expr&gt;.nnot()`, `&lt;expr&gt;.any()` and `&lt;expr&gt;.all()` renamed `&lt;expr&gt;.not_()`, `&lt;expr&gt;.any_()` and `&lt;expr&gt;.all_()` for consistency and to avoid conflicts with any()/all() methods that would already be defined in the class, for example NumPy.
-
-base.py:
-- StackableFunctionEvaluator renamed _LambdaExpressionBase.
-- Added the notion of constant expression
-- Added support of keyword arguments in all &apos;add_.._methods&apos;
-- Added make_lambda_friendly_method and utility method _get_expr_or_result_for_method which becomes the single conversion method for all non-class methods
-
-code generation:
-- Support for constant expressions in all generated methods
-- Added support of keyword arguments
-- _get_expr_or_result_for_method is used everywhere as possible
-- added missing method __round__
-- New template for pre-converted constants/functions/classes, generating goodies_generated.py
-
-main.py
-- Support for constant expressions
-- Added support of keyword arguments in __call__
-- Added __format__ as a special methods
-- Added .is_in()
-- Added make_lambda_friendly_class and Constant() (alias C())
-- Added another alias for _() : F()
-- Get and Slice are simplified now that they use _get_expr_or_result_for_method
-- Any/All removed as they are now directly part of the generated methods in goodies_generated.py
--  * `&lt;expr&gt;.nnot()`, `&lt;expr&gt;.any()` and `&lt;expr&gt;.all()` renamed `&lt;expr&gt;.not_()`, `&lt;expr&gt;.any_()` and `&lt;expr&gt;.all_()` for consistency and to avoid conflicts with any()/all() methods that would already be defined in the class, for example NumPy.
-
-goodies.py
-- Added a few precreated variables</td></tr>
+# Conflicts:
+#	mini_lambda/tests/test_mini_lambda_add_methods.py
+#	mini_lambda/tests/test_readme.py</td></tr>
       <tr>
         <td>TRAVIS_COMMIT_RANGE</td>
-        <td>6c6e0480c63d...c59ad06005d0</td></tr>
+        <td>c59ad06005d0...22ff9ff7193d</td></tr>
       <tr>
         <td>TRAVIS_EVENT_TYPE</td>
         <td>push</td></tr>
       <tr>
         <td>TRAVIS_JOB_ID</td>
-        <td>304675338</td></tr>
+        <td>304680477</td></tr>
       <tr>
         <td>TRAVIS_JOB_NUMBER</td>
-        <td>6.1</td></tr>
+        <td>7.1</td></tr>
       <tr>
         <td>TRAVIS_OS_NAME</td>
         <td>linux</td></tr>
@@ -324,7 +294,7 @@ goodies.py
         <td>true</td></tr></table>
     <h2>Summary</h2>
     <p>59 tests ran in 0.93 seconds. </p>
-    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="passed">57 passed</span>, <input checked="true" class="filter" data-test-result="skipped" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="skipped">2 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="failed">2 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
+    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="passed">59 passed</span>, <input checked="true" class="filter" data-test-result="skipped" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="skipped">2 skipped</span>, <input checked="true" class="filter" data-test-result="failed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="failed">0 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
     <h2>Results</h2>
     <table id="results-table">
       <thead id="results-table-head">
@@ -337,29 +307,6 @@ goodies.py
           <th>Links</th></tr>
         <tr hidden="true" id="not-found-message">
           <th colspan="6">No results found. Try to check the filters</th></tr></thead>
-      <tbody class="failed results-table-row">
-        <tr>
-          <td class="col-result">Failed</td>
-          <th>mini_lambda/tests/test_mini_lambda_add_methods.py</th>
-          <td>test_add_new_unbound_keywords</td>
-          <td> Tests that the mechanism provided to support additional functions works, by testing that a custom function with
-    positional and keyword arguments can be converted.</td>
-          <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda_add_methods.py#L34">source</a></td></tr>
-        <tr>
-          <td class="extra" colspan="6">
-            <div class="log">def test_add_new_unbound_keywords():<br/>        &quot;&quot;&quot; Tests that the mechanism provided to support additional functions works, by testing that a custom function with<br/>        positional and keyword arguments can be converted.&quot;&quot;&quot;<br/>    <br/>        from mini_lambda import x, _<br/>    <br/>        def divide(dummy, times, num, den=None):<br/>            &quot;&quot;&quot; an existing function that you want to convert &quot;&quot;&quot;<br/>            return times * num / den<br/>    <br/>        Divide = make_lambda_friendly_method(divide)<br/>        complex_constant = _(1 + Divide(None, x, den=x, num=1))<br/>    <br/>        assert complex_constant(10) == 2<br/>        assert complex_constant(-5) == 2<br/>&gt;       assert str(complex_constant) == &#x27;1 + divide(None, x, den=x, num=1)&#x27;<br/><span class="error">E       AssertionError: assert &#x27;1 + divide(N...num=1, den=x)&#x27; == &#x27;1 + divide(No...den=x, num=1)&#x27;</span><br/><span class="error">E         - 1 + divide(None, x, num=1, den=x)</span><br/><span class="error">E         ?                          -------</span><br/><span class="error">E         + 1 + divide(None, x, den=x, num=1)</span><br/><span class="error">E         ?                    +++++++</span><br/><br/>mini_lambda/tests/test_mini_lambda_add_methods.py:50: AssertionError<br/></div></td></tr></tbody>
-      <tbody class="failed results-table-row">
-        <tr>
-          <td class="col-result">Failed</td>
-          <th>mini_lambda/tests/test_readme.py</th>
-          <td>test_doc_usage_other_functions_2</td>
-          <td> Tests that the example in doc/usage in the others/functions section (2) works </td>
-          <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_readme.py#L268">source</a></td></tr>
-        <tr>
-          <td class="extra" colspan="6">
-            <div class="log">def test_doc_usage_other_functions_2():<br/>        &quot;&quot;&quot; Tests that the example in doc/usage in the others/functions section (2) works &quot;&quot;&quot;<br/>        from mini_lambda import x, _<br/>    <br/>        class Foo:<br/>            @staticmethod<br/>            def bar1(times, num, den):<br/>                return times * num / den<br/>    <br/>            @classmethod<br/>            def bar2(cls, times, num, den):<br/>                return times * num / den<br/>    <br/>        FooBar1 = make_lambda_friendly_method(Foo.bar1)<br/>        fun1 = _(FooBar1(x, den=x, num=1))<br/>    <br/>        FooBar2a = make_lambda_friendly_method(Foo.bar2)  # the `cls` argument is `Foo` and cant be changed<br/>        fun2a = _(FooBar2a(x, den=x, num=1))<br/>    <br/>        FooBar2b = make_lambda_friendly_method(Foo.bar2.__func__)  # the `cls` argument can be changed<br/>        fun2b = _(FooBar2b(Foo, x, den=x, num=1))<br/>    <br/>        assert fun1(5.5) == 1<br/>&gt;       assert(str(fun1)) == &#x27;bar1(x, den=x, num=1)&#x27;<br/><span class="error">E       AssertionError: assert &#x27;bar1(x, num=1, den=x)&#x27; == &#x27;bar1(x, den=x, num=1)&#x27;</span><br/><span class="error">E         - bar1(x, num=1, den=x)</span><br/><span class="error">E         + bar1(x, den=x, num=1)</span><br/><br/>mini_lambda/tests/test_readme.py:292: AssertionError<br/></div></td></tr></tbody>
       <tbody class="skipped results-table-row">
         <tr>
           <td class="col-result">Skipped</td>
@@ -367,7 +314,7 @@ goodies.py
           <td>test_evaluator_comparable_normal_function_first</td>
           <td> Tests that the comparison operators works between a function and an evaluator </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L234">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L234">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">(&#x27;mini_lambda/tests/test_mini_lambda.py&#x27;, 234, &#x27;Skipped: it is not possible anymore to use functions as expressions, they need to be converted first&#x27;)<br/></div></td></tr></tbody>
@@ -379,7 +326,7 @@ goodies.py
           <td> Long convertible Object : tests that `long` raises the appropriate exception and that equivalent Long()
     works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L593">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L593">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">(&#x27;mini_lambda/tests/test_mini_lambda.py&#x27;, 593, &#x27;Skipped: long seems not to be around anymore...&#x27;)<br/></div></td></tr></tbody>
@@ -390,7 +337,7 @@ goodies.py
           <td>test_evaluator_iterable</td>
           <td> Iterable: tests that `Iter(li)` leads to a valid evaluator and `iter(li)` raises an exception</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L16">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L16">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -401,7 +348,7 @@ goodies.py
           <td>test_evaluator_iterator</td>
           <td> Iterator/Generator: tests that `next()` leads to a valid evaluator</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L31">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L31">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -412,7 +359,7 @@ goodies.py
           <td>test_evaluator_iterator_iterable</td>
           <td> Iterable + Iterator: tests that `next(Iter(li))` leads to a valid evaluator</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L52">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L52">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -423,7 +370,7 @@ goodies.py
           <td>test_evaluator_iterable_iterator_and_comparison</td>
           <td> Iterable + Iterator + Comparable : A complex case where the evaluator is `next(Iter(li)) &gt; 0` </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L63">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L63">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -434,7 +381,7 @@ goodies.py
           <td>test_evaluator_comprehension</td>
           <td> List Comprehension : tests that `[i for i in li]` is forbidden and raises the appropriate exception </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L75">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L75">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -446,7 +393,7 @@ goodies.py
           <td> Iterable + any operator: Checks that the any operator  raises an exception but that the Any replacement function
     works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L84">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L84">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -458,7 +405,7 @@ goodies.py
           <td> Iterable + all operator: Checks that the all operator  raises an exception but that the All replacement function
     works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L98">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L98">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -470,7 +417,7 @@ goodies.py
           <td> Representable Object : tests that repr() raises the correct error message and that the equivalent Repr()
     works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L113">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L113">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -481,7 +428,7 @@ goodies.py
           <td>test_evaluator_complex_1</td>
           <td> A complex case with a combination of Repr, Len, and comparisons </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L130">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L130">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -492,7 +439,7 @@ goodies.py
           <td>test_evaluator_str</td>
           <td> Representable Object : tests that str() raises the correct error message and that the equivalent Str() works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L141">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L141">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -504,7 +451,7 @@ goodies.py
           <td> Representable Object : tests that bytes() raises the correct error message and that the equivalent Bytes()
     works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L157">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L157">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -515,7 +462,7 @@ goodies.py
           <td>test_evaluator_format</td>
           <td> Representable Object : tests that format() works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L174">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L174">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -527,7 +474,7 @@ goodies.py
           <td> Object : tests that sys.getsizeof() raises the correct error message and that the equivalent Getsizeof()
     works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L196">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L196">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -538,7 +485,7 @@ goodies.py
           <td>test_evaluator_comparable</td>
           <td> Comparable Object : tests that lt, le, eq, ne, gt, and ge are correctly supported </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L214">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L214">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -549,7 +496,7 @@ goodies.py
           <td>test_evaluator_comparable_both_evaluators</td>
           <td> Tests that it works when the first function is not a function converted to mini_lambda </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L247">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L247">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -560,7 +507,7 @@ goodies.py
           <td>test_evaluator_hashable</td>
           <td> Hashable Object : tests that hash() raises the correct error message and that the equivalent Hash() works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L260">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L260">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -572,7 +519,7 @@ goodies.py
           <td> Truth-Testable Object : tests that bool() raises the correct error message and that the equivalent Bool()
     works. </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L276">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L276">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -584,7 +531,7 @@ goodies.py
           <td> Truth-Testable Object : tests that not x raises the correct error message and that the equivalent x.not_()
     works. </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L292">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L292">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -595,7 +542,7 @@ goodies.py
           <td>test_evaluator_attribute</td>
           <td> Object: Tests that obj.foo_field works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L308">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L308">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -607,7 +554,7 @@ goodies.py
           <td> Object: Tests that a valid evaluator accessing a nonexistent attribute will behave as expected and raise the
     appropriate exception when evaluated </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L327">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L327">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -619,7 +566,7 @@ goodies.py
           <td> Container Object : tests that `1 in x` raises the correct error message and that the equivalent x.contains()
     works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L378">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L378">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -630,7 +577,7 @@ goodies.py
           <td>test_evaluator_sized</td>
           <td> Sized Container Object: tests that len() raises the appropriate error but that the equivalent Len() works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L395">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L395">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -641,7 +588,7 @@ goodies.py
           <td>test_evaluator_sized_compared</td>
           <td> Tests that Len(s) &gt; 2 works as well as (2 &lt;= Len(s)) &amp; (Len(s) &lt; 3)</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L409">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L409">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -652,7 +599,7 @@ goodies.py
           <td>test_evaluator_reversible</td>
           <td> Reversible Container Object : tests that `reversed(x)` works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L432">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L432">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -663,7 +610,7 @@ goodies.py
           <td>test_evaluator_mapping</td>
           <td> Mapping Container Object : tests that slicing with `x[i]` works</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L444">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L444">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -674,7 +621,7 @@ goodies.py
           <td>test_evaluator_mapping_key</td>
           <td> Mapping key Object : tests that dict[s] raises an exception but the workaround works</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L464">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L464">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -685,7 +632,7 @@ goodies.py
           <td>test_evaluator_list_slice</td>
           <td> Mapping Container Object : tests that slicing with `x[i]` works</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L478">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L478">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -696,7 +643,7 @@ goodies.py
           <td>test_evaluator_numeric</td>
           <td> Numeric-like Object : tests that +,-,*,/,%,divmod(),pow(),**,@,//,&lt;&lt;,&gt;&gt;,-,+,abs,~ work </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L495">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L495">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -708,7 +655,7 @@ goodies.py
           <td> Asserts that operator precedence is correctly handled in the case of the power operator which is a bit
     special, see https://docs.python.org/3/reference/expressions.html#id16 </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L548">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L548">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -719,7 +666,7 @@ goodies.py
           <td>test_evaluator_int_convertible</td>
           <td> Int convertible Object : tests that `int` raises the appropriate exception and that equivalent Int() works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L559">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L559">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -730,7 +677,7 @@ goodies.py
           <td>test_evaluator_maths</td>
           <td> </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L573">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L573">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -742,7 +689,7 @@ goodies.py
           <td> Float convertible Object : tests that `float` raises the appropriate exception and that equivalent Float()
     works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L609">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L609">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -754,7 +701,7 @@ goodies.py
           <td> Complex convertible Object : tests that `complex` raises the appropriate exception and that equivalent
     Complex_() works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L624">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L624">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -766,7 +713,7 @@ goodies.py
           <td> oct convertible Object : tests that `oct` raises the appropriate exception and that equivalent Oct()
     works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L640">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L640">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -778,7 +725,7 @@ goodies.py
           <td> Object is used as an index : tests that `__index__` raises the appropriate exception and that equivalent Get()
     works, and also that Slice works and not slice() </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L655">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L655">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -789,7 +736,7 @@ goodies.py
           <td>test_evaluator_different_vars</td>
           <td> Tests that two different variables cannot be used in the same expression, even with the same symbol </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L679">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L679">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -800,7 +747,7 @@ goodies.py
           <td>test_constants_named</td>
           <td> This test demonstrates the possibility to create constants </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L713">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L713">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -811,7 +758,7 @@ goodies.py
           <td>test_generated_methods</td>
           <td> Tests that equivalent methods generated by the package from various packages (currently, only math) work</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda.py#L725">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda.py#L725">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>sin(x)
@@ -824,7 +771,7 @@ goodies.py
           <td> Tests that the mechanism provided to support additional functions works, by testing that log can be
     converted. This test checks the behaviour with positional arguments only </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda_add_methods.py#L5">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda_add_methods.py#L5">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>log(2.718281828459045 ** x)
@@ -833,11 +780,23 @@ goodies.py
         <tr>
           <td class="col-result">Passed</td>
           <th>mini_lambda/tests/test_mini_lambda_add_methods.py</th>
+          <td>test_add_new_unbound_keywords</td>
+          <td> Tests that the mechanism provided to support additional functions works, by testing that a custom function with
+    positional and keyword arguments can be converted.</td>
+          <td class="col-duration">0.00</td>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda_add_methods.py#L34">source</a></td></tr>
+        <tr>
+          <td class="extra" colspan="6">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <th>mini_lambda/tests/test_mini_lambda_add_methods.py</th>
           <td>test_add_new_unbound_no_name</td>
           <td> Tests that the mechanism provided to support additional functions works with partial and lambda functions, for
     which the user is asked to provide a name </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda_add_methods.py#L52">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda_add_methods.py#L53">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -849,7 +808,7 @@ goodies.py
           <td> Tests that the mechanism provided to support additional bound functions works, by testing that str.startswith()
     can be converted. This test checks the behaviour with positional arguments only </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda_add_methods.py#L87">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda_add_methods.py#L88">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -861,7 +820,7 @@ goodies.py
           <td> Tests that the mechanism provided to support additional bound functions works, by testing that a custom class
     with a function including positional and keyword arguments can be converted.</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda_add_methods.py#L105">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda_add_methods.py#L106">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -873,7 +832,7 @@ goodies.py
           <td> This test demonstrates that you may not need to add a bound method if you transform the object into a
     constant </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda_add_methods.py#L148">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda_add_methods.py#L149">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -884,7 +843,7 @@ goodies.py
           <td>test_add_class</td>
           <td> This test demonstrates how you can convert any class to a lambda-friendly class </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_mini_lambda_add_methods.py#L165">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_mini_lambda_add_methods.py#L166">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -895,7 +854,7 @@ goodies.py
           <td>test_doc_index_1</td>
           <td> Tests that the first example in the documentation main page works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_readme.py#L6">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_readme.py#L6">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Hello, world !
@@ -908,7 +867,7 @@ goodies.py
           <td>test_doc_index_2</td>
           <td> Tests that the second example in the documentation main page works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_readme.py#L23">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_readme.py#L23">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>s.islower()
@@ -924,7 +883,7 @@ log(10 ** x, 10)
           <td>test_doc_usage_input_variables</td>
           <td> Tests that the examples in doc/usage in the input variables section work </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_readme.py#L56">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_readme.py#L56">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -935,7 +894,7 @@ log(10 ** x, 10)
           <td>test_doc_usage_expressions_1</td>
           <td> Tests that the first example in doc/usage in the expressions section works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_readme.py#L66">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_readme.py#L66">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>&lt;class &#x27;mini_lambda.main._LambdaExpression&#x27;&gt;
@@ -949,7 +908,7 @@ x
           <td>test_doc_usage_expressions_2</td>
           <td> Tests that the second set of examples in doc/usage in the expressions section works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_readme.py#L83">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_readme.py#L83">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -960,7 +919,7 @@ x
           <td>test_doc_usage_expressions_3_all_at_once</td>
           <td> Tests that the last example in doc/usage in the expressions section works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_readme.py#L114">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_readme.py#L114">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Hello, world !
@@ -972,7 +931,7 @@ x
           <td>test_doc_usage_syntax_1</td>
           <td> Tests that the first example in doc/usage in the syntax section works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_readme.py#L121">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_readme.py#L121">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -983,7 +942,7 @@ x
           <td>test_doc_usage_syntax_2</td>
           <td> Tests that the second example in doc/usage in the syntax section works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_readme.py#L138">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_readme.py#L138">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -994,7 +953,7 @@ x
           <td>test_doc_usage_other_constants</td>
           <td> Tests that the example in doc/usage in the others/constants section works  </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_readme.py#L214">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_readme.py#L214">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -1005,7 +964,7 @@ x
           <td>test_doc_usage_other_functions_1</td>
           <td> Tests that the example in doc/usage in the others/functions section (1) works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_readme.py#L230">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_readme.py#L230">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>startswith(&#x27;hello&#x27;, &#x27;el&#x27;, x)
@@ -1014,10 +973,21 @@ x
         <tr>
           <td class="col-result">Passed</td>
           <th>mini_lambda/tests/test_readme.py</th>
+          <td>test_doc_usage_other_functions_2</td>
+          <td> Tests that the example in doc/usage in the others/functions section (2) works </td>
+          <td class="col-duration">0.00</td>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_readme.py#L268">source</a></td></tr>
+        <tr>
+          <td class="extra" colspan="6">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <th>mini_lambda/tests/test_readme.py</th>
           <td>test_doc_usage_other_classes</td>
           <td> Tests that the example in doc/usage in the others/classes section works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_readme.py#L300">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_readme.py#L303">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -1028,7 +998,7 @@ x
           <td>test_doc_usage_all_at_once</td>
           <td> Tests that the example in doc/usage in the others/anything section works </td>
           <td class="col-duration">0.01</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_readme.py#L313">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_readme.py#L316">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>   0  1
@@ -1041,7 +1011,7 @@ x
           <td>test_doc_usage_already_imported</td>
           <td> Tests that the example in doc/usage in the others/preconverted section works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/c59ad06005d0ba1a6898aa9c179257114470fb40/mini_lambda/tests/test_readme.py#L325">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-mini-lambda/src/22ff9ff7193d9f38b76cf389448b79a7a2b0361e/mini_lambda/tests/test_readme.py#L328">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody></table></body></html>
