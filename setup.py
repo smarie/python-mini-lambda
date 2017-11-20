@@ -14,7 +14,7 @@ here = path.abspath(path.dirname(__file__))
 INSTALL_REQUIRES = []
 DEPENDENCY_LINKS = []
 SETUP_REQUIRES = ['pytest-runner', 'setuptools_scm', 'pypandoc', 'pandoc', 'ordered-set', 'mako', 'enforce', 'autoclass']
-TESTS_REQUIRE = ['pytest', 'pytest-logging', 'pytest-cov']
+TESTS_REQUIRE = ['pytest', 'pytest-logging', 'pytest-cov', 'numpy', 'pandas']
 EXTRAS_REQUIRE = {}
 
 # simple check
@@ -43,7 +43,7 @@ KEYWORDS = 'mini minimal lambda expr expression simple print string func functio
 #    LONG_DESCRIPTION = f.read()
 try:
     import pypandoc
-    LONG_DESCRIPTION = pypandoc.convert(path.join(here, 'README.md'), 'rst').replace('\r', '')
+    LONG_DESCRIPTION = pypandoc.convert(path.join(here, 'docs', 'long_description.md'), 'rst').replace('\r', '')
 except(ImportError):
     from warnings import warn
     warn('WARNING pypandoc could not be imported - we recommend that you install it in order to package the '
