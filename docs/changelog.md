@@ -1,3 +1,8 @@
+### 1.2.0 - New alias and bugfix for constant functions 
+
+ * added alias `make_lambda_friendly` for `Constant`, since it is able to convert anything (constants, functions and classes) to lambda-friendly objects usable in expressions.
+ * Fixed [#2](https://github.com/smarie/python-mini-lambda/issues/2) that was a bug happening when using lambda-friendly methods with non-lambda arguments
+
 ### 1.1.0 - Compatibility with standard functions
 
  * It is now possible to use any function in a lambda expression, through use of the `make_lambda_friendly_...` methods (see [documentation](./usage#supporting-any-other-methods-and-classes))

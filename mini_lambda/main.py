@@ -6,7 +6,7 @@ import sys
 
 from mini_lambda.base import get_repr, _PRECEDENCE_BITWISE_AND, _PRECEDENCE_BITWISE_OR, _PRECEDENCE_BITWISE_XOR, \
     _PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF, evaluate, _PRECEDENCE_EXPONENTIATION, \
-    _PRECEDENCE_POS_NEG_BITWISE_NOT, _get_expr_or_result_for_method, _get_root_var, make_lambda_friendly_method
+    _PRECEDENCE_POS_NEG_BITWISE_NOT, _get_root_var
 from mini_lambda.generated import _LambdaExpressionGenerated, FunctionDefinitionError
 
 T = TypeVar('T')
@@ -438,7 +438,7 @@ def Format(value, *args, **kwargs):
     :param kwargs:
     :return:
     """
-    return _get_expr_or_result_for_method(type(value).format, value, *args, **kwargs)
+    return _LambdaExpression._get_expression_for_method_with_args(type(value).format, value, *args, **kwargs)
 
 
 # Special case: the unbound method 'getitem' does not exist, and we want type(value).__getitem__
@@ -455,7 +455,7 @@ def Get(container, key):
     :param key:
     :return:
     """
-    return _get_expr_or_result_for_method(type(container).__getitem__, container, key)
+    return _LambdaExpression._get_expression_for_method_with_args(type(container).__getitem__, container, key)
 
 
 # ************** All of these could be generated
@@ -473,7 +473,7 @@ def In(item, container):
     :param container:
     :return:
     """
-    return _get_expr_or_result_for_method(_is_in, item, container)
+    return _LambdaExpression._get_expression_for_method_with_args(_is_in, item, container)
 
 
 def Slice(*args, **kwargs):
@@ -484,7 +484,7 @@ def Slice(*args, **kwargs):
     :param kwargs:
     :return:
     """
-    return _get_expr_or_result_for_method(slice, *args, **kwargs)
+    return _LambdaExpression._get_expression_for_method_with_args(slice, *args, **kwargs)
 
 # ************************
 
@@ -532,34 +532,125 @@ def Constant(value: T, name: str = None) -> Union[T, _LambdaExpression]:
     In such case C('toto').prefix(x) will work
     * you want a specific value to appear with name `name` in an expression's string representation, instead of the
     value's usual string representation. For example _(x + math.e)  C(math.e, 'e')
+    * you want to use an existing class in an expression, as in DDataFrame = C(DataFrame), so as to be able to use
+    it in expressions
+    * you want to use an existing function in an expression, as in Isfinite = C(math.isfinite).
 
     :param value:
     :param name:
     :return:
     """
-    if isclass(value):
-        # a class
-        return _LambdaExpression(str_expr=name or value.__name__, is_constant=True, constant_value=value)
-
-    elif callable(value):
-        # a function
-        return make_lambda_friendly_method(value, name=name)
-
-    else:
-        # a true 'constant'
-        return _LambdaExpression(str_expr=name or str(value), is_constant=True, constant_value=value)
+    return _LambdaExpression.constant(value, name)
 
 
 C = Constant
 """ Alias for 'Constant' """
 
 
+make_lambda_friendly = Constant
+""" Alias for 'Constant' """
+
+
 def make_lambda_friendly_class(typ: Type, name: str = None):
     """
-    Utility method to transform a standard class into a class usable inside lambda expressions.
+    Utility method to transform a standard class into a class usable inside lambda expressions, as in
+    DDataFrame = C(DataFrame), so as to be able to use it in expressions
 
     :param typ:
     :param name:
     :return:
     """
-    return C(typ, name=name)
+    return Constant(typ, name=name)
+
+
+def make_lambda_friendly_method(method: Callable, name: str = None):
+    """
+    Utility method to transform any method whatever their signature (positional and/or keyword arguments,
+    variable-length included) into a method usable inside lambda expressions, even if some of the arguments are
+    expressions themselves.
+
+    In particular you may wish to convert:
+
+    * standard or user-defined functions. Note that by default the name appearing in the expression is func.__name__
+
+        ```python
+        from mini_lambda import x, _, make_lambda_friendly_method
+        from math import log
+
+        # transform standard function `log` into lambda-friendly function `Log`
+        Log = make_lambda_friendly_method(log)
+
+        # now you can use it in your lambda expressions
+        complex_identity = _( Log(10 ** x, 10) )
+        complex_identity(3.5)    # returns 3.5
+        print(complex_identity)  # "log(10 ** x, 10)"
+        ```
+
+    * anonymous functions such as lambdas and partial. In which case you HAVE to provide a name
+
+        ```python
+        from mini_lambda import x, _, make_lambda_friendly_method
+        from math import log
+
+        # ** partial function (to fix leftmost positional arguments and/or keyword arguments)
+        from functools import partial
+        is_superclass_of_bool = make_lambda_friendly_method(partial(issubclass, bool), name='is_superclass_of_bool')
+
+        # now you can use it in your lambda expressions
+        expr = _(is_superclass_of_bool(x))
+        expr(int)    # True
+        expr(str)    # False
+        print(expr)  # "is_superclass_of_bool(x)"
+
+        # ** lambda function
+        Log10 = make_lambda_friendly_method(lambda x: log(x, 10), name='log10')
+
+        # now you can use it in your lambda expressions
+        complex_identity = _(Log10(10 ** x))
+        complex_identity(3.5)    # 3.5
+        print(complex_identity)  # "log10(10 ** x)"
+        ```
+
+    * class functions. Note that by default the name appearing in the expression is func.__name__
+
+        ```python
+        from mini_lambda import x, _, make_lambda_friendly_method
+
+        # ** standard class function
+        StartsWith = make_lambda_friendly_method(str.startswith)
+
+        # now you can use it in your lambda expressions
+        str_tester = _(StartsWith('hello', 'el', x))
+        str_tester(0)      # False
+        str_tester(1)      # True
+        print(str_tester)  # "startswith('hello', 'el', x)"
+
+        # ** static and class functions
+        class Foo:
+            @staticmethod
+            def bar1(times, num, den):
+                return times * num / den
+
+            @classmethod
+            def bar2(cls, times, num, den):
+                return times * num / den
+
+        FooBar1 = make_lambda_friendly_method(Foo.bar1)
+        fun1 = _( FooBar1(x, den=x, num=1) )
+
+        FooBar2a = make_lambda_friendly_method(Foo.bar2)  # the `cls` argument is `Foo` and cant be changed
+        fun2a = _( FooBar2a(x, den=x, num=1) )
+
+        FooBar2b = make_lambda_friendly_method(Foo.bar2.__func__)  # the `cls` argument can be changed
+        fun2b = _( FooBar2b(Foo, x, den=x, num=1) )
+        ```
+
+        Note: although the above is valid, it is much more recommended to convert the whole class
+
+
+    :param method:
+    :param name: an optional name for the method when used to display the expressions. It is mandatory if the method
+    does not have a name, otherwise the default name is method.__name__
+    :return:
+    """
+    return Constant(method, name)

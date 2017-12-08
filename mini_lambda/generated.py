@@ -3,9 +3,8 @@
 # ----
 from typing import Any
 
-from mini_lambda.base import _LambdaExpressionBase, evaluate, get_repr, FunctionDefinitionError,     _get_expr_or_result_for_method, _get_root_var
+from mini_lambda.base import _LambdaExpressionBase, evaluate, get_repr, FunctionDefinitionError,     _get_root_var
 from mini_lambda.base import _PRECEDENCE_ADD_SUB, _PRECEDENCE_MUL_DIV_ETC, _PRECEDENCE_COMPARISON,     _PRECEDENCE_EXPONENTIATION, _PRECEDENCE_SHIFTS, _PRECEDENCE_POS_NEG_BITWISE_NOT,     _PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF
-from sys import getsizeof
 
 
 class _LambdaExpressionGenerated(_LambdaExpressionBase):
@@ -768,76 +767,4 @@ class _LambdaExpressionGenerated(_LambdaExpressionBase):
                                       'probably used a standard method such as math.log(x) instead of a method '
                                       ' converted to mini_lambda such as Log(x). Please check the documentation for '
                                       'details.')
-
-
-# ******* All replacement methods for the magic methods throwing exceptions ********
-def Iter(*args, **kwargs):
-    """ This is a replacement method for _LambdaExpression '__iter__' magic method """
-    return _get_expr_or_result_for_method(iter, *args, **kwargs)
-
-
-def Str(*args, **kwargs):
-    """ This is a replacement method for _LambdaExpression '__str__' magic method """
-    return _get_expr_or_result_for_method(str, *args, **kwargs)
-
-
-def Repr(*args, **kwargs):
-    """ This is a replacement method for _LambdaExpression '__repr__' magic method """
-    return _get_expr_or_result_for_method(repr, *args, **kwargs)
-
-
-def Bytes(*args, **kwargs):
-    """ This is a replacement method for _LambdaExpression '__bytes__' magic method """
-    return _get_expr_or_result_for_method(bytes, *args, **kwargs)
-
-
-def Format(*args, **kwargs):
-    """ This is a replacement method for _LambdaExpression '__format__' magic method """
-    return _get_expr_or_result_for_method(format, *args, **kwargs)
-
-
-def Sizeof(*args, **kwargs):
-    """ This is a replacement method for _LambdaExpression '__sizeof__' magic method """
-    return _get_expr_or_result_for_method(getsizeof, *args, **kwargs)
-
-
-def Hash(*args, **kwargs):
-    """ This is a replacement method for _LambdaExpression '__hash__' magic method """
-    return _get_expr_or_result_for_method(hash, *args, **kwargs)
-
-
-def Bool(*args, **kwargs):
-    """ This is a replacement method for _LambdaExpression '__bool__' magic method """
-    return _get_expr_or_result_for_method(bool, *args, **kwargs)
-
-
-def Len(*args, **kwargs):
-    """ This is a replacement method for _LambdaExpression '__len__' magic method """
-    return _get_expr_or_result_for_method(len, *args, **kwargs)
-
-
-def Int(*args, **kwargs):
-    """ This is a replacement method for _LambdaExpression '__int__' magic method """
-    return _get_expr_or_result_for_method(int, *args, **kwargs)
-
-
-def Float(*args, **kwargs):
-    """ This is a replacement method for _LambdaExpression '__float__' magic method """
-    return _get_expr_or_result_for_method(float, *args, **kwargs)
-
-
-def Complex(*args, **kwargs):
-    """ This is a replacement method for _LambdaExpression '__complex__' magic method """
-    return _get_expr_or_result_for_method(complex, *args, **kwargs)
-
-
-def Oct(*args, **kwargs):
-    """ This is a replacement method for _LambdaExpression '__oct__' magic method """
-    return _get_expr_or_result_for_method(oct, *args, **kwargs)
-
-
-def Hex(*args, **kwargs):
-    """ This is a replacement method for _LambdaExpression '__hex__' magic method """
-    return _get_expr_or_result_for_method(hex, *args, **kwargs)
-
 

@@ -128,6 +128,8 @@ def generate_code():
     # generate
     generate_from_template('mini_lambda_template.mako', 'generated.py',
                            dict(to_override=to_override, to_override_with_exception=to_override_with_exception))
+    generate_from_template('mini_lambda_template_2.mako', 'generated2.py',
+                           dict(to_override=to_override, to_override_with_exception=to_override_with_exception))
 
     # (2) to-do list for the second template
     import_lines, to_create = define_goodies()

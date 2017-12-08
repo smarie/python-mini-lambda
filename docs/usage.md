@@ -236,7 +236,7 @@ from math import e
 str(_(x + e))  # 'x + 2.718281828459045'
 ``` 
 
-For this reason `mini_lambda` provides a `Constant()` method with alias `C()` to define a constant and assign it with a symbol.
+For this reason `mini_lambda` provides a `Constant()` method with aliases `C()` and `make_lambda_friendly()` to define a constant and assign it with a symbol.
 
 ```python
 from mini_lambda import x, _, C
@@ -357,7 +357,7 @@ str(expr)               # 'DataFrame(X).max().values[0]'
 
 ### Anything
 
-Actually the `Constant()` (alias `C()`) function that we saw above to convert constants, is also able to convert methods ans classes. So if there is only a single conversion operator to remember, remember this one.
+Actually the `Constant()` (alias `C()` or `make_lambda_friendly()`) function that we saw above to convert constants, is also able to convert methods ans classes. So if there is only a single conversion operator to remember, remember this one.
 
 ```python
 from mini_lambda import _, C, X

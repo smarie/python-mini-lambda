@@ -4,11 +4,10 @@
 from typing import Any
 
 from mini_lambda.base import _LambdaExpressionBase, evaluate, get_repr, FunctionDefinitionError, \
-    _get_expr_or_result_for_method, _get_root_var
+    _get_root_var
 from mini_lambda.base import _PRECEDENCE_ADD_SUB, _PRECEDENCE_MUL_DIV_ETC, _PRECEDENCE_COMPARISON, \
     _PRECEDENCE_EXPONENTIATION, _PRECEDENCE_SHIFTS, _PRECEDENCE_POS_NEG_BITWISE_NOT, \
     _PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF
-from sys import getsizeof
 
 
 class _LambdaExpressionGenerated(_LambdaExpressionBase):
@@ -158,19 +157,3 @@ class _LambdaExpressionGenerated(_LambdaExpressionBase):
                                       'details.')
 
     % endfor
-
-# ******* All replacement methods for the magic methods throwing exceptions ********
-% for o in to_override_with_exception:
-    % if o.unbound_method:
-def ${o.module_method_name}(*args, **kwargs):
-    """ This is a replacement method for _LambdaExpression '${o.method_name}' magic method """
-    ## return evaluator.add_unbound_method_to_stack(${o.unbound_method.__name__})
-    return _get_expr_or_result_for_method(${o.unbound_method.__name__}, *args, **kwargs)
-    % else:
-def ${o.module_method_name}(expr: _LambdaExpressionGenerated, *args, **kwargs):
-    """ This is a replacement method for _LambdaExpression '${o.method_name}' magic method """
-    return expr.add_bound_method_to_stack('${o.method_name}', *args, **kwargs)
-    % endif
-
-
-% endfor

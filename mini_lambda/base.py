@@ -1,4 +1,8 @@
-from typing import Callable, Any, Tuple, Type
+from inspect import isclass
+
+from typing import Callable, Any, Tuple, Union, TypeVar
+
+T = TypeVar('T')
 
 # see https://docs.python.org/3/reference/expressions.html#operator-precedence
 from copy import copy
@@ -161,7 +165,7 @@ class _LambdaExpressionBase:
         :param m_kwargs: optional kwargs to apply in method calls
         :return:
         """
-        return _get_expr_or_result_for_method(method, self, *m_args, **m_kwargs)
+        return type(self)._get_expression_for_method_with_args(method, self, *m_args, **m_kwargs)
 
     def add_bound_method_to_stack(self, method_name, *m_args, **m_kwargs):
         """
@@ -195,6 +199,194 @@ class _LambdaExpressionBase:
                           str_expr=string_expr,
                           root_var=root_var)
 
+    @classmethod
+    def constant(cls, value: T, name: str = None) -> Union[T, Any]:  # Any really means _LambdaExpressionBase
+        """
+        Creates a constant expression. This is useful when
+        * you want to use a method on an object that is not an expression, as in 'toto'.prefix(x) where x is an
+        expression.
+        In such case C('toto').prefix(x) will work
+        * you want a specific value to appear with name `name` in an expression's string representation, instead of the
+        value's usual string representation. For example _(x + math.e)  C(math.e, 'e')
+
+        :param value:
+        :param name:
+        :return:
+        """
+        if isclass(value):
+            # a class
+            return cls(str_expr=name or value.__name__, is_constant=True, constant_value=value)
+
+        elif callable(value):
+            # a function
+            return cls.make_lambda_friendly_method(value, name=name)
+
+        else:
+            # a true 'constant'
+            return cls(str_expr=name or str(value), is_constant=True, constant_value=value)
+
+    @classmethod
+    def make_lambda_friendly_method(cls, method: Callable, name: str = None):
+        """
+        Utility method to transform any method whatever their signature (positional and/or keyword arguments,
+        variable-length included) into a method usable inside lambda expressions, even if some of the arguments are
+        expressions themselves.
+
+        In particular you may wish to convert:
+
+        * standard or user-defined functions. Note that by default the name appearing in the expression is func.__name__
+
+            ```python
+            from mini_lambda import x, _, make_lambda_friendly_method
+            from math import log
+
+            # transform standard function `log` into lambda-friendly function `Log`
+            Log = make_lambda_friendly_method(log)
+
+            # now you can use it in your lambda expressions
+            complex_identity = _( Log(10 ** x, 10) )
+            complex_identity(3.5)    # returns 3.5
+            print(complex_identity)  # "log(10 ** x, 10)"
+            ```
+
+        * anonymous functions such as lambdas and partial. In which case you HAVE to provide a name
+
+            ```python
+            from mini_lambda import x, _, make_lambda_friendly_method
+            from math import log
+
+            # ** partial function (to fix leftmost positional arguments and/or keyword arguments)
+            from functools import partial
+            is_superclass_of_bool = make_lambda_friendly_method(partial(issubclass, bool), name='is_superclass_of_bool')
+
+            # now you can use it in your lambda expressions
+            expr = _(is_superclass_of_bool(x))
+            expr(int)    # True
+            expr(str)    # False
+            print(expr)  # "is_superclass_of_bool(x)"
+
+            # ** lambda function
+            Log10 = make_lambda_friendly_method(lambda x: log(x, 10), name='log10')
+
+            # now you can use it in your lambda expressions
+            complex_identity = _(Log10(10 ** x))
+            complex_identity(3.5)    # 3.5
+            print(complex_identity)  # "log10(10 ** x)"
+            ```
+
+        * class functions. Note that by default the name appearing in the expression is func.__name__
+
+            ```python
+            from mini_lambda import x, _, make_lambda_friendly_method
+
+            # ** standard class function
+            StartsWith = make_lambda_friendly_method(str.startswith)
+
+            # now you can use it in your lambda expressions
+            str_tester = _(StartsWith('hello', 'el', x))
+            str_tester(0)      # False
+            str_tester(1)      # True
+            print(str_tester)  # "startswith('hello', 'el', x)"
+
+            # ** static and class functions
+            class Foo:
+                @staticmethod
+                def bar1(times, num, den):
+                    return times * num / den
+
+                @classmethod
+                def bar2(cls, times, num, den):
+                    return times * num / den
+
+            FooBar1 = make_lambda_friendly_method(Foo.bar1)
+            fun1 = _( FooBar1(x, den=x, num=1) )
+
+            FooBar2a = make_lambda_friendly_method(Foo.bar2)  # the `cls` argument is `Foo` and cant be changed
+            fun2a = _( FooBar2a(x, den=x, num=1) )
+
+            FooBar2b = make_lambda_friendly_method(Foo.bar2.__func__)  # the `cls` argument can be changed
+            fun2b = _( FooBar2b(Foo, x, den=x, num=1) )
+            ```
+
+            Note: although the above is valid, it is much more recommended to convert the whole class
+
+
+        :param method:
+        :param name: an optional name for the method when used to display the expressions. It is mandatory if the method
+        does not have a name, otherwise the default name is method.__name__
+        :return:
+        """
+
+        # If the provided method does not have a name then name is mandatory
+        if (not hasattr(method, '__name__') or method.__name__ == '<lambda>') and name is None:
+            raise ValueError('This method does not have a name (it is either a partial or a lambda) so you have to '
+                             'provide one: the \'name\' argument is mandatory')
+
+        # create a named method if a new name is provided
+        if name is not None:
+            # work on a copy to rename it
+            def new_method(*args, **kwargs):
+                return method(*args, **kwargs)
+
+            new_method.__name__ = name
+        else:
+            new_method = method
+
+        # construct the lambda-friendly method
+        def lambda_friendly_method(*args, **kwargs):
+            """ A replacement method for `method`, that returns a new expression corresponding to executing the inner
+            method with the provided arguments """
+            return cls._get_expression_for_method_with_args(new_method, *args, **kwargs)
+
+        return lambda_friendly_method
+
+    @classmethod
+    def _get_expression_for_method_with_args(cls, method, *args, **kwargs):
+        """
+        This method is called when a lambda-friendly converted method is used in a lambda expression.
+
+        It first performs some checks on its arguments to be sure that if there are some expressions inside, they are
+        compliant with each other.
+
+        Then it either returns
+        * the direct result of the method execution (if no expression is present in the arguments)
+        * or a new expression that when evaluated later, will evaluate the expressions used in the arguments and finally
+        call the method
+
+        :param method:
+        :param args: the arguments for the method. they may contain lambda expressions
+        :param kwargs: the arguments for the method. they may contain lambda expressions
+        :return:
+        """
+        # first we check here if all expressions in the arguments are compliant
+        root_var, first_expression = _get_root_var(*args, **kwargs)
+
+        if root_var is None:
+            # there are no expressions in the arguments so the method can be executed right now
+            # however we need to return a constant
+            value = method(*args, **kwargs)
+            return cls.constant(value)
+
+        else:
+            # there are expressions in the arguments: we have to create a new expression
+            def evaluate_all_and_apply_method(input):
+                # this basically calls your method on the same arguments (positional and keyword),
+                # except that all of the arguments are first  evaluated if they are expressions
+                return method(*[evaluate(arg, input) for arg in args],
+                              **{arg_name: evaluate(arg, input) for arg_name, arg in kwargs.items()})
+
+            # return a new expression of the same type than first_expression, with the new function as inner function
+            # Note: we use precedence=None for coma-separated items inside the parenthesis
+            string_expr = method.__name__ + '(' \
+                          + ', '.join([get_repr(arg, None) for arg in args]) \
+                          + (', ' if (len(args) > 0 and len(kwargs) > 0) else '') \
+                          + ', '.join([arg_name + '=' + get_repr(arg, None) for arg_name, arg in kwargs.items()]) \
+                          + ')'
+
+            return cls(fun=evaluate_all_and_apply_method,
+                       precedence_level=_PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF,
+                       str_expr=string_expr, root_var=root_var)
+
 
 def _get_root_var(*args, **kwargs) -> Tuple[Any, _LambdaExpressionBase]:
     """
@@ -217,7 +409,7 @@ def _get_root_var(*args, **kwargs) -> Tuple[Any, _LambdaExpressionBase]:
             # check compliance
             root_var = first_expression.assert_has_same_root_var(arg)
 
-    root_var = root_var or first_expression._root_var
+    root_var = root_var or (first_expression._root_var if first_expression is not None else None)
     return root_var, first_expression
 
 
@@ -275,162 +467,3 @@ def get_repr(statement: Any, target_precedence_level: float = None):
     else:
         # a standard callable
         return statement.__name__
-
-
-def make_lambda_friendly_method(method: Callable, name: str = None):
-    """
-    Utility method to transform any method whatever their signature (positional and/or keyword arguments,
-    variable-length included) into a method usable inside lambda expressions, even if some of the arguments are
-    expressions themselves.
-
-    In particular you may wish to convert:
-
-    * standard or user-defined functions. Note that by default the name appearing in the expression is func.__name__
-
-        ```python
-        from mini_lambda import x, _, make_lambda_friendly_method
-        from math import log
-
-        # transform standard function `log` into lambda-friendly function `Log`
-        Log = make_lambda_friendly_method(log)
-
-        # now you can use it in your lambda expressions
-        complex_identity = _( Log(10 ** x, 10) )
-        complex_identity(3.5)    # returns 3.5
-        print(complex_identity)  # "log(10 ** x, 10)"
-        ```
-
-    * anonymous functions such as lambdas and partial. In which case you HAVE to provide a name
-
-        ```python
-        from mini_lambda import x, _, make_lambda_friendly_method
-        from math import log
-
-        # ** partial function (to fix leftmost positional arguments and/or keyword arguments)
-        from functools import partial
-        is_superclass_of_bool = make_lambda_friendly_method(partial(issubclass, bool), name='is_superclass_of_bool')
-
-        # now you can use it in your lambda expressions
-        expr = _(is_superclass_of_bool(x))
-        expr(int)    # True
-        expr(str)    # False
-        print(expr)  # "is_superclass_of_bool(x)"
-
-        # ** lambda function
-        Log10 = make_lambda_friendly_method(lambda x: log(x, 10), name='log10')
-
-        # now you can use it in your lambda expressions
-        complex_identity = _(Log10(10 ** x))
-        complex_identity(3.5)    # 3.5
-        print(complex_identity)  # "log10(10 ** x)"
-        ```
-
-    * class functions. Note that by default the name appearing in the expression is func.__name__
-
-        ```python
-        from mini_lambda import x, _, make_lambda_friendly_method
-
-        # ** standard class function
-        StartsWith = make_lambda_friendly_method(str.startswith)
-
-        # now you can use it in your lambda expressions
-        str_tester = _(StartsWith('hello', 'el', x))
-        str_tester(0)      # False
-        str_tester(1)      # True
-        print(str_tester)  # "startswith('hello', 'el', x)"
-
-        # ** static and class functions
-        class Foo:
-            @staticmethod
-            def bar1(times, num, den):
-                return times * num / den
-
-            @classmethod
-            def bar2(cls, times, num, den):
-                return times * num / den
-
-        FooBar1 = make_lambda_friendly_method(Foo.bar1)
-        fun1 = _( FooBar1(x, den=x, num=1) )
-
-        FooBar2a = make_lambda_friendly_method(Foo.bar2)  # the `cls` argument is `Foo` and cant be changed
-        fun2a = _( FooBar2a(x, den=x, num=1) )
-
-        FooBar2b = make_lambda_friendly_method(Foo.bar2.__func__)  # the `cls` argument can be changed
-        fun2b = _( FooBar2b(Foo, x, den=x, num=1) )
-        ```
-
-        Note: although the above is valid, it is much more recommended to convert the whole class
-
-
-    :param method:
-    :param name: an optional name for the method when used to display the expressions. It is mandatory if the method
-    does not have a name, otherwise the default name is method.__name__
-    :return:
-    """
-
-    # If the provided method does not have a name then name is mandatory
-    if (not hasattr(method, '__name__') or method.__name__ == '<lambda>') and name is None:
-            raise ValueError('This method does not have a name (it is either a partial or a lambda) so you have to '
-                             'provide one: the \'name\' argument is mandatory')
-
-    # create a named method if a new name is provided
-    if name is not None:
-        # work on a copy to rename it
-        def new_method(*args, **kwargs):
-            return method(*args, **kwargs)
-        new_method.__name__ = name
-    else:
-        new_method = method
-
-    # construct the lambda-friendly method
-    def lambda_friendly_method(*args, **kwargs):
-        """ A replacement method for `method`, that is able to either execute directly if no arguments are expressions,
-        or to return a new expression if at least one argument is an expression """
-        return _get_expr_or_result_for_method(new_method, *args, **kwargs)
-
-    return lambda_friendly_method
-
-
-def _get_expr_or_result_for_method(method, *args, **kwargs):
-    """
-    This method is called when a lambda-friendly converted method is used in a lambda expression.
-
-    It first performs some checks on its arguments to be sure that if there are some expressions inside, they are
-    compliant with each other.
-
-    Then it either returns
-    * the direct result of the method execution (if no expression is present in the arguments)
-    * or a new expression that when evaluated later, will evaluate the expressions used in the arguments and finally
-    call the method
-
-    :param method:
-    :param args: the arguments for the method. they may contain lambda expressions
-    :param kwargs: the arguments for the method. they may contain lambda expressions
-    :return:
-    """
-    # first we check here if all expressions in the arguments are compliant
-    root_var, first_expression = _get_root_var(*args, **kwargs)
-
-    if first_expression is None:
-        # there are no expressions in the arguments so the method can be executed right now
-        return method(*args, **kwargs)
-
-    else:
-        # there are expressions in the arguments: we have to create a new expression
-        def evaluate_all_and_apply_method(input):
-            # this basically calls your method on the same arguments (positional and keyword),
-            # except that all of the arguments are first  evaluated if they are expressions
-            return method(*[evaluate(arg, input) for arg in args],
-                          **{arg_name: evaluate(arg, input) for arg_name, arg in kwargs.items()})
-
-        # return a new expression of the same type than first_expression, with the new function as inner function
-        # Note: we use precedence=None for coma-separated items inside the parenthesis
-        string_expr = method.__name__ + '(' \
-                      + ', '.join([get_repr(arg, None) for arg in args]) \
-                      + (', ' if (len(args) > 0 and len(kwargs) > 0) else '') \
-                      + ', '.join([arg_name + '=' + get_repr(arg, None) for arg_name, arg in kwargs.items()]) \
-                      + ')'
-
-        return type(first_expression)(fun=evaluate_all_and_apply_method,
-                                      precedence_level=_PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF,
-                                      str_expr=string_expr, root_var=root_var)

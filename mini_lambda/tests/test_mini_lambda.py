@@ -5,8 +5,8 @@ import pytest
 import sys
 
 from mini_lambda import InputVar, Len, Str, Int, Repr, Bytes, Sizeof, Hash, Bool, Complex, Float, Oct, Iter, \
-    Any, All, _, Slice, Get, Not, FunctionDefinitionError, Format
-from math import cos
+    Any, All, _, Slice, Get, Not, FunctionDefinitionError, Format, C
+from math import cos, isfinite
 from numbers import Real
 
 
@@ -735,3 +735,10 @@ def test_generated_methods():
     print(sine)
 
     assert str(sine) == "sin(x)"
+
+
+def test_constants_methods_can_be_combined():
+    a = C(isfinite)  # define a constant function (a lambda-friendly function)
+
+    f = _(a(0) & a(0))
+    assert f(None)
