@@ -10,6 +10,19 @@ from setuptools import setup, find_packages
 
 here = path.abspath(path.dirname(__file__))
 
+# Check that code generation has been run, otherwise run it
+generated_files = ['generated.py', 'generated2.py', 'goodies_generated.py']
+generated_file_paths = [path.join(here, 'mini_lambda', file_name) for file_name in generated_files]
+
+if not all(path.exists(file_path) for file_path in generated_file_paths):
+    print('Generated files not found. Executing code generation...')
+    from code_generation.mini_lambda_methods_generation import generate_code
+    generate_code()
+
+if not all(path.exists(file_path) for file_path in generated_file_paths):
+    raise Exception('Generated files not found even after executing code generation. Something is wrong, exiting.')
+
+
 # *************** Dependencies *********
 INSTALL_REQUIRES = []
 DEPENDENCY_LINKS = []
