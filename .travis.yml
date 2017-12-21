@@ -39,7 +39,7 @@ install:
 
 script:
 #  - coverage run tests.py
-  - python code_generation/mini_lambda_methods_generation.py
+  - python ./code_generation/mini_lambda_methods_generation.py
   - pip install .
 
 after_success:

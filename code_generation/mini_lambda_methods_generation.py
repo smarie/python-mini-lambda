@@ -170,6 +170,8 @@ def generate_from_template(src_file, dst_file, template_vars):
         dest_file = os.path.join(THIS_DIR, os.pardir, 'mini_lambda', dst_file)
         with open(dest_file, 'wt') as f:
             f.write(res)
+        print("Wrote generated file " + dest_file + " successfully")
+
     except:
         # mako user-friendly exception display
         print(exceptions.text_error_template().render())
