@@ -97,7 +97,8 @@ class OverExc:
 @autoclass
 class Goodie:
     def __init__(self, item_name: str, function_name: Optional[str] = None,
-                 constant_name: Optional[str] = None, class_name: Optional[str] = None):
+                 constant_name: Optional[str] = None, class_name: Optional[str] = None,
+                 import_line: Optional[str] = None):
         pass
 
     def __str__(self):
@@ -396,19 +397,23 @@ def define_goodies() -> Tuple[List[str], List[Goodie]]:
         import_string = "from " + package.__name__ + " import"
         for item_name, item in getmembers(package):
             if not item_name.startswith('_'):
-                import_string += ' ' + item_name + ','
+                # import_string += ' ' + item_name + ','
                 if isclass(item):
                     new_class_name = item_name[0].upper() + item_name
-                    goodies_list.append(Goodie(item_name=new_class_name, class_name=item_name))
+                    goodies_list.append(Goodie(item_name=new_class_name, class_name=item_name,
+                                               import_line=import_string + ' ' + item_name))
                 elif callable(item):
-                    goodies_list.append(Goodie(item_name=item_name.capitalize(), function_name=item_name))
+                    goodies_list.append(Goodie(item_name=item_name.capitalize(), function_name=item_name,
+                                               import_line=import_string + ' ' + item_name))
                 else:
                     new_item_name = item_name.capitalize()
                     if new_item_name == item_name:
                         new_item_name = new_item_name[0] + new_item_name
-                    goodies_list.append(Goodie(item_name=new_item_name, constant_name=item_name))
+                    goodies_list.append(Goodie(item_name=new_item_name, constant_name=item_name,
+                                               import_line=import_string + ' ' + item_name))
 
-        import_list.append(import_string[0:-1])
+        # we do not import anymore at the top but in each one so as to put additional try/catch around them
+        # import_list.append(import_string[0:-1])
 
     for function_name in built_in_functions:
         goodies_list.append(Goodie(item_name=function_name.capitalize(), function_name=function_name))

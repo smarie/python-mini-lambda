@@ -65,7 +65,9 @@ This project uses `setuptools_scm` to synchronise the version number. Therefore 
 python setup.py egg_info bdist_wheel rotate -m.whl -k3
 ```
 
-You may need to install requirements for setup beforehand, using 
+You need to [generate code](##building-from-sources--notes-on-this-projects-design-principles) before packaging.
+
+You also may need to install requirements for setup beforehand, using 
 
 ```bash
 pip install -r ci_tools/requirements-setup.txt
