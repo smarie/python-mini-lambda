@@ -77,7 +77,7 @@ deploy:
     secure: "L4CcfT7Aq4bTiVAkMadR1dHUgU0GEHFphuywP38OpPAofsgf1b/IFIZPT3SDpo5AhbzpDSm0GGgQmITJrFwUlh4K5ubs/QYB3AWQN/w1yEf9T+ON/UcwtJYvjtrMNHV5yNxtDiSmDe6T8pjV0w9210KB7cW0r3Nkjq4A/Vo6bdInMAiK1pSgreuYHqkvDvKytjBnray8UlPQK4Bc1w7ixA91veNvcD+0OlOrSROzb5No0zbZ8+6PVu0Sa6G5gV32cDWxL7sSSbfaFeebZFgoYPaZkPl14IhG/VA9698yZ26owaqI9UqKPnoO/ySisgxmljc0QA7zJksFYCPzjFOUVVmcDnRgJmcMrqg3wrbXJLYAPHoj1jDtd3R6eEXBDV/Z/rdX33YfalfeRiXj2xA6RBeYGscIrfe93PbOfKOl2oAv5So4Guip2gjubXyHH7720PUQu1D8h5kA/GP0OhISwrRc7SVg3gsx31vpQUMMWgryS4B40aVf30VIlruJFD/JNPBEIjH+otZmc1j4PIJ3swWtPgDKijaPkj0isvacCwMH89+DAYR19QyG/fuLZwEm4Vykrruk6s52FPnootWSShluRu6APbPeZ473UV7SaPDDYXt8eZAz4l7GvGz7yVpHLXLS368oUb4L8N3yICtmHha6vRJcFaVsQ6JFFH3S98A="
   on:
     tags: true
-    python: 3.5  #only one of the builds have to be deployed
+    python: 3.6  # only one of the builds have to be deployed, we'll take the latest since generated code will be more complete
 #  server: https://test.pypi.org/legacy/
   distributions: "sdist bdist_wheel"
 
