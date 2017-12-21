@@ -1,4 +1,4 @@
-### 1.2.1 - Fixed code generation to solve two import errors
+### 1.2.2 - Fixed code generation to solve two import errors
 
  * Fixed [#3](https://github.com/smarie/python-mini-lambda/issues/3) and [#4](https://github.com/smarie/python-mini-lambda/issues/4). Generated source code has been removed from version control to avoid this kind of errors in the future.
  * Travis script has been equipped with an automatic module import checker to detect such issues earlier next time.
