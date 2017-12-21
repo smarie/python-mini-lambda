@@ -1,3 +1,8 @@
+### 1.2.1 - Fixed code generation to solve two import errors
+
+ * Fixed [#3](https://github.com/smarie/python-mini-lambda/issues/3) and [#4](https://github.com/smarie/python-mini-lambda/issues/4). Generated source code has been removed from version control to avoid this kind of errors in the future.
+ * Travis script has been equipped with an automatic module import checker to detect such issues earlier next time.
+
 ### 1.2.0 - New alias and bugfix for constant functions 
 
  * added alias `make_lambda_friendly` for `Constant`, since it is able to convert anything (constants, functions and classes) to lambda-friendly objects usable in expressions.
