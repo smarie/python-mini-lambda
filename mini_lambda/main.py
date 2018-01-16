@@ -1,6 +1,6 @@
 from copy import copy
 from inspect import isclass
-from typing import Type, TypeVar, Union, Tuple, Callable
+from typing import TypeVar, Union, Tuple, Callable  # do not import Type for compatibility with earlier python 3.5
 from warnings import warn
 import sys
 
@@ -509,7 +509,7 @@ F = _
 """ Alias for '_' """
 
 
-def InputVar(symbol: str = None, typ: Type[T] = None) -> Union[T, _LambdaExpression]:
+def InputVar(symbol: str = None, typ: 'Type[T]' = None) -> Union[T, _LambdaExpression]:
     """
     Creates a variable to use in validator expression. The optional `typ` argument may be used to get a variable with
     appropriate syntactic completion from your IDE, but is not used for anything else.
@@ -551,7 +551,7 @@ make_lambda_friendly = Constant
 """ Alias for 'Constant' """
 
 
-def make_lambda_friendly_class(typ: Type, name: str = None):
+def make_lambda_friendly_class(typ: 'Type[T]', name: str = None) -> 'Union[Type[T], _LambdaExpression]':
     """
     Utility method to transform a standard class into a class usable inside lambda expressions, as in
     DDataFrame = C(DataFrame), so as to be able to use it in expressions
@@ -563,7 +563,7 @@ def make_lambda_friendly_class(typ: Type, name: str = None):
     return Constant(typ, name=name)
 
 
-def make_lambda_friendly_method(method: Callable, name: str = None):
+def make_lambda_friendly_method(method: Callable, name: str = None) -> _LambdaExpression:
     """
     Utility method to transform any method whatever their signature (positional and/or keyword arguments,
     variable-length included) into a method usable inside lambda expressions, even if some of the arguments are
