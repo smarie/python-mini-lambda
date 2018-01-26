@@ -1,3 +1,7 @@
+### 1.2.3 - Fixed minor bug in code generation
+
+ * Removed all `None` that were appearing in the goodies_generated.py file
+
 ### 1.2.2 - Fixed code generation to solve two import errors
 
  * Fixed [#3](https://github.com/smarie/python-mini-lambda/issues/3) and [#4](https://github.com/smarie/python-mini-lambda/issues/4). Generated source code has been removed from version control to avoid this kind of errors in the future.
