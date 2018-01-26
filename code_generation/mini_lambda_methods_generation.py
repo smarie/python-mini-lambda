@@ -98,7 +98,7 @@ class OverExc:
 class Goodie:
     def __init__(self, item_name: str, function_name: Optional[str] = None,
                  constant_name: Optional[str] = None, class_name: Optional[str] = None,
-                 import_line: Optional[str] = None):
+                 import_line: Optional[str] = ''):
         pass
 
     def __str__(self):
