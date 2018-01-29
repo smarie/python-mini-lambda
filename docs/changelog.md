@@ -1,6 +1,7 @@
 ### 1.2.3 - Fixed minor bug in code generation
 
  * Removed all `None` that were appearing in the goodies_generated.py file
+ * Now compliant with old versions of `typing` module: `typing.Type` is not imported explicitly anymore. 
 
 ### 1.2.2 - Fixed code generation to solve two import errors
 
