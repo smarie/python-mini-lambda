@@ -1,3 +1,8 @@
+### 1.2.4 - Minor improvements in generated goodies
+
+ * Removed annoying warning message when loading goodies
+ * Removed useless try/except for goodies that do not need import
+
 ### 1.2.3 - Fixed minor bug in code generation
 
  * Removed all `None` that were appearing in the goodies_generated.py file
