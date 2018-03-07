@@ -1,3 +1,7 @@
+### 1.3.0 - fixed init.py
+
+ * The init file has been improved so as not to export symbols from other packages. Fixes [#6](https://github.com/smarie/python-mini-lambda/issues/6)
+
 ### 1.2.4 - Minor improvements in generated goodies
 
  * Removed annoying warning message when loading goodies
