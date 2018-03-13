@@ -1,4 +1,10 @@
-### 1.3.0 - fixed init.py
+# Changelog
+
+### 1.3.1 - fixed ImportError in code generation
+
+ * the latest `autoclass` has its `__init__.py` fixed, this revealed a `ImportError: cannot import name 'getmembers'` because we were importing `getmembers` from it instead of `inspect`. Fixed
+
+### 1.3.0 - fixed __init__.py
 
  * The init file has been improved so as not to export symbols from other packages. Fixes [#6](https://github.com/smarie/python-mini-lambda/issues/6)
 

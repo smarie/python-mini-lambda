@@ -13,7 +13,8 @@ from mako.template import Template
 # from sortedcontainers import SortedSet
 from ordered_set import OrderedSet
 
-from autoclass import autoclass, getmembers
+from inspect import getmembers
+from autoclass import autoclass
 from enforce import runtime_validation
 
 
