@@ -428,6 +428,37 @@ def Not(expression: _LambdaExpression):
     return expression.not_()
 
 
+# Logical combinations 'and' and 'or'
+def _and(a, b):
+    return a and b
+
+
+def And(a, b):
+    """
+    Equivalent of 'a and b'.
+
+    :param a: left operand
+    :param b: right operand
+    :return:
+    """
+    return _LambdaExpression._get_expression_for_method_with_args(_and, a, b)
+
+
+def _or(a, b):
+    return a or b
+
+
+def Or(a, b):
+    """
+    Equivalent of 'a or b'.
+
+    :param a: left operand
+    :param b: right operand
+    :return:
+    """
+    return _LambdaExpression._get_expression_for_method_with_args(_or, a, b)
+
+
 # Special case: we do not want to use format() but type(value).format. So we override the generated method
 def Format(value, *args, **kwargs):
     """
