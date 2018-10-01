@@ -148,7 +148,7 @@ or through provided workarounds :
 
 ```python
 from mini_lambda import b, i, s, l, x
-from mini_lambda import Slice, Get, Not, In
+from mini_lambda import Slice, Get, Not, In, And
 from mini_lambda import Iter, Repr, Format, Len, Int, Any, Log, DDecimal
 from math import log
 from decimal import Decimal
@@ -156,6 +156,7 @@ from decimal import Decimal
 # boolean logic
 expr = (x > 1) and (x < 5)            # fails
 expr = (x > 1) & (x < 5)              # OK
+expr = And(x > 1, x < 5)              # OK
 # iterating
 expr = next(iter(s))                  # fails
 expr = next(Iter(s))                  # OK
@@ -207,7 +208,7 @@ As seen above, there are several types of defective behaviours:
 
  * built-in behaviours with special syntax (`not b`, `{'a': 1}[s]`, `x in y`, `any_(x)`). In which case an equivalent explicit method is provided: `Not`, `Get`, `Slice`, `In`, `Any`, `All`. In addition, equivalent methods `<expr>.contains()`, `<expr>.is_in()`, `<expr>.not_()`, `<expr>.any_()`, and `<expr>.all_()` are provided.
  
- * the shortcircuit boolean operators `and/or` can not be overriden and check the return type, so you should use `&` or `|` instead
+ * the shortcircuit boolean operators `and/or` can not be overridden and check the return type, so you should use either bitwise combination (`&` or `|`) or logical (`And` or `Or`) instead.
 
  * any other 'standard' methods, whether they are object constructors `Decimal()` or functions such as `log()`. We will see in the next section how you can convert any existing class or method to a lambda-friendly one. `mini_lambda` comes bundled with a few of them, namely all constants, functions and classes defined in `math` and `decimal` modules.
 
