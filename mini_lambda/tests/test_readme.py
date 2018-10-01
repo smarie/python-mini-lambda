@@ -303,7 +303,8 @@ def test_doc_usage_other_functions_2():
 
 def test_doc_usage_other_classes():
     """ Tests that the example in doc/usage in the others/classes section works """
-    from mini_lambda import X, _, make_lambda_friendly_class
+    from mini_lambda import _, make_lambda_friendly_class
+    from mini_lambda.numpy import X
     import numpy as np
     import pandas as pd
 
@@ -316,7 +317,8 @@ def test_doc_usage_other_classes():
 
 def test_doc_usage_all_at_once():
     """ Tests that the example in doc/usage in the others/anything section works """
-    from mini_lambda import _, C, X
+    from mini_lambda import _, C
+    from mini_lambda.numpy import X
     import numpy as np
     import pandas as pd
 
