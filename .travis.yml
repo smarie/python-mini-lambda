@@ -58,7 +58,7 @@ after_success:
   - pylint mini_lambda  # note that at the moment the report is simply lost, we dont transform the result into anything
 # ***documentation***
   - mkdocs build -f docs/mkdocs.yml
-  - if [ "${TRAVIS_PULL_REQUEST}" = "true" ]; then exit 0; fi;
+  - if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then exit 0; fi;
   - mv reports/junit site/
   # mkdocs gh-deploy requires special care :
   # ---grant the possibility to push on the repo---
