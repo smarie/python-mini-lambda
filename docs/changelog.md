@@ -1,8 +1,10 @@
 # Changelog
 
-### 1.4.0 - fixed initial import time
+### 1.4.0 - fixed initial import time + added `And()` and `Or()`
 
-Fixed [#5](https://github.com/smarie/python-mini-lambda/issues/5) by making `numpy` and `pandas` import optional: they are now only imported if you import `mini_lambda.numpy_` or `mini_lambda.pandas_` respectively.
+ - Fixed [#5](https://github.com/smarie/python-mini-lambda/issues/5) by making `numpy` and `pandas` import optional: they are now only imported if you import `mini_lambda.numpy_` or `mini_lambda.pandas_` respectively.
+
+ - New `And()` and `Or()` functions, see [#7](https://github.com/smarie/python-mini-lambda/issues/7)
 
 ### 1.3.1 - fixed ImportError in code generation
 
