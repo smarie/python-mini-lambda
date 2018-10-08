@@ -5,7 +5,7 @@ import pytest
 import sys
 
 from mini_lambda import InputVar, Len, Str, Int, Repr, Bytes, Sizeof, Hash, Bool, Complex, Float, Oct, Iter, \
-    Any, All, _, Slice, Get, Not, FunctionDefinitionError, Format, C
+    Any, All, _, Slice, Get, Not, FunctionDefinitionError, Format, C, And, Or
 from math import cos, isfinite
 from numbers import Real
 
@@ -304,6 +304,41 @@ def test_evaluator_truth_testable_not():
 
     assert h(0)
     assert not h(5.2)
+
+
+def test_evaluator_logical_and():
+    """ Object: Tests that And function works """
+
+    x = InputVar('x', int)
+
+    with pytest.raises(FunctionDefinitionError):
+        x > 5 and x < 10
+    
+    r = And(x > 5, x < 10)
+    r = r.as_function()
+
+    assert not r(5)
+    assert r(6)
+    assert r(9)
+    assert not r(10)
+
+
+def test_evaluator_logical_or():
+    """ Object: Tests that Or function works """
+
+    x = InputVar('x', int)
+
+    with pytest.raises(FunctionDefinitionError):
+        x < 5 or x > 10
+    
+    r = Or(x < 5, x > 10)
+    r = r.as_function()
+
+    assert r(4)
+    assert not r(5)
+    assert not r(10)
+    assert r(11)
+
 
 # Object: .__getattr__
 def test_evaluator_attribute():
