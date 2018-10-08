@@ -439,7 +439,7 @@ def And(a, b):
 
     :param a: left operand
     :param b: right operand
-    :return: expression evaluation 'and'
+    :return: expression evaluating the and combination
     """
     return _LambdaExpression._get_expression_for_method_with_args(_and, a, b)
 
@@ -454,7 +454,7 @@ def Or(a, b):
 
     :param a: left operand
     :param b: right operand
-    :return: expression evaluation 'or'
+    :return: expression evaluating the or combination
     """
     return _LambdaExpression._get_expression_for_method_with_args(_or, a, b)
 

@@ -25,8 +25,8 @@ For convenience, `mini_lambda` comes bundled with the following predefined input
  * boolean/int/float numbers: `b` / `i`, `j`, `n` / `x`, `y`
  * lists/mappings: `l` / `d`
  * callables: `f`
- * numpy arrays (if numpy is present): `X`, `Y`, `M`
- * pandas dataframes (if pandas is present): `df`
+ * numpy arrays (if numpy is present): `X`, `Y`, `M` (from `mini_lambda.numpy`)
+ * pandas dataframes (if pandas is present): `df` (from `mini_lambda.pandas`)
 
 
 ## Lambda Expressions vs Lambda Functions
@@ -345,7 +345,8 @@ Note: although the above is valid, it is much more recommended to convert the wh
 Classes can be entirely made lambda-friendly at once. This will convert the constructor, as well as any other method that would be available.
 
 ```python
-from mini_lambda import X, _, make_lambda_friendly_class
+from mini_lambda import _, make_lambda_friendly_class
+from mini_lambda.numpy import X
 import numpy as np
 import pandas as pd
 
@@ -361,7 +362,8 @@ str(expr)               # 'DataFrame(X).max().values[0]'
 Actually the `Constant()` (alias `C()` or `make_lambda_friendly()`) function that we saw above to convert constants, is also able to convert methods ans classes. So if there is only a single conversion operator to remember, remember this one.
 
 ```python
-from mini_lambda import _, C, X
+from mini_lambda import _, C
+from mini_lambda.numpy import X
 import numpy as np
 import pandas as pd
 
