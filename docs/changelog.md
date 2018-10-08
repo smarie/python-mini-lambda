@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.4.0 - fixed initial import time
+
+Fixed [#5](https://github.com/smarie/python-mini-lambda/issues/5) by making `numpy` and `pandas` import optional: they are now only imported if you import `mini_lambda.numpy_` or `mini_lambda.pandas_` respectively.
+
 ### 1.3.1 - fixed ImportError in code generation
 
  * the latest `autoclass` has its `__init__.py` fixed, this revealed a `ImportError: cannot import name 'getmembers'` because we were importing `getmembers` from it instead of `inspect`. Fixed
