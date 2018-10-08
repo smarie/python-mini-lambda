@@ -304,7 +304,7 @@ def test_doc_usage_other_functions_2():
 def test_doc_usage_other_classes():
     """ Tests that the example in doc/usage in the others/classes section works """
     from mini_lambda import _, make_lambda_friendly_class
-    from mini_lambda.numpy import X
+    from mini_lambda.numpy_ import X
     import numpy as np
     import pandas as pd
 
@@ -318,7 +318,7 @@ def test_doc_usage_other_classes():
 def test_doc_usage_all_at_once():
     """ Tests that the example in doc/usage in the others/anything section works """
     from mini_lambda import _, C
-    from mini_lambda.numpy import X
+    from mini_lambda.numpy_ import X
     import numpy as np
     import pandas as pd
 
@@ -334,3 +334,17 @@ def test_doc_usage_already_imported():
     from mini_lambda import DDecimal  # Decimal class
     from mini_lambda import Print  # print() function
     from mini_lambda import Pi  # math.pi constant
+
+
+def test_doc_optional():
+    """"""
+
+    with pytest.raises(ImportError):
+        from mini_lambda import X
+
+    from mini_lambda.numpy_ import X
+
+    with pytest.raises(ImportError):
+        from mini_lambda import df
+
+    from mini_lambda.pandas_ import df

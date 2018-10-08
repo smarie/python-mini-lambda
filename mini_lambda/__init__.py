@@ -7,6 +7,7 @@ __SUBMODULES_TO_EXPORT = ['base', 'generated', 'generated2', 'goodies', 'goodies
 # (1) allow users to do
 #     import <package> as p and then p.<symbol>
 __all__ = __get_all_submodules_symbols(__PACKAGE_NAME, __SUBMODULES_TO_EXPORT)
+__all__ += ['numpy_', 'pandas_']
 # Note: this is one way to do it, but it would be simpler to check the names in globals() at the end of this file.
 
 # (2) allow users to do
