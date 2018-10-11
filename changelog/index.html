@@ -283,6 +283,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#140-fixed-initial-import-time-added-and-and-or" title="1.4.0 - fixed initial import time + added And() and Or()" class="md-nav__link">
+    1.4.0 - fixed initial import time + added And() and Or()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#131-fixed-importerror-in-code-generation" title="1.3.1 - fixed ImportError in code generation" class="md-nav__link">
     1.3.1 - fixed ImportError in code generation
   </a>
@@ -370,6 +377,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#140-fixed-initial-import-time-added-and-and-or" title="1.4.0 - fixed initial import time + added And() and Or()" class="md-nav__link">
+    1.4.0 - fixed initial import time + added And() and Or()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#131-fixed-importerror-in-code-generation" title="1.3.1 - fixed ImportError in code generation" class="md-nav__link">
     1.3.1 - fixed ImportError in code generation
   </a>
@@ -445,6 +459,15 @@
                 
                 
                 <h1 id="changelog">Changelog<a class="headerlink" href="#changelog" title="Permanent link">&para;</a></h1>
+<h3 id="140-fixed-initial-import-time-added-and-and-or">1.4.0 - fixed initial import time + added <code>And()</code> and <code>Or()</code><a class="headerlink" href="#140-fixed-initial-import-time-added-and-and-or" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p>Fixed <a href="https://github.com/smarie/python-mini-lambda/issues/5">#5</a> by making <code>numpy</code> and <code>pandas</code> import optional: they are now only imported if you import <code>mini_lambda.numpy_</code> or <code>mini_lambda.pandas_</code> respectively.</p>
+</li>
+<li>
+<p>New <code>And()</code> and <code>Or()</code> functions, see <a href="https://github.com/smarie/python-mini-lambda/issues/7">#7</a></p>
+</li>
+</ul>
 <h3 id="131-fixed-importerror-in-code-generation">1.3.1 - fixed ImportError in code generation<a class="headerlink" href="#131-fixed-importerror-in-code-generation" title="Permanent link">&para;</a></h3>
 <ul>
 <li>the latest <code>autoclass</code> has its <code>__init__.py</code> fixed, this revealed a <code>ImportError: cannot import name 'getmembers'</code> because we were importing <code>getmembers</code> from it instead of <code>inspect</code>. Fixed</li>

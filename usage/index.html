@@ -561,8 +561,8 @@
 <li>boolean/int/float numbers: <code>b</code> / <code>i</code>, <code>j</code>, <code>n</code> / <code>x</code>, <code>y</code></li>
 <li>lists/mappings: <code>l</code> / <code>d</code></li>
 <li>callables: <code>f</code></li>
-<li>numpy arrays (if numpy is present): <code>X</code>, <code>Y</code>, <code>M</code></li>
-<li>pandas dataframes (if pandas is present): <code>df</code></li>
+<li>numpy arrays (if numpy is present): <code>X</code>, <code>Y</code>, <code>M</code> (from <code>mini_lambda.numpy</code>)</li>
+<li>pandas dataframes (if pandas is present): <code>df</code> (from <code>mini_lambda.pandas</code>)</li>
 </ul>
 <h2 id="lambda-expressions-vs-lambda-functions">Lambda Expressions vs Lambda Functions<a class="headerlink" href="#lambda-expressions-vs-lambda-functions" title="Permanent link">&para;</a></h2>
 <h3 id="creating-an-expression-and-evaluating-it">Creating an expression and Evaluating it<a class="headerlink" href="#creating-an-expression-and-evaluating-it" title="Permanent link">&para;</a></h3>
@@ -663,7 +663,7 @@
 
 <p>or through provided workarounds :</p>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">b</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">x</span>
-<span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">Slice</span><span class="p">,</span> <span class="n">Get</span><span class="p">,</span> <span class="n">Not</span><span class="p">,</span> <span class="n">In</span>
+<span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">Slice</span><span class="p">,</span> <span class="n">Get</span><span class="p">,</span> <span class="n">Not</span><span class="p">,</span> <span class="n">In</span><span class="p">,</span> <span class="n">And</span>
 <span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">Iter</span><span class="p">,</span> <span class="n">Repr</span><span class="p">,</span> <span class="n">Format</span><span class="p">,</span> <span class="n">Len</span><span class="p">,</span> <span class="n">Int</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Log</span><span class="p">,</span> <span class="n">DDecimal</span>
 <span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">log</span>
 <span class="kn">from</span> <span class="nn">decimal</span> <span class="kn">import</span> <span class="n">Decimal</span>
@@ -671,6 +671,7 @@
 <span class="c1"># boolean logic</span>
 <span class="n">expr</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">)</span>            <span class="c1"># fails</span>
 <span class="n">expr</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">)</span>              <span class="c1"># OK</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">And</span><span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">)</span>              <span class="c1"># OK</span>
 <span class="c1"># iterating</span>
 <span class="n">expr</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>                  <span class="c1"># fails</span>
 <span class="n">expr</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">Iter</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>                  <span class="c1"># OK</span>
@@ -726,7 +727,7 @@
 <p>built-in behaviours with special syntax (<code>not b</code>, <code>{'a': 1}[s]</code>, <code>x in y</code>, <code>any_(x)</code>). In which case an equivalent explicit method is provided: <code>Not</code>, <code>Get</code>, <code>Slice</code>, <code>In</code>, <code>Any</code>, <code>All</code>. In addition, equivalent methods <code>&lt;expr&gt;.contains()</code>, <code>&lt;expr&gt;.is_in()</code>, <code>&lt;expr&gt;.not_()</code>, <code>&lt;expr&gt;.any_()</code>, and <code>&lt;expr&gt;.all_()</code> are provided.</p>
 </li>
 <li>
-<p>the shortcircuit boolean operators <code>and/or</code> can not be overriden and check the return type, so you should use <code>&amp;</code> or <code>|</code> instead</p>
+<p>the shortcircuit boolean operators <code>and/or</code> can not be overridden and check the return type, so you should use either bitwise combination (<code>&amp;</code> or <code>|</code>) or logical (<code>And</code> or <code>Or</code>) instead.</p>
 </li>
 <li>
 <p>any other 'standard' methods, whether they are object constructors <code>Decimal()</code> or functions such as <code>log()</code>. We will see in the next section how you can convert any existing class or method to a lambda-friendly one. <code>mini_lambda</code> comes bundled with a few of them, namely all constants, functions and classes defined in <code>math</code> and <code>decimal</code> modules.</p>
@@ -846,7 +847,8 @@
 <p>Note: although the above is valid, it is much more recommended to convert the whole class as we'll see in the next section.</p>
 <h3 id="classes">Classes<a class="headerlink" href="#classes" title="Permanent link">&para;</a></h3>
 <p>Classes can be entirely made lambda-friendly at once. This will convert the constructor, as well as any other method that would be available.</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">X</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">make_lambda_friendly_class</span>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">_</span><span class="p">,</span> <span class="n">make_lambda_friendly_class</span>
+<span class="kn">from</span> <span class="nn">mini_lambda.numpy</span> <span class="kn">import</span> <span class="n">X</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 
@@ -860,7 +862,8 @@
 
 <h3 id="anything">Anything<a class="headerlink" href="#anything" title="Permanent link">&para;</a></h3>
 <p>Actually the <code>Constant()</code> (alias <code>C()</code> or <code>make_lambda_friendly()</code>) function that we saw above to convert constants, is also able to convert methods ans classes. So if there is only a single conversion operator to remember, remember this one.</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">_</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">X</span>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">_</span><span class="p">,</span> <span class="n">C</span>
+<span class="kn">from</span> <span class="nn">mini_lambda.numpy</span> <span class="kn">import</span> <span class="n">X</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 
