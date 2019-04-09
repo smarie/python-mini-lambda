@@ -1,15 +1,17 @@
-from copy import copy
-from inspect import isclass
-from typing import TypeVar, Union, Tuple, Callable  # do not import Type for compatibility with earlier python 3.5
 from warnings import warn
 import sys
+
+try:  # python 3.5+
+    from typing import TypeVar, Union, Tuple, Callable, Type
+    T = TypeVar('T')
+except ImportError:
+    pass
 
 from mini_lambda.base import get_repr, _PRECEDENCE_BITWISE_AND, _PRECEDENCE_BITWISE_OR, _PRECEDENCE_BITWISE_XOR, \
     _PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF, evaluate, _PRECEDENCE_EXPONENTIATION, \
     _PRECEDENCE_POS_NEG_BITWISE_NOT, _get_root_var
 from mini_lambda.generated import _LambdaExpressionGenerated, FunctionDefinitionError
 
-T = TypeVar('T')
 
 this_module = sys.modules[__name__]
 
@@ -418,7 +420,8 @@ class _LambdaExpression(_LambdaExpressionGenerated):
 
 
 # Special case: 'not' is not a function
-def Not(expression: _LambdaExpression):
+def Not(expression  # type: _LambdaExpression
+        ):
     """
     Equivalent of 'not x' for a _LambdaExpression.
 
@@ -520,8 +523,9 @@ def Slice(*args, **kwargs):
 # ************************
 
 
-def _(*expressions: _LambdaExpression) -> Union[_LambdaExpression.LambdaFunction,
-                                               Tuple[_LambdaExpression.LambdaFunction, ...]]:
+def _(*expressions  # type: _LambdaExpression
+      ):
+    # type: (...) -> Union[_LambdaExpression.LambdaFunction, Tuple[_LambdaExpression.LambdaFunction, ...]]
     """
     'Closes' one or several lambda expressions, in other words, transforms them into callable functions.
 
@@ -540,7 +544,10 @@ F = _
 """ Alias for '_' """
 
 
-def InputVar(symbol: str = None, typ: 'Type[T]' = None) -> Union[T, _LambdaExpression]:
+def InputVar(symbol=None,  # type: str
+             typ=None      # type: Type[T]
+             ):
+    # type: (...) -> Union[T, _LambdaExpression]
     """
     Creates a variable to use in validator expression. The optional `typ` argument may be used to get a variable with
     appropriate syntactic completion from your IDE, but is not used for anything else.
@@ -556,7 +563,10 @@ def InputVar(symbol: str = None, typ: 'Type[T]' = None) -> Union[T, _LambdaExpre
     return _LambdaExpression(symbol)
 
 
-def Constant(value: T, name: str = None) -> Union[T, _LambdaExpression]:
+def Constant(value,     # type: T
+             name=None  # type: str
+             ):
+    # type: (...) -> Union[T, _LambdaExpression]
     """
     Creates a constant expression. This is useful when
     * you want to use a method on an object that is not an expression, as in 'toto'.prefix(x) where x is an expression.
@@ -582,7 +592,10 @@ make_lambda_friendly = Constant
 """ Alias for 'Constant' """
 
 
-def make_lambda_friendly_class(typ: 'Type[T]', name: str = None) -> 'Union[Type[T], _LambdaExpression]':
+def make_lambda_friendly_class(typ,       # type: Type[T]
+                               name=None  # type: str
+                               ):
+    # type: (...) -> Union[Type[T], _LambdaExpression]
     """
     Utility method to transform a standard class into a class usable inside lambda expressions, as in
     DDataFrame = C(DataFrame), so as to be able to use it in expressions
@@ -594,7 +607,10 @@ def make_lambda_friendly_class(typ: 'Type[T]', name: str = None) -> 'Union[Type[
     return Constant(typ, name=name)
 
 
-def make_lambda_friendly_method(method: Callable, name: str = None) -> _LambdaExpression:
+def make_lambda_friendly_method(method,    # type: Callable
+                                name=None  # type: str
+                                ):
+    # type: (...) -> _LambdaExpression
     """
     Utility method to transform any method whatever their signature (positional and/or keyword arguments,
     variable-length included) into a method usable inside lambda expressions, even if some of the arguments are

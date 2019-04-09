@@ -33,7 +33,7 @@ class FunctionDefinitionError(Exception):
     """ An exception thrown when defining a function incorrectly """
 
 
-class _LambdaExpressionBase:
+class _LambdaExpressionBase(object):
     """
     A _LambdaExpressionBase is a wrapper for a function (self._fun) with a SINGLE argument.
     It can be evaluated on any input by calling the 'evaluate' method. This will execute self._fun() on this input.
@@ -48,8 +48,14 @@ class _LambdaExpressionBase:
 
     __slots__ = ['_fun', '_str_expr', '_root_var', '_precedence_level']
 
-    def __init__(self, str_expr: str=None, is_constant: bool=False, constant_value: Any=None,
-                 precedence_level: int=None, fun: Callable=None, root_var=None):
+    def __init__(self,
+                 str_expr=None,          # type: str
+                 is_constant=False,      # type: bool
+                 constant_value=None,    # type: Any
+                 precedence_level=None,  # type: int
+                 fun=None,               # type: Callable
+                 root_var=None
+                 ):
         """
         Constructor with an optional nested evaluation function. If no argument is provided, the nested evaluation
         function is the identity function with one single parameter x
@@ -131,7 +137,10 @@ class _LambdaExpressionBase:
         """
         return self._str_expr
 
-    def assert_has_same_root_var(self, other: Any) -> Any:
+    def assert_has_same_root_var(self,
+                                 other  # type: Any
+                                 ):
+        # type: (...) -> Any
         """
         Asserts that if other is also a _LambdaExpressionBase, then it has the same root variable.
         It returns the root variable to use for expressions combining self and other.
@@ -200,7 +209,11 @@ class _LambdaExpressionBase:
                           root_var=root_var)
 
     @classmethod
-    def constant(cls, value: T, name: str = None) -> Union[T, Any]:  # Any really means _LambdaExpressionBase
+    def constant(cls,
+                 value,     # type: T
+                 name=None  # type: str
+                 ):
+        # type: (...) -> Union[T, _LambdaExpressionBase]
         """
         Creates a constant expression. This is useful when
         * you want to use a method on an object that is not an expression, as in 'toto'.prefix(x) where x is an
@@ -279,7 +292,8 @@ class _LambdaExpressionBase:
                        str_expr=string_expr, root_var=root_var)
 
 
-def _get_root_var(*args, **kwargs) -> Tuple[Any, _LambdaExpressionBase]:
+def _get_root_var(*args, **kwargs):
+    # type: (...) -> Tuple[Any, _LambdaExpressionBase]
     """
     Returns the root variable to use when the various arguments are used in the same expression, or raises an exception
     if two arguments have incompatible root variables
@@ -304,7 +318,8 @@ def _get_root_var(*args, **kwargs) -> Tuple[Any, _LambdaExpressionBase]:
     return root_var, first_expression
 
 
-def evaluate(statement: Any, input):
+def evaluate(statement,  # type: Any
+             input):
     """
     A helper function to evaluate something, whether it is a _LambdaExpressionBase, a callable, or a non-callable.
     * if that something is not callable, it returns it directly
@@ -322,7 +337,9 @@ def evaluate(statement: Any, input):
         return statement
 
 
-def get_repr(statement: Any, target_precedence_level: float = None):
+def get_repr(statement,                    # type: Any
+             target_precedence_level=None  # type: float
+             ):
     """
     A helper function to return the representation of something, whether it is a _LambdaExpressionBase,
     a callable, or a non-callable.

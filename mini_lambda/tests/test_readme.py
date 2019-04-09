@@ -1,3 +1,8 @@
+from __future__ import print_function
+from __future__ import division
+
+from sys import version_info
+
 import pytest
 
 from mini_lambda import FunctionDefinitionError, make_lambda_friendly_method
@@ -157,7 +162,7 @@ def test_doc_usage_syntax_2():
         expr = log(x)                         # fails
     expr = Log(x)                         # OK
     # constructing with the variable as arg
-    with pytest.raises(TypeError):
+    with pytest.raises(TypeError if version_info >= (3, 0) else FunctionDefinitionError):
         expr = Decimal(x)                     # fails
     expr = DDecimal(x)                    # OK
     # getting with the variable as the key

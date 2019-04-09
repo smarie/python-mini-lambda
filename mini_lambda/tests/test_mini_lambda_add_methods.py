@@ -10,9 +10,11 @@ def test_add_new_unbound_positional():
     from mini_lambda import x, _
     from math import log, e
 
+    # we cannot apply a function directly on x
     with pytest.raises(FunctionDefinitionError):
         log(x)
 
+    # but we can make a lambda friendly version of the function
     Log = make_lambda_friendly_method(log)
     complex_identity = _(Log(e ** x))
 
@@ -20,7 +22,7 @@ def test_add_new_unbound_positional():
     assert abs(complex_identity(3.5) - 3.5) < 10e-5
     print(complex_identity)
     # this is the remaining issue: the value of math.e is displayed instead of 'e'. We have to define 'constants'
-    assert str(complex_identity) == "log(" + str(e) + " ** x)"
+    assert str(complex_identity) == "log(" + repr(e) + " ** x)"
 
     # then for several arguments
     complex_identity = _(Log(10 ** x, 10))
@@ -169,7 +171,7 @@ def test_add_class():
 
     from mini_lambda import x, _
 
-    class Temp:
+    class Temp(object):
         def __init__(self, den):
             self.den = den
 

@@ -1,12 +1,9 @@
-from collections import Mapping
-from typing import Iterator
-
 import pytest
 import sys
 
 from mini_lambda import InputVar, Len, Str, Int, Repr, Bytes, Sizeof, Hash, Bool, Complex, Float, Oct, Iter, \
-    Any, All, _, Slice, Get, Not, FunctionDefinitionError, Format, C, And, Or
-from math import cos, isfinite
+    Any, All, _, Slice, Get, Not, FunctionDefinitionError, Format, C, And, Or, Round
+from math import cos
 from numbers import Real
 
 
@@ -25,14 +22,19 @@ def test_evaluator_iterable():
     basic_evaluator = Iter(li)
     basic_evaluator = basic_evaluator.as_function()
 
-    assert type(basic_evaluator([0, 1])).__name__ == 'list_iterator'
+    assert type(basic_evaluator([0, 1])).__name__ == 'list_iterator' if sys.version_info > (3, 0) else 'listiterator'
 
 
 # Iterator: __next__
 def test_evaluator_iterator():
     """ Iterator/Generator: tests that `next()` leads to a valid evaluator"""
 
-    i = InputVar('i', Iterator)
+    try:
+        from typing import Iterator
+        i = InputVar('i', Iterator)
+    except ImportError:
+        i = InputVar('i')
+
     next_elt_accessor = next(i)
     next_elt_accessor = next_elt_accessor.as_function()
 
@@ -43,6 +45,9 @@ def test_evaluator_iterator():
         def __next__(self):
             self.current = not self.current
             return self.current
+
+        def next(self):
+            return self.__next__()
 
     foo = Alternator()
 
@@ -543,7 +548,7 @@ def test_evaluator_numeric():
     assert times_two(1) == 2
 
     div_two = _(x / 2)
-    assert div_two(1) == 0.5
+    assert div_two(1.) == 0.5
 
     neg = _(x % 2)
     assert neg(3) == 1
@@ -613,7 +618,10 @@ def test_evaluator_maths():
 
     x = InputVar('x', float)
 
-    assert round(x).evaluate(5.5) == 6
+    # since in python 2 round calls float then we protect it entirely
+    with pytest.raises(FunctionDefinitionError):
+        round(x)
+    assert Round(x).evaluate(5.5) == 6
     assert trunc(x).evaluate(5.5) == 5
 
     with pytest.raises(FunctionDefinitionError):
@@ -685,14 +693,14 @@ def test_evaluator_oct_convertible():
     to_octal = Oct(s)
     to_octal = to_octal.as_function()
 
-    assert to_octal(55) == '0o67'
+    assert to_octal(55) == '0o67' if sys.version_info > (3, 0) else '067'
 
 
 def test_evaluator_index_slice():
     """ Object is used as an index : tests that `__index__` raises the appropriate exception and that equivalent Get()
     works, and also that Slice works and not slice() """
 
-    l = [0,1,2,3,4]
+    l = [0, 1, 2, 3, 4]
     x = InputVar('x', int)
 
     with pytest.raises(FunctionDefinitionError):
@@ -773,7 +781,7 @@ def test_generated_methods():
 
 
 def test_constants_methods_can_be_combined():
-    a = C(isfinite)  # define a constant function (a lambda-friendly function)
+    a = C(cos)  # define a constant function (a lambda-friendly function)
 
-    f = _(a(0) & a(0))
-    assert f(None)
+    f = _(a(0) + a(0))
+    assert f(None) == 2.

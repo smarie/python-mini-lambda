@@ -14,19 +14,16 @@ from mako.template import Template
 from ordered_set import OrderedSet
 
 from inspect import getmembers
-from autoclass import autoclass
-from enforce import runtime_validation
 
 
-@runtime_validation
-@autoclass
 class Override:
-    def __init__(self, method_name: str,
-                 # we cannot use Callable, see https://github.com/RussBaz/enforce/issues/58
-                 unbound_method: Optional[Any] = None,
-                 pair_operator: Optional[str] = None, is_operator_left: bool = True,
-                 uni_operator: Optional[str] = None,
-                 precedence_level: Optional[str] = None
+    def __init__(self,
+                 method_name,            # type: str
+                 unbound_method=None,    # type: Optional[Any]
+                 pair_operator=None,     # type: Optional[str]
+                 is_operator_left=True,  # type: bool
+                 uni_operator=None,      # type: Optional[str]
+                 precedence_level=None   # type: Optional[str]
                  ):
         """
         A descriptor for a method to override in _InputEvaluatorGenerated.
@@ -43,9 +40,14 @@ class Override:
         :param is_operator_left:
         :param uni_operator: for self-operator e.g. -x
         :param precedence_level: the precedence level of the operation. This is the string representation of the
-        constant in mini_lambda base.py
+            constant in mini_lambda base.py
         """
-        pass
+        self.method_name = method_name
+        self.unbound_method = unbound_method
+        self.pair_operator = pair_operator
+        self.is_operator_left = is_operator_left
+        self.uni_operator = uni_operator
+        self.precedence_level = precedence_level
 
     def __hash__(self):
         return hash(self.method_name)
@@ -62,13 +64,12 @@ class Override:
             return '{}: Standard default'.format(self.method_name)
 
 
-@runtime_validation
-@autoclass
 class OverExc:
-    def __init__(self, method_name: str,
-                 module_method_name: Optional[str] = None,
-                 # we cannot use Callable, see https://github.com/RussBaz/enforce/issues/58
-                 unbound_method: Optional[Any] = None):
+    def __init__(self,
+                 method_name,              # type: str
+                 module_method_name=None,  # type: Optional[str]
+                 unbound_method=None       # type: Optional[Any]
+                 ):
         """
         A descriptor for a method to override with exception in _InputEvaluatorGenerated, and for which a module-level
         replacement method needs to be provided.
@@ -84,23 +85,30 @@ class OverExc:
         :param module_method_name:
         :param unbound_method:
         """
-        # this is executed AFTER @autoargs
+        self.method_name = method_name
         self.module_method_name = module_method_name or method_name.replace('__', '').capitalize()
+        self.unbound_method = unbound_method
 
     def __hash__(self):
         return hash(self.method_name)
 
     def __str__(self):
-        return 'Exception {} replaced by module method {}'.format(self.method_name, self.module_method_name)
+        return 'Exception {} replaced with module method {}'.format(self.method_name, self.module_method_name)
 
 
-@runtime_validation
-@autoclass
 class Goodie:
-    def __init__(self, item_name: str, function_name: Optional[str] = None,
-                 constant_name: Optional[str] = None, class_name: Optional[str] = None,
-                 import_line: Optional[str] = ''):
-        pass
+    def __init__(self,
+                 item_name,           # type: str
+                 function_name=None,  # type: Optional[str]
+                 constant_name=None,  # type: Optional[str]
+                 class_name=None,     # type: Optional[str]
+                 import_line=''       # type: Optional[str]
+                 ):
+        self.item_name = item_name
+        self.function_name = function_name
+        self.constant_name = constant_name
+        self.class_name = class_name
+        self.import_line = import_line
 
     def __str__(self):
         if self.function_name:
@@ -189,7 +197,8 @@ def __get_all_magic_methods(*classes):
     return {name for clazz in classes for name in dir(clazz) if name.startswith('__')}
 
 
-def define_what_needs_to_be_written() -> Tuple[Set[Override], Set[OverExc]]:
+def define_what_needs_to_be_written():
+    # type: (...) -> Tuple[Set[Override], Set[OverExc]]
     """
     Creates three sets containing the definition of what we want to write as methods in the generated class.
     :return: a tuple of two sorted sets. The first set contains Override definitions, the second one OverExc
@@ -218,6 +227,8 @@ def define_what_needs_to_be_written() -> Tuple[Set[Override], Set[OverExc]]:
     # .__next__
     # to_override.update(__get_all_magic_methods(Iterator, Generator))
     to_override.add(Override('__next__', unbound_method=next))
+    # to support Python 2
+    to_override.add(Override('next', unbound_method=next))
 
     # ** Initializable Object **
     # .__new__, .__init__, .__del__
@@ -304,7 +315,7 @@ def define_what_needs_to_be_written() -> Tuple[Set[Override], Set[OverExc]]:
     # ** Numeric types **
     #  .__add__, .__radd__, .__sub__, .__rsub__, .__mul__, .__rmul__, .__truediv__, .__rtruediv__,
     # .__mod__, .__rmod__, .__divmod__, .__rdivmod__, .__pow__, .__rpow__
-    # .__matmul__, .__floordiv__, .__rfloordiv__
+    # .__matmul__, .__div__, .__rdiv__, .__floordiv__, .__rfloordiv__
     # .__lshift__, .__rshift__, __rlshift__, __rrshift__
     # .__neg__, .__pos__, .__abs__, .__invert__
     # to_override.update(__get_all_magic_methods(Integral))
@@ -322,8 +333,15 @@ def define_what_needs_to_be_written() -> Tuple[Set[Override], Set[OverExc]]:
     to_override.add(Override('__rdivmod__'))
     to_override.add(Override('__pow__', pair_operator='**', precedence_level='_PRECEDENCE_EXPONENTIATION'))
     to_override.add(Override('__rpow__', pair_operator='**', is_operator_left=False, precedence_level='_PRECEDENCE_EXPONENTIATION'))
-    to_override.add(Override('__matmul__', pair_operator='@', precedence_level='_PRECEDENCE_MUL_DIV_ETC'))
+
+    # does not work in python 2
+    # to_override.add(Override('__matmul__', pair_operator='@', precedence_level='_PRECEDENCE_MUL_DIV_ETC'))
+    to_override.add(Override('__matmul__', precedence_level='_PRECEDENCE_MUL_DIV_ETC'))
+
     # Override('__rmatmul__', operator='@', is_operator_left=False),
+    # for python 2
+    to_override.add(Override('__div__', pair_operator='/', precedence_level='_PRECEDENCE_MUL_DIV_ETC'))
+    to_override.add(Override('__rdiv__', pair_operator='/', is_operator_left=False, precedence_level='_PRECEDENCE_MUL_DIV_ETC'))
     to_override.add(Override('__floordiv__', pair_operator='//', precedence_level='_PRECEDENCE_MUL_DIV_ETC'))
     to_override.add(Override('__rfloordiv__', pair_operator='//', is_operator_left=False, precedence_level='_PRECEDENCE_MUL_DIV_ETC'))
     to_override.add(Override('__lshift__', pair_operator='<<', precedence_level='_PRECEDENCE_SHIFTS'))
@@ -336,7 +354,8 @@ def define_what_needs_to_be_written() -> Tuple[Set[Override], Set[OverExc]]:
     to_override.add(Override('__pos__', uni_operator='+', precedence_level='_PRECEDENCE_POS_NEG_BITWISE_NOT'))
     to_override.add(Override('__abs__', unbound_method=abs))
     to_override.add(Override('__invert__', uni_operator='~', precedence_level='_PRECEDENCE_POS_NEG_BITWISE_NOT'))
-    to_override.add(Override('__round__', unbound_method=round))
+    # requires __float__ in python 2: skip
+    # to_override.add(Override('__round__', unbound_method=round))
 
     # ** Boolean types **
     # .__and__, .__xor__, .__or__, __rand__, __rxor__, __ror__
@@ -344,9 +363,11 @@ def define_what_needs_to_be_written() -> Tuple[Set[Override], Set[OverExc]]:
 
     # ** Type conversion **
     # __int__, __long__, __float__, __complex__, __oct__, __hex__, __index__, __trunc__, __coerce__
-    to_override.add(Override('__trunc__'))
+    from math import trunc
+    to_override.add(Override('__trunc__', unbound_method=trunc))
     to_override.add(Override('__coerce__'))
     to_skip.update({'__index__'})
+    to_override_with_exception.add(OverExc('__round__', unbound_method=round))
     to_override_with_exception.add(OverExc('__int__', unbound_method=int))
                                        # OverExc('__long__', unbound_method=long),
     to_override_with_exception.add(OverExc('__float__', unbound_method=float))
@@ -363,32 +384,34 @@ def define_what_needs_to_be_written() -> Tuple[Set[Override], Set[OverExc]]:
     to_override_2 = OrderedSet()
     for overriden in to_override:
         if overriden not in to_skip and overriden not in to_override_with_exception:
-            assert type(overriden) == Override
+            assert isinstance(overriden, Override)
             to_override_2.add(overriden)
 
     to_override_with_exception_2 = OrderedSet()
     for overriden_with_e in to_override_with_exception:
         if overriden_with_e not in to_skip:
-            assert type(overriden_with_e) == OverExc
+            assert isinstance(overriden_with_e, OverExc)
             to_override_with_exception_2.add(overriden_with_e)
 
     return to_override_2, to_override_with_exception_2
 
 
-def define_goodies() -> Tuple[List[str], List[Goodie]]:
+def define_goodies():
+    # type: (...) -> Tuple[List[str], List[Goodie]]
     """
 
     :return:
     """
     packages = [math, decimal]
-    built_in_functions = ['abs', 'all', 'any', 'ascii', 'bin', 'bool', 'bytearray', 'bytes', 'callable', 'chr',
+    built_in_functions = ['abs', 'all', 'any', 'bin', 'bool', 'bytearray', 'bytes', 'callable', 'chr',
                           'classmethod', 'compile', 'complex', 'delattr', 'dict', 'dir', 'divmod', 'enumerate',
-                          'eval', 'exec', 'filter', 'float', 'format', 'frozenset', 'getattr', 'globals', 'hasattr',
-                          'hash', 'help', 'hex', 'id', 'input', 'int', 'isinstance', 'issubclass', 'iter', 'len',
+                          'eval', 'filter', 'float', 'format', 'frozenset', 'getattr', 'globals', 'hasattr',
+                          'hash', 'hex', 'id', 'input', 'int', 'isinstance', 'issubclass', 'iter', 'len',
                           'list', 'locals', 'map', 'max', 'memoryview', 'min', 'next', 'object', 'oct', 'open', 'ord',
                           'pow', 'print', 'property', 'range', 'repr', 'reversed', 'round', 'set', 'setattr', 'slice',
                           'sorted', 'staticmethod', 'str', 'sum', 'super', 'tuple', 'type', 'vars', 'zip']
-
+    # these do not work in python 2
+    protected_functions = ['ascii', 'help', 'exec']
     import_list = list()
     goodies_list = list()
 
