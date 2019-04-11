@@ -26,7 +26,7 @@ if not all(path.exists(file_path) for file_path in generated_file_paths):
 # *************** Dependencies *********
 INSTALL_REQUIRES = []
 DEPENDENCY_LINKS = []
-SETUP_REQUIRES = ['pytest-runner', 'setuptools_scm', 'pypandoc', 'pandoc', 'ordered-set', 'mako', 'enforce', 'autoclass']
+SETUP_REQUIRES = ['pytest-runner', 'setuptools_scm', 'pypandoc', 'pandoc', 'ordered-set', 'mako']
 TESTS_REQUIRE = ['pytest', 'pytest-logging', 'pytest-cov', 'numpy', 'pandas']
 EXTRAS_REQUIRE = {}
 
