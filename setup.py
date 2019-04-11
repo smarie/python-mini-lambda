@@ -3,7 +3,7 @@ See:
 https://packaging.python.org/en/latest/distributing.html
 https://github.com/pypa/sampleproject
 """
-
+from six import raise_from
 from os import path
 
 from setuptools import setup, find_packages
@@ -34,14 +34,12 @@ EXTRAS_REQUIRE = {}
 try:
     from setuptools_scm import get_version
 except Exception as e:
-    raise Exception('Required packages for setup not found. You may wish you execute '
-                    '"pip install -r ci_tools/requirements-setup.txt" to install them or alternatively install them '
-                    'manually using conda or other system. The list is : ' + str(SETUP_REQUIRES)) from e
+    raise_from(Exception('Required packages for setup not found. Please install `setuptools_scm`'), e)
 
 # ************** ID card *****************
 DISTNAME = 'mini_lambda'
 DESCRIPTION = 'Simple lambda functions without `lambda x:` and with string conversion capability.'
-MAINTAINER = 'Sylvain Marié'
+MAINTAINER = 'Sylvain MARIE'
 MAINTAINER_EMAIL = 'sylvain.marie@schneider-electric.com'
 URL = 'https://github.com/smarie/python-mini-lambda'
 LICENSE = 'BSD 3-Clause'
@@ -63,12 +61,12 @@ except(ImportError):
          'documentation correctly')
     LONG_DESCRIPTION = open('README.md').read()
 
-# ************* VERSION A **************
+# ************* VERSION **************
 # --Get the Version number from VERSION file, see https://packaging.python.org/single_source_version/ option 4.
 # THIS IS DEPRECATED AS WE NOW USE GIT TO MANAGE VERSION
 # with open(path.join(here, 'VERSION')) as version_file:
 #    VERSION = version_file.read().strip()
-OBSOLETES = []
+# OBSOLETES = []
 
 setup(
     name=DISTNAME,
@@ -106,12 +104,13 @@ setup(
         # that you indicate whether you support Python 2, Python 3 or both.
         # 'Programming Language :: Python :: 2',
         # 'Programming Language :: Python :: 2.6',
-        # 'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 2.7',
         # 'Programming Language :: Python :: 3',
         # 'Programming Language :: Python :: 3.3',
         # 'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
     ],
 
     # What does your project relate to?
@@ -134,7 +133,7 @@ setup(
 
     # we're using git
     use_scm_version=True, # this provides the version + adds the date if local non-commited changes.
-    # use_scm_version={'local_scheme':'dirty-tag'}, # provides the version + adds '+dirty' if local non-commited changes
+    # use_scm_version={'local_scheme':'dirty-tag'}, # this provides the version + adds '+dirty' if local non-commited changes.
     setup_requires=SETUP_REQUIRES,
 
     # test
@@ -147,7 +146,7 @@ setup(
     # $ pip install -e .[dev,test]
     extras_require=EXTRAS_REQUIRE,
 
-    obsoletes=OBSOLETES
+    # obsoletes=OBSOLETES
 
     # If there are data files included in your packages that need to be
     # installed, specify them here.  If using Python 2.6 or less, then these
