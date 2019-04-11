@@ -1,6 +1,9 @@
 from inspect import isclass
 from sys import getsizeof
-from typing import Tuple, Set, Optional, Any, List
+try:
+    from typing import Tuple, Set, Optional, Any, List
+except ImportError:
+    pass
 
 import os
 import math
