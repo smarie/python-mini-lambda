@@ -1,5 +1,3 @@
-from typing import Callable
-
 from mini_lambda.main import InputVar
 
 # ******* Useful input variables ***********
@@ -19,4 +17,8 @@ l = InputVar('l', list)
 d = InputVar('d', dict)
 
 # callables
-f = InputVar('f', Callable)
+try:
+    from typing import Callable
+    f = InputVar('f', Callable)
+except ImportError:
+    pass

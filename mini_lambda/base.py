@@ -1,8 +1,10 @@
 from inspect import isclass
 
-from typing import Callable, Any, Tuple, Union, TypeVar
-
-T = TypeVar('T')
+try:  # python 3.5+
+    from typing import Callable, Any, Tuple, Union, TypeVar
+    T = TypeVar('T')
+except ImportError:
+    pass
 
 # see https://docs.python.org/3/reference/expressions.html#operator-precedence
 from copy import copy
