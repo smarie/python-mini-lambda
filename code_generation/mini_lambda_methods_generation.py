@@ -259,7 +259,7 @@ def define_what_needs_to_be_written():
     # .__repr__, .__str__, .__bytes__, .__format__,
     # __sizeof__
     to_override_with_exception.add(OverExc('__str__', unbound_method=str))
-    to_override_with_exception.add(OverExc('__repr__', unbound_method=repr))
+    # to_override_with_exception.add(OverExc('__repr__', unbound_method=repr))
     to_override_with_exception.add(OverExc('__bytes__', unbound_method=bytes))
     # this is a special case
     to_override_with_exception.add(OverExc('__format__', unbound_method=format))

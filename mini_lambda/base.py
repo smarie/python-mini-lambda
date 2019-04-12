@@ -48,7 +48,7 @@ class _LambdaExpressionBase(object):
      self._fun (res) by doing res.meth(*other_args)
     """
 
-    __slots__ = ['_fun', '_str_expr', '_root_var', '_precedence_level']
+    __slots__ = ['repr_on', '_fun', '_str_expr', '_root_var', '_precedence_level']
 
     def __init__(self,
                  str_expr=None,          # type: str
@@ -56,7 +56,8 @@ class _LambdaExpressionBase(object):
                  constant_value=None,    # type: Any
                  precedence_level=None,  # type: int
                  fun=None,               # type: Callable
-                 root_var=None
+                 root_var=None,
+                 repr_on=True            # type: bool
                  ):
         """
         Constructor with an optional nested evaluation function. If no argument is provided, the nested evaluation
@@ -70,6 +71,8 @@ class _LambdaExpressionBase(object):
         :param fun:
         :param root_var:
         """
+        self.repr_on = repr_on
+
         # case 1: constant
         if is_constant:
             if precedence_level is not None or fun is not None or root_var is not None:
@@ -130,6 +133,15 @@ class _LambdaExpressionBase(object):
         :return:
         """
         return self._fun(arg)
+
+    def __repr__(self):
+        if self.repr_on:
+            return "<_LambdaExpression: %s>" % self.to_string()
+        else:
+            raise FunctionDefinitionError('__repr__ is not supported by this Lambda Expression. If you wish to '
+                                          'use `repr` in the lambda expression, use the replacement method `Repr`.'
+                                          'If you wish to enable repr again to see the expression in your IDE,'
+                                          'set the `repr_on` attribute to True')
 
     def to_string(self):
         """

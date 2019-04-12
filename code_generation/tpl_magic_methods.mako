@@ -69,7 +69,8 @@ class _LambdaExpressionGenerated(_LambdaExpressionBase):
 
         # return a new LambdaExpression of the same type than self, with the new function as inner function
         string_expr = get_repr(self, ${o.precedence_level}) + ' ${o.pair_operator} ' + get_repr(other, ${o.precedence_level})
-        return type(self)(fun=_${o.method_name}, precedence_level=${o.precedence_level}, str_expr=string_expr, root_var=root_var)
+        return type(self)(fun=_${o.method_name}, precedence_level=${o.precedence_level}, str_expr=string_expr,
+                          root_var=root_var, repr_on=self.repr_on)
 
     ## -----------------------------
             % else:
@@ -88,7 +89,8 @@ class _LambdaExpressionGenerated(_LambdaExpressionBase):
 
         # return a new LambdaExpression of the same type than self, with the new function as inner function
         string_expr = get_repr(other, ${o.precedence_level}) + ' ${o.pair_operator} ' + get_repr(self, ${o.precedence_level})
-        return type(self)(fun=_${o.method_name}, precedence_level=${o.precedence_level}, str_expr=string_expr, root_var=root_var)
+        return type(self)(fun=_${o.method_name}, precedence_level=${o.precedence_level}, str_expr=string_expr,
+                          root_var=root_var, repr_on=self.repr_on)
 
     ## -----------------------------
             % endif
@@ -115,7 +117,7 @@ class _LambdaExpressionGenerated(_LambdaExpressionBase):
                        + ', '.join([arg_name + '=' + get_repr(arg, None) for arg_name, arg in kwargs.items()])
                        + ')')
         return type(self)(fun=_${o.method_name}, precedence_level=_PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF,
-                          str_expr=string_expr, root_var=root_var)
+                          str_expr=string_expr, root_var=root_var, repr_on=self.repr_on)
 
     ## -----------------------------
         % else:
@@ -139,7 +141,7 @@ class _LambdaExpressionGenerated(_LambdaExpressionBase):
                       + ', '.join([arg_name + '=' + get_repr(arg, None) for arg_name, arg in kwargs.items()]) \
                       + ')'
         return type(self)(fun=_${o.method_name}, precedence_level=_PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF,
-                          str_expr=string_expr, root_var=root_var)
+                          str_expr=string_expr, root_var=root_var, repr_on=self.repr_on)
 
     ## -----------------------------
         % endif
