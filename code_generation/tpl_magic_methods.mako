@@ -154,7 +154,8 @@ class _LambdaExpressionGenerated(_LambdaExpressionBase):
         This magic method can not be used on an _LambdaExpression, because unfortunately python checks the
         result type and does not allow it to be a custom type.
         """
-        raise FunctionDefinitionError('${o.method_name} is not supported by _LambdaExpression, since python raises an'
+        raise FunctionDefinitionError('${o.method_name} is not supported by mini-lambda expressions, since python '
+                                      'raises an'
                                       ' error when its output is not directly an object of the type it expects.'
                                       'Please use the ${o.module_method_name}() method provided at mini_lambda package'
                                       ' level instead. If you did not use ${o.method_name} in your expression, you '
