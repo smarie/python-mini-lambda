@@ -4,6 +4,16 @@
 from mini_lambda.main import _LambdaExpression
 from sys import getsizeof
 
+% if generate_all:
+__all__ = [
+    % for o in to_override_with_exception:
+        % if o.module_method_name != 'Format':
+    '${o.module_method_name}',
+        % endif
+    % endfor
+]
+% endif
+
 
 # ******* All replacement methods for the magic methods throwing exceptions ********
 % for o in to_override_with_exception:

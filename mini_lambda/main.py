@@ -9,8 +9,8 @@ except ImportError:
 
 from mini_lambda.base import get_repr, _PRECEDENCE_BITWISE_AND, _PRECEDENCE_BITWISE_OR, _PRECEDENCE_BITWISE_XOR, \
     _PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF, evaluate, _PRECEDENCE_EXPONENTIATION, \
-    _PRECEDENCE_POS_NEG_BITWISE_NOT, _get_root_var
-from mini_lambda.generated import _LambdaExpressionGenerated, FunctionDefinitionError
+    _PRECEDENCE_POS_NEG_BITWISE_NOT, _get_root_var, FunctionDefinitionError
+from mini_lambda.generated_magic import _LambdaExpressionGenerated
 
 
 this_module = sys.modules[__name__]

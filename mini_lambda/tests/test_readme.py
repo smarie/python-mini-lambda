@@ -29,7 +29,8 @@ def test_doc_index_1():
 def test_doc_index_2():
     """ Tests that the second example in the documentation main page works """
 
-    from mini_lambda import s, x, _, Log  # this is a dynamic creation hence pycharm does not see it
+    from mini_lambda import s, x, _  # this is a dynamic creation hence pycharm does not see it
+    from mini_lambda.symbols.math_ import Log
 
     # various lambda functions
     is_lowercase = _(s.islower())
@@ -145,7 +146,9 @@ def test_doc_usage_syntax_2():
     """ Tests that the second example in doc/usage in the syntax section works """
     from mini_lambda import b, i, s, l, x
     from mini_lambda import Slice, Get, Not, In
-    from mini_lambda import Iter, Repr, Format, Len, Int, Any, Log, DDecimal
+    from mini_lambda import Iter, Repr, Format, Len, Int, Any
+    from mini_lambda.symbols.math_ import Log
+    from mini_lambda.symbols.decimal_ import DDecimal
     from math import log
     from decimal import Decimal
 
@@ -162,7 +165,7 @@ def test_doc_usage_syntax_2():
         expr = log(x)                         # fails
     expr = Log(x)                         # OK
     # constructing with the variable as arg
-    with pytest.raises(TypeError if version_info >= (3, 0) else FunctionDefinitionError):
+    with pytest.raises(TypeError):
         expr = Decimal(x)                     # fails
     expr = DDecimal(x)                    # OK
     # getting with the variable as the key
@@ -174,6 +177,8 @@ def test_doc_usage_syntax_2():
         expr = 'hello'[0:i]                   # fails
     expr = Get('hello', Slice(0, i))      # OK
     # representing: Repr/Str/Bytes/Sizeof/Hash
+    assert repr(l) == '<_LambdaExpression: l>'
+    l.repr_on = False
     with pytest.raises(FunctionDefinitionError):
         expr = repr(l)                        # fails
     expr = Repr(l)                        # OK
@@ -219,7 +224,8 @@ def test_doc_usage_syntax_2():
 
 def test_doc_usage_other_constants():
     """ Tests that the example in doc/usage in the others/constants section works  """
-    from mini_lambda import x, _, E, C
+    from mini_lambda import x, _, C
+    from mini_lambda.symbols.math_ import E
     from math import e
 
     assert str(_(x + e)) == 'x + 2.718281828459045'
@@ -309,7 +315,7 @@ def test_doc_usage_other_functions_2():
 def test_doc_usage_other_classes():
     """ Tests that the example in doc/usage in the others/classes section works """
     from mini_lambda import _, make_lambda_friendly_class
-    from mini_lambda.numpy_ import X
+    from mini_lambda.vars.numpy_ import X
     import numpy as np
     import pandas as pd
 
@@ -323,7 +329,7 @@ def test_doc_usage_other_classes():
 def test_doc_usage_all_at_once():
     """ Tests that the example in doc/usage in the others/anything section works """
     from mini_lambda import _, C
-    from mini_lambda.numpy_ import X
+    from mini_lambda.vars.numpy_ import X
     import numpy as np
     import pandas as pd
 
@@ -336,9 +342,11 @@ def test_doc_usage_all_at_once():
 def test_doc_usage_already_imported():
     """ Tests that the example in doc/usage in the others/preconverted section works """
 
-    from mini_lambda import DDecimal  # Decimal class
     from mini_lambda import Print  # print() function
-    from mini_lambda import Pi  # math.pi constant
+
+    from mini_lambda.symbols.decimal_ import DDecimal  # Decimal class
+    from mini_lambda.symbols.builtins import Print  # print() function
+    from mini_lambda.symbols.math_ import Pi  # math.pi constant
 
 
 def test_doc_optional():
@@ -347,9 +355,9 @@ def test_doc_optional():
     with pytest.raises(ImportError):
         from mini_lambda import X
 
-    from mini_lambda.numpy_ import X
+    from mini_lambda.vars.numpy_ import X
 
     with pytest.raises(ImportError):
         from mini_lambda import df
 
-    from mini_lambda.pandas_ import df
+    from mini_lambda.vars.pandas_ import df

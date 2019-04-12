@@ -1,34 +1,29 @@
-from mini_lambda.utils_init import __remove_all_external_symbols, __get_all_submodules_symbols
+from mini_lambda.base import FunctionDefinitionError, evaluate, get_repr
 
-__PACKAGE_NAME = 'mini_lambda'
-__SUBMODULES_TO_EXPORT = ['base', 'generated', 'generated2', 'goodies', 'goodies_generated', 'main']
-# TODO we could rather rely on a regexp mechanism
+# this one only exports one private class, no need
+# from mini_lambda.generated import *
 
-# (1) allow users to do
-#     import <package> as p and then p.<symbol>
-__all__ = __get_all_submodules_symbols(__PACKAGE_NAME, __SUBMODULES_TO_EXPORT)
-__all__ += ['numpy_', 'pandas_']
-# Note: this is one way to do it, but it would be simpler to check the names in globals() at the end of this file.
+from mini_lambda.main import _, L, F, C, Not, And, Or, Format, Get, In, Slice, InputVar, Constant, \
+    make_lambda_friendly, make_lambda_friendly_method, make_lambda_friendly_class
 
-# (2) allow users to do
-#     from <package> import <symbol>
-#
-# The following works, but unfortunately IDE like pycharm do not understand
-from mini_lambda.base import *
-from mini_lambda.generated import *
-from mini_lambda.goodies_generated import *
-from mini_lambda.main import *
-from mini_lambda.main import _
-from mini_lambda.generated2 import *
-from mini_lambda.goodies import *
+__all__ = [
+    # submodules
+    'base', 'generated_magic', 'generated_magic_replacements', 'main', 'symbols', 'vars',
+    # symbols
+    'FunctionDefinitionError', 'evaluate', 'get_repr',
+    '_', 'L', 'F', 'C', 'InputVar', 'Constant', 'make_lambda_friendly', 'make_lambda_friendly_method',
+    'make_lambda_friendly_class',
+    'Not', 'And', 'Or', 'Format', 'Get', 'In', 'Slice',
+]
 
-# remove all symbols that were imported above but do not belong in this package
-__remove_all_external_symbols(__PACKAGE_NAME, globals())
+# for these two ones we can, there is a `__all__` inside
+from mini_lambda.vars import *
+from mini_lambda.vars import __all__ as vall
 
-# Otherwise exhaustive list would be required, which is sad
-# ...
+from mini_lambda.generated_magic_replacements import *
+from mini_lambda.generated_magic_replacements import __all__ as gall
 
-# print(__all__)
-# print(globals().keys())
-# print('Done')
+from mini_lambda.symbols import *
+from mini_lambda.symbols import __all__ as sall
 
+__all__ = __all__ + vall + gall + sall

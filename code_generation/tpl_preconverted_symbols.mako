@@ -9,6 +9,14 @@ from mini_lambda.main import C, make_lambda_friendly_class, make_lambda_friendly
 ${o}
 % endfor
 
+% if generate_all:
+__all__ = [
+    % for o in to_create:
+    '${o.item_name}',
+    % endfor
+]
+% endif
+
 % for o in to_create:
     % if o.import_line is None or len(o.import_line) == 0:
         % if o.constant_name:

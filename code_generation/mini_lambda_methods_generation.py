@@ -1,3 +1,4 @@
+from __future__ import print_function
 from inspect import isclass
 from sys import getsizeof
 try:
@@ -139,13 +140,15 @@ def generate_code():
         print(o)
 
     # generate
-    generate_from_template('mini_lambda_template.mako', 'generated.py',
+    generate_from_template('tpl_magic_methods.mako', 'generated_magic.py',
                            dict(to_override=to_override, to_override_with_exception=to_override_with_exception))
-    generate_from_template('mini_lambda_template_2.mako', 'generated2.py',
-                           dict(to_override=to_override, to_override_with_exception=to_override_with_exception))
+    generate_from_template('tpl_magic_methods_replacements.mako', 'generated_magic_replacements.py',
+                           dict(to_override=to_override, to_override_with_exception=to_override_with_exception,
+                                generate_all=True))
 
     # (2) to-do list for the second template
-    import_lines, to_create = define_goodies()
+    # --(a) builtins
+    import_lines, to_create = define_goodies_builtins()
 
     # check outside of the template that it works:
     for o in import_lines:
@@ -154,8 +157,23 @@ def generate_code():
         print(o)
 
     # generate
-    generate_from_template('goodies_template.mako', 'goodies_generated.py',
-                           dict(import_lines=import_lines, to_create=to_create))
+    generate_from_template('tpl_preconverted_symbols.mako', 'symbols/builtins.py',
+                           dict(import_lines=import_lines, to_create=to_create, generate_all=True))
+
+    # --(b) math
+    for pkg in [math, decimal]:
+        import_lines, to_create = define_goodies(packages=[pkg])
+
+        # check outside of the template that it works:
+        for o in import_lines:
+            print(o)
+        for o in to_create:
+            print(o)
+
+        # generate but without the '__all__' symbol since packages may not contain the same symbols across versions of
+        # python
+        generate_from_template('tpl_preconverted_symbols.mako', 'symbols/%s_.py' % pkg.__name__,
+                               dict(import_lines=import_lines, to_create=to_create, generate_all=False))
 
 
 def generate_from_template(src_file, dst_file, template_vars):
@@ -399,13 +417,9 @@ def define_what_needs_to_be_written():
     return to_override_2, to_override_with_exception_2
 
 
-def define_goodies():
-    # type: (...) -> Tuple[List[str], List[Goodie]]
-    """
-
-    :return:
-    """
-    packages = [math, decimal]
+def define_goodies_builtins():
+    import_list = list()
+    goodies_list = list()
     built_in_functions = ['abs', 'all', 'any', 'bin', 'bool', 'bytearray', 'bytes', 'callable', 'chr',
                           'classmethod', 'compile', 'complex', 'delattr', 'dict', 'dir', 'divmod', 'enumerate',
                           'eval', 'filter', 'float', 'format', 'frozenset', 'getattr', 'globals', 'hasattr',
@@ -413,11 +427,26 @@ def define_goodies():
                           'list', 'locals', 'map', 'max', 'memoryview', 'min', 'next', 'object', 'oct', 'open', 'ord',
                           'pow', 'print', 'property', 'range', 'repr', 'reversed', 'round', 'set', 'setattr', 'slice',
                           'sorted', 'staticmethod', 'str', 'sum', 'super', 'tuple', 'type', 'vars', 'zip']
-    # these do not work in python 2
-    protected_functions = ['ascii', 'help', 'exec']
+    # these do not work in python 2: the statement is reserved.
+    # protected_functions = ['ascii', 'help', 'exec']
+
+    for function_name in built_in_functions:
+        if isclass(eval(function_name)):
+            goodies_list.append(Goodie(item_name=function_name.capitalize(), class_name=function_name))
+        else:
+            goodies_list.append(Goodie(item_name=function_name.capitalize(), function_name=function_name))
+
+    return import_list, goodies_list
+
+
+def define_goodies(packages):
+    # type: (...) -> Tuple[List[str], List[Goodie]]
+    """
+
+    :return:
+    """
     import_list = list()
     goodies_list = list()
-
     for package in packages:
         # import pprint
         # pprint(getmembers(math, callable))
@@ -441,9 +470,6 @@ def define_goodies():
 
         # we do not import anymore at the top but in each one so as to put additional try/catch around them
         # import_list.append(import_string[0:-1])
-
-    for function_name in built_in_functions:
-        goodies_list.append(Goodie(item_name=function_name.capitalize(), function_name=function_name))
 
     return import_list, goodies_list
 
