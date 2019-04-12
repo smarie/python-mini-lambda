@@ -21,4 +21,5 @@ try:
     from typing import Callable
     f = InputVar('f', Callable)
 except ImportError:
-    pass
+    # no typing module but at least create something
+    f = InputVar('f')
