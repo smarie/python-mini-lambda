@@ -151,7 +151,7 @@ class _LambdaExpression(_LambdaExpressionGenerated):
             return _LambdaExpression(fun=evaluate_both_inner_functions_and_combine,
                                      precedence_level=_PRECEDENCE_BITWISE_AND,
                                      str_expr=string_expr,
-                                     root_var=root_var)
+                                     root_var=root_var, repr_on=self.repr_on)
 
     def __or__(self, other):
         """
@@ -201,7 +201,7 @@ class _LambdaExpression(_LambdaExpressionGenerated):
             return _LambdaExpression(fun=evaluate_both_inner_functions_and_combine,
                                      precedence_level=_PRECEDENCE_BITWISE_OR,
                                      str_expr=string_expr,
-                                     root_var=root_var)
+                                     root_var=root_var, repr_on=self.repr_on)
 
     def __xor__(self, other):
         """
@@ -242,7 +242,7 @@ class _LambdaExpression(_LambdaExpressionGenerated):
             return _LambdaExpression(fun=evaluate_both_inner_functions_and_combine,
                                      precedence_level=_PRECEDENCE_BITWISE_XOR,
                                      str_expr=string_expr,
-                                     root_var=root_var)
+                                     root_var=root_var, repr_on=self.repr_on)
 
     def not_(self):
         """ Returns a new _LambdaExpression performing 'not x' on the result of this expression's evaluation """
@@ -299,7 +299,7 @@ class _LambdaExpression(_LambdaExpressionGenerated):
         # return a new LambdaExpression of the same type than self, with the new function as inner function
         string_expr = get_repr(self, _PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF) + '.' + name
         return type(self)(fun=___getattr__, precedence_level=_PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF,
-                          str_expr=string_expr, root_var=root_var)
+                          str_expr=string_expr, root_var=root_var, repr_on=self.repr_on)
 
     # Special case for the string representation
     def __call__(self, *args, **kwargs):
@@ -320,7 +320,7 @@ class _LambdaExpression(_LambdaExpressionGenerated):
                       + (', ' if (len(args) > 0 and len(kwargs) > 0) else '')\
                       + ', '.join([arg_name + '=' + get_repr(arg, None) for arg_name, arg in kwargs.items()]) + ')'
         return type(self)(fun=___call__, precedence_level=_PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF,
-                          str_expr=string_expr, root_var=root_var)
+                          str_expr=string_expr, root_var=root_var, repr_on=self.repr_on)
 
     # Special case for the string representation
     def __getitem__(self, key):
@@ -338,7 +338,7 @@ class _LambdaExpression(_LambdaExpressionGenerated):
         string_expr = get_repr(self, _PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF) \
                       + '[' + get_repr(key, None) + ']'
         return type(self)(fun=___getitem__, precedence_level=_PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF,
-                          str_expr=string_expr, root_var=root_var)
+                          str_expr=string_expr, root_var=root_var, repr_on=self.repr_on)
 
     # Special case for string representation because pow is asymetric in precedence
     def __pow__(self, other):
@@ -353,7 +353,8 @@ class _LambdaExpression(_LambdaExpressionGenerated):
         # return a new LambdaExpression of the same type than self, with the new function as inner function
         string_expr = get_repr(self, _PRECEDENCE_EXPONENTIATION) + ' ** ' \
                       + get_repr(other, _PRECEDENCE_POS_NEG_BITWISE_NOT)
-        return type(self)(fun=___pow__, precedence_level=13, str_expr=string_expr, root_var=root_var)
+        return type(self)(fun=___pow__, precedence_level=13, str_expr=string_expr, root_var=root_var,
+                          repr_on=self.repr_on)
 
     # Special case for string representation because pow is asymetric in precedence
     def __rpow__(self, other):
@@ -368,7 +369,8 @@ class _LambdaExpression(_LambdaExpressionGenerated):
         # return a new LambdaExpression of the same type than self, with the new function as inner function
         string_expr = get_repr(other, _PRECEDENCE_EXPONENTIATION) + ' ** ' \
                       + get_repr(self, _PRECEDENCE_POS_NEG_BITWISE_NOT)
-        return type(self)(fun=___rpow__, precedence_level=13, str_expr=string_expr, root_var=root_var)
+        return type(self)(fun=___rpow__, precedence_level=13, str_expr=string_expr, root_var=root_var,
+                          repr_on=self.repr_on)
 
     # Special case : unbound function call but with left/right
     def __divmod__(self, other):
@@ -385,7 +387,7 @@ class _LambdaExpression(_LambdaExpressionGenerated):
         # Note: we use precedence=None for coma-separated items inside the parenthesis
         string_expr = 'divmod(' + get_repr(self, None) + ', ' + get_repr(other, None) + ')'
         return type(self)(fun=___divmod__, precedence_level=_PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF,
-                          str_expr=string_expr, root_var=root_var)
+                          str_expr=string_expr, root_var=root_var, repr_on=self.repr_on)
 
     # Special case : unbound function call but with left/right
     def __rdivmod__(self, other):
@@ -402,7 +404,7 @@ class _LambdaExpression(_LambdaExpressionGenerated):
         # Note: we use precedence=None for coma-separated items inside the parenthesis
         string_expr = 'divmod(' + get_repr(other, None) + ', ' + get_repr(self, None) + ')'
         return type(self)(fun=___rdivmod__, precedence_level=_PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF,
-                          str_expr=string_expr, root_var=root_var)
+                          str_expr=string_expr, root_var=root_var, repr_on=self.repr_on)
 
     # special case: format(x, args) does not work but x.format() works
     def __format__(self, *args):

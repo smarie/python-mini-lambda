@@ -219,8 +219,7 @@ class _LambdaExpressionBase(object):
                       + ', '.join([arg_name + '=' + get_repr(arg, None) for arg_name, arg in m_kwargs.items()]) + ')'
         return type(self)(fun=evaluate_inner_function_and_apply_object_method,
                           precedence_level=_PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF,
-                          str_expr=string_expr,
-                          root_var=root_var)
+                          str_expr=string_expr, root_var=root_var, repr_on=self.repr_on)
 
     @classmethod
     def constant(cls,
@@ -303,7 +302,7 @@ class _LambdaExpressionBase(object):
 
             return cls(fun=evaluate_all_and_apply_method,
                        precedence_level=_PRECEDENCE_SUBSCRIPTION_SLICING_CALL_ATTRREF,
-                       str_expr=string_expr, root_var=root_var)
+                       str_expr=string_expr, root_var=root_var, repr_on=first_expression.repr_on)
 
 
 def _get_root_var(*args, **kwargs):

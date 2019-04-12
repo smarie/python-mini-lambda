@@ -4,6 +4,8 @@
 
 [![Build Status](https://travis-ci.org/smarie/python-mini-lambda.svg?branch=master)](https://travis-ci.org/smarie/python-mini-lambda) [![Tests Status](https://smarie.github.io/python-mini-lambda/junit/junit-badge.svg?dummy=8484744)](https://smarie.github.io/python-mini-lambda/junit/report.html) [![codecov](https://codecov.io/gh/smarie/python-mini-lambda/branch/master/graph/badge.svg)](https://codecov.io/gh/smarie/python-mini-lambda) [![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://smarie.github.io/python-mini-lambda/) [![PyPI](https://img.shields.io/badge/PyPI-mini_lambda-blue.svg)](https://pypi.python.org/pypi/mini_lambda/)[![downloads](https://img.shields.io/badge/downloads%2008%2F18-18k-brightgreen.svg)](https://kirankoduru.github.io/python/pypi-stats.html)
 
+!!! success "`repr` is now enabled by default for expressions! More details [here](#new-repr-now-enabled-by-default)"
+
 This idea initially comes from the [valid8](https://smarie.github.io/python-valid8/) validation library. I ended up understanding that there were two complementary ways to provide users with easy-to-use validation functions:
 
  * either to provide a very exhaustive catalog of functions to cover most use cases (is greater than, is between, etc.). *Drawback*: we need to reinvent all functions that exist already.
@@ -45,7 +47,8 @@ print(say_hello_function)       # "'Hello, ' + s + ' !'"
 Most of python syntax can be used in an expression:
 
 ```python
-from mini_lambda import x, s, _, Log
+from mini_lambda import x, s, _
+from mini_lambda.symbols.math_ import Log
 
 # various lambda functions
 is_lowercase             = _( s.islower() )
@@ -72,7 +75,7 @@ print(complex_identity)         # log(10 ** x, 10)
 If you know python you should feel at home here, except for two things:
 
  * `or` and `and` should be replaced with their bitwise equivalents `|` and `&`
- * additional constants, methods and classes need to be made lambda-friendly before use. For convenience all of the [built-in functions](https://docs.python.org/3/library/functions.html) as well as constants, methods and classes from the `math.py` and `decimal.py` modules are provided in a lambda-friendly way by this package, hence the `from mini_lambda import Log` above.
+ * additional constants, methods and classes need to be made lambda-friendly before use. For convenience all of the [built-in functions](https://docs.python.org/3/library/functions.html) as well as constants, methods and classes from the `math.py` and `decimal.py` modules are provided in a lambda-friendly way by this package, hence the `from mini_lambda.symbols.math_ import Log` above.
 
 Note that the printed version provides the minimal equivalent representation taking into account operator precedence. Hence `numeric_test_2` got rid of the useless parenthesis. This is **not** a mathematical simplification like in [SymPy](http://www.sympy.org/fr/), i.e. `x - x` will **not** be simplified to `0`.
 
@@ -84,11 +87,32 @@ There are of course a few limitations to `mini_lambda` as compared to full-flavo
  
 Check the [Usage](./usage/) page for more details.
 
+## New: `repr` now enabled by default
+
+Starting in version 2.0.0, the representation of lambda expressions does not raise exceptions anymore by default. This behaviour was a pain for developers, and was only like this for the very rare occasions where `repr` was used in the expression.
+
+So now
+
+```python
+>>> from mini_lambda import x
+>>> x ** 2
+<_LambdaExpression: x ** 2>
+```
+
+If you wish to bring back the old exception-raising behaviour, simply set the `repr_on` attribute of your expressions to `False`:
+
+```python
+>>> from mini_lambda import x
+>>> x.repr_on = False
+>>> x ** 2
+(...)
+mini_lambda.base.FunctionDefinitionError: __repr__ is not supported by this Lambda Expression. (...)
+```
 
 ## Main features
 
  * More compact lambda expressions for single-variable functions
- * As close to python syntax as technically possible: the base type for lambda expressions in `mini_lambda`, `_LambdaExpression`, overrides all operators that can be overriden as of today in [python 3.6](https://docs.python.org/3/reference/datamodel.html). The remaining limits come from the language itself, for example chained comparisons and `and/or` are not supported as python casts the partial results to boolean to enable short-circuits. Details [here](./usage#lambda-expression-syntax).
+ * As close to python syntax as technically possible: the base type for lambda expressions in `mini_lambda`, `_LambdaExpression`, overrides all operators that can be overriden as of today in [python](https://docs.python.org/3/reference/datamodel.html). The remaining limits come from the language itself, for example chained comparisons and `and/or` are not supported as python casts the partial results to boolean to enable short-circuits. Details [here](./usage#lambda-expression-syntax).
  * Printability: expressions can be turned to string representation in order to (hopefully) get interpretable messages more easily, for example when the expression is used in a [validation context](https://github.com/smarie/python-valid8)
 
 

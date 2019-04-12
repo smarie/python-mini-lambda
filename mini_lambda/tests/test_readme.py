@@ -177,11 +177,15 @@ def test_doc_usage_syntax_2():
         expr = 'hello'[0:i]                   # fails
     expr = Get('hello', Slice(0, i))      # OK
     # representing: Repr/Str/Bytes/Sizeof/Hash
-    assert repr(l) == '<_LambdaExpression: l>'
-    l.repr_on = False
+    assert repr(x) == '<_LambdaExpression: x>'
+    x.repr_on = False
     with pytest.raises(FunctionDefinitionError):
-        expr = repr(l)                        # fails
-    expr = Repr(l)                        # OK
+        expr = repr(x)                        # fails
+    expr = Repr(x)                        # OK
+    # propagation
+    with pytest.raises(FunctionDefinitionError):
+        expr = repr(x ** 2)                        # fails
+    expr = Repr(x ** 2)                        # OK
     # formatting with the variable in the args
     with pytest.raises(FunctionDefinitionError):
         expr = '{} {}'.format(s, s)           # fails
