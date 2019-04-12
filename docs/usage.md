@@ -175,7 +175,12 @@ expr = Get({'a': 1}, s)               # OK
 expr = 'hello'[0:i]                   # fails
 expr = Get('hello', Slice(0, i))      # OK
 # representing: Repr/Str/Bytes/Sizeof/Hash
+# -- by default repr show the to_string()
+assert repr(l) == '<_LambdaExpression: l>'
+# -- but you can disable it
+l.repr_on = False
 expr = repr(l)                        # fails
+# -- in both cases, if you need repr in the expression, use
 expr = Repr(l)                        # OK
 # formatting with the variable in the args
 expr = '{} {}'.format(s, s)           # fails
