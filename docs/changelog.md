@@ -1,5 +1,13 @@
 # Changelog
 
+### 2.0.0 - python 2 support, default `repr`, and cleaner submodules structure
+
+ * Lambda expressions now have a normal `repr` by default, and this can be disabled by using the `repr_on` attribute to `False`. Fixes [#12](https://github.com/smarie/python-mini-lambda/issues/12)
+
+ * Added support for python 2. Fixes [#11](https://github.com/smarie/python-mini-lambda/issues/11).
+
+ * The package structure is now cleaner. In particular, predefined variables are in `mini_lambda.vars` and predefined symbols (constants, functions and classes) are in `mini_lambda.symbols`.
+
 ### 1.4.0 - fixed initial import time + added `And()` and `Or()`
 
  - Fixed [#5](https://github.com/smarie/python-mini-lambda/issues/5) by making `numpy` and `pandas` import optional: they are now only imported if you import `mini_lambda.numpy_` or `mini_lambda.pandas_` respectively.
