@@ -11,8 +11,13 @@ from setuptools import setup, find_packages
 here = path.abspath(path.dirname(__file__))
 
 # Check that code generation has been run, otherwise run it
-generated_files = ['generated.py', 'generated2.py', 'goodies_generated.py']
-generated_file_paths = [path.join(here, 'mini_lambda', file_name) for file_name in generated_files]
+generated_file_paths = [
+    path.join(here, 'mini_lambda', 'generated_magic.py'),
+    path.join(here, 'mini_lambda', 'generated_magic_replacements.py'),
+    path.join(here, 'mini_lambda', 'symbols', 'builtins.py'),
+    path.join(here, 'mini_lambda', 'symbols', 'math_.py'),
+    path.join(here, 'mini_lambda', 'symbols', 'decimal_.py'),
+]
 
 if not all(path.exists(file_path) for file_path in generated_file_paths):
     print('Generated files not found. Executing code generation...')
