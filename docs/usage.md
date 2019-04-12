@@ -25,8 +25,8 @@ For convenience, `mini_lambda` comes bundled with the following predefined input
  * boolean/int/float numbers: `b` / `i`, `j`, `n` / `x`, `y`
  * lists/mappings: `l` / `d`
  * callables: `f`
- * numpy arrays (if numpy is present): `X`, `Y`, `M` (from `mini_lambda.numpy`)
- * pandas dataframes (if pandas is present): `df` (from `mini_lambda.pandas`)
+ * numpy arrays (if numpy is present): `X`, `Y`, `M` (from `mini_lambda.vars.numpy_`)
+ * pandas dataframes (if pandas is present): `df` (from `mini_lambda.vars.pandas_`)
 
 
 ## Lambda Expressions vs Lambda Functions
@@ -149,7 +149,9 @@ or through provided workarounds :
 ```python
 from mini_lambda import b, i, s, l, x
 from mini_lambda import Slice, Get, Not, In, And
-from mini_lambda import Iter, Repr, Format, Len, Int, Any, Log, DDecimal
+from mini_lambda import Iter, Repr, Str, Len, Int, Any
+from mini_lambda.symbols.math_ import Log
+from mini_lambda.symbols.decimal_ import DDecimal
 from math import log
 from decimal import Decimal
 
@@ -177,7 +179,7 @@ expr = repr(l)                        # fails
 expr = Repr(l)                        # OK
 # formatting with the variable in the args
 expr = '{} {}'.format(s, s)           # fails
-expr = Format('{} {}', s, s)          # OK
+expr = Str.format('{} {}', s, s)          # OK
 # sizing
 expr = len(l)                         # fails
 expr = Len(l)                         # OK
@@ -346,7 +348,7 @@ Classes can be entirely made lambda-friendly at once. This will convert the cons
 
 ```python
 from mini_lambda import _, make_lambda_friendly_class
-from mini_lambda.numpy import X
+from mini_lambda.vars.numpy_ import X
 import numpy as np
 import pandas as pd
 
@@ -363,7 +365,7 @@ Actually the `Constant()` (alias `C()` or `make_lambda_friendly()`) function tha
 
 ```python
 from mini_lambda import _, C
-from mini_lambda.numpy import X
+from mini_lambda.vars.numpy_ import X
 import numpy as np
 import pandas as pd
 
@@ -381,7 +383,11 @@ str(all_at_once)  # 'print(DataFrame(X).transpose())'
 For convenience all of the [built-in functions](https://docs.python.org/3/library/functions.html) as well as constants, methods and classes from the `math.py` and `decimal.py` modules are provided in a lambda-friendly way by this package. The naming rule is to capitalize lower-case names, and for already capitalized names to duplicate the first letter:
 
 ```python
-from mini_lambda import DDecimal  # Decimal class
-from mini_lambda import Print     # print() function
-from mini_lambda import Pi        # math.pi constant
+# builtins are available at pkg root
+from mini_lambda import Print
+
+# all other symbols are in ther appropriate 'symbols' submodule
+from mini_lambda.symbols.builtins import Print     # print() function
+from mini_lambda.symbols.math_ import Pi        # math.pi constant
+from mini_lambda.symbols.decimal_ import DDecimal  # Decimal class
 ```
