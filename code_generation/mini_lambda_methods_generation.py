@@ -357,8 +357,8 @@ def define_what_needs_to_be_written():
     to_override.add(Override('__pos__', uni_operator='+', precedence_level='_PRECEDENCE_POS_NEG_BITWISE_NOT'))
     to_override.add(Override('__abs__', unbound_method=abs))
     to_override.add(Override('__invert__', uni_operator='~', precedence_level='_PRECEDENCE_POS_NEG_BITWISE_NOT'))
-    # requires __float__ in python 2: skip
-    # to_override.add(Override('__round__', unbound_method=round))
+    # requires __float__ in python 2 but we add it still
+    to_override.add(Override('__round__', unbound_method=round))
 
     # ** Boolean types **
     # .__and__, .__xor__, .__or__, __rand__, __rxor__, __ror__
@@ -370,7 +370,7 @@ def define_what_needs_to_be_written():
     to_override.add(Override('__trunc__', unbound_method=trunc))
     to_override.add(Override('__coerce__'))
     to_skip.update({'__index__'})
-    to_override_with_exception.add(OverExc('__round__', unbound_method=round))
+    # to_override_with_exception.add(OverExc('__round__', unbound_method=round))
     to_override_with_exception.add(OverExc('__int__', unbound_method=int))
                                        # OverExc('__long__', unbound_method=long),
     to_override_with_exception.add(OverExc('__float__', unbound_method=float))

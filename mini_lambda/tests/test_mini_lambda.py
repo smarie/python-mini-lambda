@@ -618,10 +618,13 @@ def test_evaluator_maths():
 
     x = InputVar('x', float)
 
-    # since in python 2 round calls float then we protect it entirely
-    with pytest.raises(FunctionDefinitionError):
-        round(x)
-    assert Round(x).evaluate(5.5) == 6
+    if sys.version_info < (3, 0):
+        # since in python 2 round calls float then we protect it entirely
+        with pytest.raises(FunctionDefinitionError):
+            round(x)
+        assert Round(x).evaluate(5.5) == 6
+    else:
+        assert round(x).evaluate(5.5) == 6
     assert trunc(x).evaluate(5.5) == 5
 
     with pytest.raises(FunctionDefinitionError):
