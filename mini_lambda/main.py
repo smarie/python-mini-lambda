@@ -412,7 +412,9 @@ class _LambdaExpression(_LambdaExpressionGenerated):
         """
         raise FunctionDefinitionError('__format__ is not supported by _LambdaExpression, since python raises an'
                                       ' error when its output is not directly an object of the type it expects.'
-                                      'Please either use the equivalent x.format() method, or the Format method provided'
+                                      'Please either use the equivalent x.format() method if your variable is the '
+                                      'string template, or the `Format` (for `format`) or `Str.format` '
+                                      '(for `str.format`) methods provided'
                                       ' at mini_lambda package level.If you did not use __format__ in your expression, '
                                       'you probably used a standard method such as math.log(x) instead of a method '
                                       ' converted to mini_lambda such as Log(x). Please check the documentation for '

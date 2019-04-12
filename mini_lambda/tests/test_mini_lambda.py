@@ -182,23 +182,31 @@ def test_evaluator_bytes():
 def test_evaluator_format():
     """ Representable Object : tests that format() works """
 
-    s = InputVar('s', str)
+    # (1) the variable is the template
+    s_tpl = InputVar('s_tpl', str)
 
     # the str operator cannot be overloaded
-    formatted_string = s.format('yes')
-    formatted_string = formatted_string.as_function()
+    format_my_yes = s_tpl.format('yes')
+    format_my_yes = format_my_yes.as_function()
 
-    assert formatted_string('{}') == 'yes'
+    assert format_my_yes('{} sure') == 'yes sure'
+
+    # (2) the variable is the value
+    s = InputVar('s', str)
 
     # the str operator cannot be overloaded
     with pytest.raises(FunctionDefinitionError):
         '{} {}'.format(s, s)
 
     # so we provide this equivalent
-    reasonable_string = Format('{} {}', s, s)
+    reasonable_string = Str.format('{} {}', s, s)
     reasonable_string = reasonable_string.as_function()
 
     assert reasonable_string('hello') == 'hello hello'
+
+    # and there is also a Format method replacing `format`
+    stringify = Format(s).as_function()
+    assert stringify(12) == '12'
 
 
 def test_evaluator_sizeof():
