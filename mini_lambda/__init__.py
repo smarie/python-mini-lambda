@@ -17,7 +17,7 @@ __all__ = [
 ]
 
 # for these two ones we can, there is a `__all__` inside
-from mini_lambda.vars import *
+from mini_lambda.vars import s, b, x, y, i, j, n, l, d, f
 from mini_lambda.vars import __all__ as vall
 
 from mini_lambda.generated_magic_replacements import *

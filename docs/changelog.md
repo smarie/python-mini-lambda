@@ -1,5 +1,9 @@
 # Changelog
 
+### 2.0.1 - fixed dependency issue
+
+ * in 2.0.0 pandas and numpy were mandatory again. Fixed that.
+
 ### 2.0.0 - python 2 support, default `repr`, and cleaner submodules structure
 
  * Lambda expressions now have a normal `repr` by default, and this can be disabled by using the `repr_on` attribute to `False`. Fixes [#12](https://github.com/smarie/python-mini-lambda/issues/12)
