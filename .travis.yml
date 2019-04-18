@@ -91,7 +91,7 @@ deploy:
 
   # Create a github release on tags
   - provider: script
-    script: python ci_tools/github_release.py -s $GITHUB_TOKEN --repo-slug smarie/python-decopatch -cf ./docs/changelog.md -d https://smarie.github.io/python-mini-lambda/changelog/ $TRAVIS_TAG
+    script: python ci_tools/github_release.py -s $GITHUB_TOKEN --repo-slug smarie/python-mini-lambda -cf ./docs/changelog.md -d https://smarie.github.io/python-mini-lambda/changelog/ $TRAVIS_TAG
     skip_cleanup: true
     on:
       tags: true
