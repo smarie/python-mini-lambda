@@ -79,6 +79,9 @@ class LambdaExpression(_LambdaExpressionGenerated):
         def __str__(self):
             return self.expression._str_expr
 
+        def __repr__(self):
+            return "<LambdaFunction: %s>" % str(self)
+
     def as_function(self):
         """
         freezes this expression so that it can be called directly, in other words that calling it actually calls
