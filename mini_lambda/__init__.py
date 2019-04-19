@@ -1,18 +1,18 @@
 from mini_lambda.base import FunctionDefinitionError, evaluate, get_repr
 
 # this one only exports one private class, no need
-# from mini_lambda.generated import *
+# from mini_lambda.generated_magic import *
 
 from mini_lambda.main import _, L, F, C, Not, And, Or, Format, Get, In, Slice, InputVar, Constant, \
-    make_lambda_friendly, make_lambda_friendly_method, make_lambda_friendly_class
+    make_lambda_friendly, make_lambda_friendly_method, make_lambda_friendly_class, as_function, is_mini_lambda_expr
 
 __all__ = [
     # submodules
-    'base', 'generated_magic', 'generated_magic_replacements', 'main', 'symbols', 'vars',
+    'base', 'generated_magic_replacements', 'main', 'symbols', 'vars',  # generated_magic
     # symbols
     'FunctionDefinitionError', 'evaluate', 'get_repr',
     '_', 'L', 'F', 'C', 'InputVar', 'Constant', 'make_lambda_friendly', 'make_lambda_friendly_method',
-    'make_lambda_friendly_class',
+    'make_lambda_friendly_class', 'as_function', 'is_mini_lambda_expr',
     'Not', 'And', 'Or', 'Format', 'Get', 'In', 'Slice',
 ]
 

@@ -2,7 +2,7 @@ import pytest
 import sys
 
 from mini_lambda import InputVar, Len, Str, Int, Repr, Bytes, Sizeof, Hash, Bool, Complex, Float, Oct, Iter, \
-    Any, All, _, Slice, Get, Not, FunctionDefinitionError, Format, C, And, Or, Round
+    Any, All, _, Slice, Get, Not, FunctionDefinitionError, Format, C, And, Or, Round, as_function, is_mini_lambda_expr
 from math import cos
 from numbers import Real
 
@@ -799,3 +799,38 @@ def test_constants_methods_can_be_combined():
 
     f = _(a(0) + a(0))
     assert f(None) == 2.
+
+
+def test_is_mini_lambda_expr():
+    """Tests that `is_mini_lambda_expr` works"""
+
+    from mini_lambda import x
+
+    # mini lambda: true
+    assert is_mini_lambda_expr(x ** 2)
+
+    # standard lambda: false
+    assert not is_mini_lambda_expr(lambda x: x)
+
+    # standard function: false
+    def foo():
+        pass
+    assert not is_mini_lambda_expr(foo)
+
+    # mini lambda as function: false
+    f = as_function(x ** 2)
+    assert not is_mini_lambda_expr(f)
+
+
+def test_as_function():
+    """Tests that `as_function` works"""
+
+    # it transforms mini-lambda exprs...
+    from mini_lambda import x
+    f = as_function(x ** 2)
+    assert f(2) == 4
+
+    # but supports normal functions too
+    def foo(x):
+        pass
+    assert as_function(foo) is foo

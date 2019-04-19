@@ -2,7 +2,11 @@ from warnings import warn
 import sys
 
 try:  # python 3.5+
-    from typing import TypeVar, Union, Tuple, Callable, Type
+    from typing import TypeVar, Union, Tuple, Callable, Any
+    try: # old python 3.5
+        from typing import Type
+    except ImportError:
+        pass
     T = TypeVar('T')
 except ImportError:
     pass
@@ -705,3 +709,31 @@ def make_lambda_friendly_method(method,    # type: Callable
     :return:
     """
     return Constant(method, name)
+
+
+def is_mini_lambda_expr(f  # type: Union[LambdaExpression, Any]
+                        ):
+    """
+    Returns `True` if f is a mini-lambda expression, False otherwise
+
+    :param f:
+    :return:
+    """
+    try:
+        return issubclass(f.__class__, LambdaExpression)
+    except (AttributeError, TypeError):
+        return False
+
+
+def as_function(f  # type: Union[LambdaExpression, Any]
+                ):
+    """
+    Returns `f.as_function()` if f is a mini-lambda expression, returns f otherwise.
+
+    :param f:
+    :return:
+    """
+    if is_mini_lambda_expr(f):
+        return f.as_function()
+    else:
+        return f
