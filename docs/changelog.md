@@ -1,5 +1,13 @@
 # Changelog
 
+### 2.1.0 - New features to improve usability.
+
+ * Added two helper functions `is_mini_lambda_expr` and `as_function`. Fixes [#13](https://github.com/smarie/python-mini-lambda/issues/13)
+
+ * Renamed `_LambdaExpression` to `LambdaExpression`. It is now exported at package lavel, that's clearer.
+
+ * Added `__repr__` to `LambdaFunction`. Fixes [#14](https://github.com/smarie/python-mini-lambda/issues/14).
+
 ### 2.0.1 - fixed dependency issue
 
  * in 2.0.0 pandas and numpy were mandatory again. Fixed that.
