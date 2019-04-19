@@ -267,12 +267,39 @@
     Usage
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-principles" title="a- Principles" class="md-nav__link">
+    a- Principles
+  </a>
+  
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
+  <a href="#b-capabilities" title="b- Capabilities" class="md-nav__link">
+    b- Capabilities
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#new-repr-now-enabled-by-default" title="New: repr now enabled by default" class="md-nav__link">
     New: repr now enabled by default
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-how-to-support-mini-lambda-expressions-in-your-libraries" title="c- How to support mini-lambda expressions in your libraries." class="md-nav__link">
+    c- How to support mini-lambda expressions in your libraries.
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -391,12 +418,39 @@
     Usage
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-principles" title="a- Principles" class="md-nav__link">
+    a- Principles
+  </a>
+  
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
+  <a href="#b-capabilities" title="b- Capabilities" class="md-nav__link">
+    b- Capabilities
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#new-repr-now-enabled-by-default" title="New: repr now enabled by default" class="md-nav__link">
     New: repr now enabled by default
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-how-to-support-mini-lambda-expressions-in-your-libraries" title="c- How to support mini-lambda expressions in your libraries." class="md-nav__link">
+    c- How to support mini-lambda expressions in your libraries.
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -472,26 +526,42 @@
 <p><a href="https://pypi.python.org/pypi/mini-lambda/"><img alt="Python versions" src="https://img.shields.io/pypi/pyversions/mini-lambda.svg" /></a> <a href="https://travis-ci.org/smarie/python-mini-lambda"><img alt="Build Status" src="https://travis-ci.org/smarie/python-mini-lambda.svg?branch=master" /></a> <a href="https://smarie.github.io/python-mini-lambda/junit/report.html"><img alt="Tests Status" src="https://smarie.github.io/python-mini-lambda/junit/junit-badge.svg?dummy=8484744" /></a> <a href="https://codecov.io/gh/smarie/python-mini-lambda"><img alt="codecov" src="https://codecov.io/gh/smarie/python-mini-lambda/branch/master/graph/badge.svg" /></a></p>
 <p><a href="https://smarie.github.io/python-mini-lambda/"><img alt="Documentation" src="https://img.shields.io/badge/doc-latest-blue.svg" /></a> <a href="https://pypi.python.org/pypi/mini-lambda/"><img alt="PyPI" src="https://img.shields.io/pypi/v/mini-lambda.svg" /></a> <a href="https://pepy.tech/project/mini-lambda"><img alt="Downloads" src="https://pepy.tech/badge/mini-lambda" /></a> <a href="https://pepy.tech/project/mini-lambda"><img alt="Downloads per week" src="https://pepy.tech/badge/mini-lambda/week" /></a> <a href="https://github.com/smarie/python-mini-lambda/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/smarie/python-mini-lambda.svg" /></a></p>
 <div class="admonition success">
-<p class="admonition-title"><code>repr</code> is now enabled by default for expressions! More details <a href="#new-repr-now-enabled-by-default">here</a></p>
+<p class="admonition-title"><code>repr</code> is now enabled by default for expressions and functions! More details <a href="#new-repr-now-enabled-by-default">here</a></p>
 </div>
-<p>This idea initially comes from the <a href="https://smarie.github.io/python-valid8/">valid8</a> validation library. I ended up understanding that there were two complementary ways to provide users with easy-to-use validation functions:</p>
-<ul>
-<li>either to provide a very exhaustive catalog of functions to cover most use cases (is greater than, is between, etc.). <em>Drawback</em>: we need to reinvent all functions that exist already.</li>
-<li>or to provide users with the capability to write custom validation functions, in particular using lambdas. <em>Drawback</em>: the <code>lambda x:</code> prefix has to be present everywhere, and users still have to write explicit exception messages for validation failures.</li>
-</ul>
-<p>The <code>mini_lambda</code> library provides an answer to the second item: it allows developers to write simple functions with a subset of standard python syntax, without the <code>lambda x:</code> prefix. It is possible to get a string representation of these functions in order for example to automatically generate validation exception messages as done in <a href="https://smarie.github.io/python-valid8/">valid8</a>. But it can also be used for other use cases: indeed, although initially developed in the context of validation, this library is now fully independent.</p>
+<p><code>mini_lambda</code> allows developers to write simple expressions with a subset of standard python syntax, without the <code>lambda x:</code> prefix. These expressions can easily be transformed into functions. It is possible to get a string representation of both.</p>
+<p>Among many potential use cases, the original motivation came from <a href="https://smarie.github.io/python-valid8/">valid8</a> where we want to let users provide their own validation functions, while still being able to raise user-friendly exceptions "showing" the formula that failed.</p>
 <h2 id="installing">Installing<a class="headerlink" href="#installing" title="Permanent link">&para;</a></h2>
 <div class="codehilite"><pre><span></span>&gt; pip install mini_lambda
 </pre></div>
 
 
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
+<h3 id="a-principles">a- Principles<a class="headerlink" href="#a-principles" title="Permanent link">&para;</a></h3>
 <p>Three basic steps:</p>
 <ul>
-<li>import or create a 'magic variable' such as <code>x</code>, <code>s</code>, <code>l</code>, <code>df</code>...</li>
-<li>write an expression using it.</li>
-<li>transform the expression into a function by wrapping it with <code>_()</code> or its aliases <code>L()</code> and<code>F()</code>.</li>
+<li>import or create a 'magic variable' (an <code>InputVar</code>) such as <code>x</code>, <code>s</code>, <code>l</code>, <code>df</code>...</li>
+<li>write an <em>expression</em> using it.</li>
+<li>transform the <em>expression</em> into a <em>function</em> by wrapping it with <code>_()</code>, <code>L()</code>, or <code>F()</code> (3 aliases), or by calling <code>as_function()</code> on it.</li>
 </ul>
+<p>For example with a numeric variable:</p>
+<div class="codehilite"><pre><span></span><span class="c1"># -- expressions --</span>
+<span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">x</span>
+<span class="n">my_expr</span> <span class="o">=</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">2</span>
+<span class="n">my_expr</span>       <span class="c1"># &lt;LambdaExpression: x ** 2&gt;</span>
+
+<span class="n">my_expr</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span>   <span class="c1"># beware: calling an expression is still an expression !</span>
+              <span class="c1"># &lt;LambdaExpression: (x ** 2)(12)&gt;</span>
+
+<span class="c1"># -- functions --</span>
+<span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">_</span>
+<span class="n">my_func</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>  
+<span class="n">my_func</span>       <span class="c1"># &lt;LambdaFunction: x ** 2&gt;</span>
+
+<span class="k">assert</span> <span class="n">my_func</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span> <span class="o">==</span> <span class="mi">144</span>   <span class="c1"># calling a function executes it as expected</span>
+</pre></div>
+
+
+<p>Or with a string variable:</p>
 <div class="codehilite"><pre><span></span><span class="c1"># create or import a magic variable, here we import &#39;s&#39; </span>
 <span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">s</span>
 
@@ -507,6 +577,17 @@
 </pre></div>
 
 
+<h3 id="b-capabilities">b- Capabilities<a class="headerlink" href="#b-capabilities" title="Permanent link">&para;</a></h3>
+<p>The variable can represent anything, not necessarily a primitive. If you wish to use another symbol just define it using <code>InputVar</code>:</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">InputVar</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">InputVar</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">logging</span> <span class="kn">import</span> <span class="n">Logger</span>
+<span class="n">l</span> <span class="o">=</span> <span class="n">InputVar</span><span class="p">(</span><span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="n">Logger</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Note that the type information is optional, it is just for your IDE's autocompletion capabilities.</p>
 <p>Most of python syntax can be used in an expression:</p>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">x</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span>
 <span class="kn">from</span> <span class="nn">mini_lambda.symbols.math_</span> <span class="kn">import</span> <span class="n">Log</span>
@@ -547,12 +628,14 @@
 <li><code>... if ... else ...</code> ternary conditional expressions are not supported either</li>
 </ul>
 <p>Check the <a href="./usage/">Usage</a> page for more details.</p>
-<h2 id="new-repr-now-enabled-by-default">New: <code>repr</code> now enabled by default<a class="headerlink" href="#new-repr-now-enabled-by-default" title="Permanent link">&para;</a></h2>
-<p>Starting in version 2.0.0, the representation of lambda expressions does not raise exceptions anymore by default. This behaviour was a pain for developers, and was only like this for the very rare occasions where <code>repr</code> was used in the expression.</p>
+<h3 id="new-repr-now-enabled-by-default">New: <code>repr</code> now enabled by default<a class="headerlink" href="#new-repr-now-enabled-by-default" title="Permanent link">&para;</a></h3>
+<p>Starting in version 2.0.0, the representation of lambda expressions does not raise exceptions anymore by default. This behaviour was a pain for developers, and was only like this for the very rare occasions where <code>repr</code> was needed in the expression itself.</p>
 <p>So now</p>
-<div class="codehilite"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">x</span>
+<div class="codehilite"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">x</span><span class="p">,</span> <span class="n">F</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">2</span>
-<span class="o">&lt;</span><span class="n">_LambdaExpression</span><span class="p">:</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">2</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">LambdaExpression</span><span class="p">:</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">2</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">F</span><span class="p">(</span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="n">LambdaFunction</span><span class="p">:</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">2</span><span class="o">&gt;</span>
 </pre></div>
 
 
@@ -565,10 +648,56 @@
 </pre></div>
 
 
+<h3 id="c-how-to-support-mini-lambda-expressions-in-your-libraries">c- How to support mini-lambda expressions in your libraries.<a class="headerlink" href="#c-how-to-support-mini-lambda-expressions-in-your-libraries" title="Permanent link">&para;</a></h3>
+<p>You may wish to support mini-lambda <em>expressions</em> (not <em>functions</em>) directly into your code. That way, your users will not even have to convert their expressions into functions - this will bring more readability and ease of use for them.</p>
+<p>You can do this with <code>as_function</code>: this will convert expressions to functions if needed, but otherwise silently return its input.</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">_</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">as_function</span>
+
+<span class="k">def</span> <span class="nf">call_with_hello</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An example custom method that is lambda_friendy&quot;&quot;&quot;</span>
+
+    <span class="c1"># transform mini-lambda expression to function if needed.</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">as_function</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">)</span>
+
+<span class="c1"># it works with a normal function</span>
+<span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">assert</span> <span class="n">call_with_hello</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;h&#39;</span>
+
+<span class="c1"># with a mini-lambda *Function* (normal: this is a function)</span>
+<span class="k">assert</span> <span class="n">call_with_hello</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> <span class="o">==</span> <span class="s1">&#39;h&#39;</span>
+
+<span class="c1"># and with a mini-lambda *Expression* too (this is new and easier to read)</span>
+<span class="k">assert</span> <span class="n">call_with_hello</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="s1">&#39;h&#39;</span>
+</pre></div>
+
+
+<p>In addition a <code>is_mini_lambda_expr</code> helper is also provided, if you wish to perform some reasoning:</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">x</span><span class="p">,</span> <span class="n">is_mini_lambda_expr</span><span class="p">,</span> <span class="n">as_function</span>
+
+<span class="c1"># mini lambda: true</span>
+<span class="k">assert</span> <span class="n">is_mini_lambda_expr</span><span class="p">(</span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># standard lambda: false</span>
+<span class="k">assert</span> <span class="ow">not</span> <span class="n">is_mini_lambda_expr</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="c1"># standard function: false</span>
+<span class="k">def</span> <span class="nf">foo</span><span class="p">():</span>
+    <span class="k">pass</span>
+<span class="k">assert</span> <span class="ow">not</span> <span class="n">is_mini_lambda_expr</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
+
+<span class="c1"># mini lambda as function: false</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">as_function</span><span class="p">(</span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+<span class="k">assert</span> <span class="ow">not</span> <span class="n">is_mini_lambda_expr</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+
+
 <h2 id="main-features">Main features<a class="headerlink" href="#main-features" title="Permanent link">&para;</a></h2>
 <ul>
 <li>More compact lambda expressions for single-variable functions</li>
-<li>As close to python syntax as technically possible: the base type for lambda expressions in <code>mini_lambda</code>, <code>_LambdaExpression</code>, overrides all operators that can be overriden as of today in <a href="https://docs.python.org/3/reference/datamodel.html">python</a>. The remaining limits come from the language itself, for example chained comparisons and <code>and/or</code> are not supported as python casts the partial results to boolean to enable short-circuits. Details <a href="./usage#lambda-expression-syntax">here</a>.</li>
+<li>As close to python syntax as technically possible: the base type for lambda expressions in <code>mini_lambda</code>, <code>LambdaExpression</code>, overrides all operators that can be overriden as of today in <a href="https://docs.python.org/3/reference/datamodel.html">python</a>. The remaining limits come from the language itself, for example chained comparisons and <code>and/or</code> are not supported as python casts the partial results to boolean to enable short-circuits. Details <a href="./usage#lambda-expression-syntax">here</a>.</li>
 <li>Printability: expressions can be turned to string representation in order to (hopefully) get interpretable messages more easily, for example when the expression is used in a <a href="https://github.com/smarie/python-valid8">validation context</a></li>
 </ul>
 <h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
