@@ -6,15 +6,11 @@
 
 [![Documentation](https://img.shields.io/badge/doc-latest-blue.svg)](https://smarie.github.io/python-mini-lambda/) [![PyPI](https://img.shields.io/pypi/v/mini-lambda.svg)](https://pypi.python.org/pypi/mini-lambda/) [![Downloads](https://pepy.tech/badge/mini-lambda)](https://pepy.tech/project/mini-lambda) [![Downloads per week](https://pepy.tech/badge/mini-lambda/week)](https://pepy.tech/project/mini-lambda) [![GitHub stars](https://img.shields.io/github/stars/smarie/python-mini-lambda.svg)](https://github.com/smarie/python-mini-lambda/stargazers)
 
-!!! success "`repr` is now enabled by default for expressions! More details [here](#new-repr-now-enabled-by-default)"
+!!! success "`repr` is now enabled by default for expressions and functions! More details [here](#new-repr-now-enabled-by-default)"
 
-This idea initially comes from the [valid8](https://smarie.github.io/python-valid8/) validation library. I ended up understanding that there were two complementary ways to provide users with easy-to-use validation functions:
+`mini_lambda` allows developers to write simple expressions with a subset of standard python syntax, without the `lambda x:` prefix. These expressions can easily be transformed into functions. It is possible to get a string representation of both.
 
- * either to provide a very exhaustive catalog of functions to cover most use cases (is greater than, is between, etc.). *Drawback*: we need to reinvent all functions that exist already.
- * or to provide users with the capability to write custom validation functions, in particular using lambdas. *Drawback*: the `lambda x:` prefix has to be present everywhere, and users still have to write explicit exception messages for validation failures.
-
-
-The `mini_lambda` library provides an answer to the second item: it allows developers to write simple functions with a subset of standard python syntax, without the `lambda x:` prefix. It is possible to get a string representation of these functions in order for example to automatically generate validation exception messages as done in [valid8](https://smarie.github.io/python-valid8/). But it can also be used for other use cases: indeed, although initially developed in the context of validation, this library is now fully independent.
+Among many potential use cases, the original motivation came from [valid8](https://smarie.github.io/python-valid8/) where we want to let users provide their own validation functions, while still being able to raise user-friendly exceptions "showing" the formula that failed.
 
 
 ## Installing
@@ -25,11 +21,35 @@ The `mini_lambda` library provides an answer to the second item: it allows devel
 
 ## Usage
 
+### a- Principles
+
 Three basic steps:
 
- * import or create a 'magic variable' such as `x`, `s`, `l`, `df`...
- * write an expression using it.
- * transform the expression into a function by wrapping it with `_()` or its aliases `L()` and`F()`.
+ * import or create a 'magic variable' (an `InputVar`) such as `x`, `s`, `l`, `df`...
+ * write an *expression* using it.
+ * transform the *expression* into a *function* by wrapping it with `_()`, `L()`, or `F()` (3 aliases), or by calling `as_function()` on it.
+
+For example with a numeric variable:
+
+```python
+# -- expressions --
+from mini_lambda import x
+my_expr = x ** 2
+my_expr       # <LambdaExpression: x ** 2>
+
+my_expr(12)   # beware: calling an expression is still an expression !
+              # <LambdaExpression: (x ** 2)(12)>
+
+# -- functions --
+from mini_lambda import _
+my_func = _(x ** 2)  
+my_func       # <LambdaFunction: x ** 2>
+
+assert my_func(12) == 144   # calling a function executes it as expected
+```
+
+
+Or with a string variable:
 
 ```python
 # create or import a magic variable, here we import 's' 
@@ -45,6 +65,20 @@ say_hello_function('world')     # Returns "Hello, world !"
 # the function's string representation is available
 print(say_hello_function)       # "'Hello, ' + s + ' !'"
 ```
+
+### b- Capabilities
+
+The variable can represent anything, not necessarily a primitive. If you wish to use another symbol just define it using `InputVar`:
+
+```python
+from mini_lambda import InputVar
+z = InputVar('z')
+
+from logging import Logger
+l = InputVar('l', Logger)
+```
+
+Note that the type information is optional, it is just for your IDE's autocompletion capabilities.
 
 Most of python syntax can be used in an expression:
 
@@ -89,16 +123,18 @@ There are of course a few limitations to `mini_lambda` as compared to full-flavo
  
 Check the [Usage](./usage/) page for more details.
 
-## New: `repr` now enabled by default
+### New: `repr` now enabled by default
 
-Starting in version 2.0.0, the representation of lambda expressions does not raise exceptions anymore by default. This behaviour was a pain for developers, and was only like this for the very rare occasions where `repr` was used in the expression.
+Starting in version 2.0.0, the representation of lambda expressions does not raise exceptions anymore by default. This behaviour was a pain for developers, and was only like this for the very rare occasions where `repr` was needed in the expression itself.
 
 So now
 
 ```python
->>> from mini_lambda import x
+>>> from mini_lambda import x, F
 >>> x ** 2
 <LambdaExpression: x ** 2>
+>>> F(x ** 2)
+<LambdaFunction: x ** 2>
 ```
 
 If you wish to bring back the old exception-raising behaviour, simply set the `repr_on` attribute of your expressions to `False`:
@@ -110,6 +146,57 @@ If you wish to bring back the old exception-raising behaviour, simply set the `r
 (...)
 mini_lambda.base.FunctionDefinitionError: __repr__ is not supported by this Lambda Expression. (...)
 ```
+
+### c- How to support mini-lambda expressions in your libraries.
+
+You may wish to support mini-lambda *expressions* (not *functions*) directly into your code. That way, your users will not even have to convert their expressions into functions - this will bring more readability and ease of use for them.
+
+You can do this with `as_function`: this will convert expressions to functions if needed, but otherwise silently return its input.
+
+```python
+from mini_lambda import _, s, as_function
+
+def call_with_hello(f):
+    """An example custom method that is lambda_friendy"""
+    
+    # transform mini-lambda expression to function if needed.
+    f = as_function(f)
+
+    return f('hello')
+
+# it works with a normal function
+def foo(s):
+    return s[0]
+assert call_with_hello(foo) == 'h'
+
+# with a mini-lambda *Function* (normal: this is a function)
+assert call_with_hello(_(s[0])) == 'h'
+
+# and with a mini-lambda *Expression* too (this is new and easier to read)
+assert call_with_hello(s[0]) == 'h'
+```
+
+In addition a `is_mini_lambda_expr` helper is also provided, if you wish to perform some reasoning:
+
+```python
+from mini_lambda import x, is_mini_lambda_expr, as_function
+
+# mini lambda: true
+assert is_mini_lambda_expr(x ** 2)
+
+# standard lambda: false
+assert not is_mini_lambda_expr(lambda x: x)
+
+# standard function: false
+def foo():
+    pass
+assert not is_mini_lambda_expr(foo)
+
+# mini lambda as function: false
+f = as_function(x ** 2)
+assert not is_mini_lambda_expr(f)
+```
+
 
 ## Main features
 

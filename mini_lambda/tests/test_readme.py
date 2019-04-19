@@ -9,21 +9,61 @@ from mini_lambda import FunctionDefinitionError, make_lambda_friendly_method
 from mini_lambda.main import LambdaExpression
 
 
-def test_doc_index_1():
+def test_doc_index_0(capsys):
+    """"""
+
+    with capsys.disabled():
+        from mini_lambda import x, F
+
+        # this is the world of expressions, they can be combined etc.
+        my_expr = x ** 2
+
+    print(repr(my_expr))
+    print(repr(my_expr(12)))  # beware: calling an expression is still an expression !
+
+    with capsys.disabled():
+        # expressions can be transformed into functions
+        my_func = F(x ** 2)
+
+    print(repr(my_func))
+    print(repr(my_func(12)))  # calling a function executes it as expected
+
+    captured = capsys.readouterr()
+
+    with capsys.disabled():
+        print(captured.out)
+        assert captured.out == """<LambdaExpression: x ** 2>
+<LambdaExpression: (x ** 2)(12)>
+<LambdaFunction: x ** 2>
+144
+"""
+
+
+def test_doc_index_1(capsys):
     """ Tests that the first example in the documentation main page works """
 
-    # import magic variable 's'
-    from mini_lambda import s
+    with capsys.disabled():
 
-    # write an expression and wrap it with _() to make a function
-    from mini_lambda import _
-    say_hello_function = _('Hello, ' + s + ' !')
+        # import magic variable 's'
+        from mini_lambda import s
 
-    # use the function
-    print(say_hello_function('world'))  # 'Hello, world !'
-    assert say_hello_function('world') == 'Hello, world !'
+        # write an expression and wrap it with _() to make a function
+        from mini_lambda import _
+        say_hello_function = _('Hello, ' + s + ' !')
+
+        # use the function
+        print(say_hello_function('world'))  # 'Hello, world !'
+        assert say_hello_function('world') == 'Hello, world !'
+
     print(say_hello_function)
-    assert str(say_hello_function) == "'Hello, ' + s + ' !'"
+
+    captured = capsys.readouterr()
+
+    with capsys.disabled():
+        print(captured.out)
+        assert captured.out == "'Hello, ' + s + ' !'\n"
+
+        assert str(say_hello_function) == "'Hello, ' + s + ' !'"
 
 
 def test_doc_index_2():
@@ -178,6 +218,7 @@ def test_doc_usage_syntax_2():
     expr = Get('hello', Slice(0, i))      # OK
     # representing: Repr/Str/Bytes/Sizeof/Hash
     assert repr(x) == '<LambdaExpression: x>'
+    assert repr(x.as_function()) == '<LambdaFunction: x>'
     x.repr_on = False
     with pytest.raises(FunctionDefinitionError):
         expr = repr(x)                        # fails
@@ -365,3 +406,24 @@ def test_doc_optional():
         from mini_lambda import df
 
     from mini_lambda.vars.pandas_ import df
+
+
+def test_doc_as_function():
+    from mini_lambda import _, s, as_function
+
+    def call_with_hello(f):
+        """An example custom method that is lambda_friendy"""
+        f = as_function(f)
+        return f('hello')
+
+    # it works with a normal function
+    def foo(s):
+        return s[0]
+
+    assert call_with_hello(foo) == 'h'
+
+    # with a mini-lambda function (normal: this is a function)
+    assert call_with_hello(_(s[0])) == 'h'
+
+    # and with a mini-lambda expression too (this is new)
+    assert call_with_hello(s[0]) == 'h'
