@@ -136,7 +136,7 @@ class _LambdaExpressionBase(object):
 
     def __repr__(self):
         if self.repr_on:
-            return "<_LambdaExpression: %s>" % self.to_string()
+            return "<LambdaExpression: %s>" % self.to_string()
         else:
             raise FunctionDefinitionError('__repr__ is not supported by this Lambda Expression. If you wish to '
                                           'use `repr` in the lambda expression, use the replacement method `Repr`.'

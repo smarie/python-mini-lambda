@@ -37,7 +37,7 @@ class _LambdaExpressionGenerated(_LambdaExpressionBase):
         % if o.uni_operator:
     ## ----------unitary operator such as '-'-------------------
     def ${o.method_name}(self):
-        """ Returns a new _LambdaExpression performing '${o.uni_operator}<r>' on the result <r> of this evaluator's evaluation """
+        """ Returns a new LambdaExpression performing '${o.uni_operator}<r>' on the result <r> of this evaluator's evaluation """
         ## def _${o.method_name}(r, input):
         ##     return ${o.uni_operator}r
         ## return self.add_unbound_method_to_stack(_${o.method_name})
@@ -56,7 +56,7 @@ class _LambdaExpressionGenerated(_LambdaExpressionBase):
             % if o.is_operator_left:
     ## --------pairwise operator - left---------------------
     def ${o.method_name}(self, other):
-        """ Returns a new _LambdaExpression performing '<r> ${o.pair_operator} other' on the result <r> of this evaluator's evaluation """
+        """ Returns a new LambdaExpression performing '<r> ${o.pair_operator} other' on the result <r> of this evaluator's evaluation """
         ## def _${o.method_name}(r, input):
         ##    return r ${o.pair_operator} evaluate(other, input)
         ## return self.add_unbound_method_to_stack(_${o.method_name})
@@ -76,7 +76,7 @@ class _LambdaExpressionGenerated(_LambdaExpressionBase):
             % else:
     ## --------pairwise operator - right ---------------------
     def ${o.method_name}(self, other):
-        """ Returns a new _LambdaExpression performing 'other ${o.pair_operator} <r>' on the result <r> of this evaluator's evaluation """
+        """ Returns a new LambdaExpression performing 'other ${o.pair_operator} <r>' on the result <r> of this evaluator's evaluation """
         ## def _${o.method_name}(r, input):
         ##     return evaluate(other, input) ${o.pair_operator} r
         ## return self.add_unbound_method_to_stack(_${o.method_name})
@@ -97,7 +97,7 @@ class _LambdaExpressionGenerated(_LambdaExpressionBase):
         % elif o.unbound_method:
     ## --------unbound method---------------------
     def ${o.method_name}(self, *args, **kwargs):
-        """ Returns a new _LambdaExpression performing '${o.unbound_method.__name__}(<r>, *args, **kwargs)' on the result <r> of this evaluator's evaluation """
+        """ Returns a new LambdaExpression performing '${o.unbound_method.__name__}(<r>, *args, **kwargs)' on the result <r> of this evaluator's evaluation """
         ## def _${o.method_name}(r, input, *args, **kwargs):
         ##     return ${o.unbound_method.__name__}(r, input, *args, **kwargs)
         ## return self.add_unbound_method_to_stack(_${o.method_name}, *args, **kwargs)
@@ -123,7 +123,7 @@ class _LambdaExpressionGenerated(_LambdaExpressionBase):
         % else:
     ## --------general case---------------------
     def ${o.method_name}(self, *args, **kwargs):
-        """ Returns a new _LambdaExpression performing '<r>.${o.method_name}(*args, **kwargs)' on the result <r> of this evaluator's evaluation """
+        """ Returns a new LambdaExpression performing '<r>.${o.method_name}(*args, **kwargs)' on the result <r> of this evaluator's evaluation """
         # return self.add_bound_method_to_stack('${o.method_name}', *args, **kwargs)
         root_var, _ = _get_root_var(self, *args, **kwargs)
         def _${o.method_name}(input):
@@ -151,7 +151,7 @@ class _LambdaExpressionGenerated(_LambdaExpressionBase):
     % for o in to_override_with_exception:
     def ${o.method_name}(self, *args, **kwargs):
         """
-        This magic method can not be used on an _LambdaExpression, because unfortunately python checks the
+        This magic method can not be used on an LambdaExpression, because unfortunately python checks the
         result type and does not allow it to be a custom type.
         """
         raise FunctionDefinitionError('${o.method_name} is not supported by mini-lambda expressions, since python '

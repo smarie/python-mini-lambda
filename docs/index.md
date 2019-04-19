@@ -98,7 +98,7 @@ So now
 ```python
 >>> from mini_lambda import x
 >>> x ** 2
-<_LambdaExpression: x ** 2>
+<LambdaExpression: x ** 2>
 ```
 
 If you wish to bring back the old exception-raising behaviour, simply set the `repr_on` attribute of your expressions to `False`:
@@ -114,7 +114,7 @@ mini_lambda.base.FunctionDefinitionError: __repr__ is not supported by this Lamb
 ## Main features
 
  * More compact lambda expressions for single-variable functions
- * As close to python syntax as technically possible: the base type for lambda expressions in `mini_lambda`, `_LambdaExpression`, overrides all operators that can be overriden as of today in [python](https://docs.python.org/3/reference/datamodel.html). The remaining limits come from the language itself, for example chained comparisons and `and/or` are not supported as python casts the partial results to boolean to enable short-circuits. Details [here](./usage#lambda-expression-syntax).
+ * As close to python syntax as technically possible: the base type for lambda expressions in `mini_lambda`, `LambdaExpression`, overrides all operators that can be overriden as of today in [python](https://docs.python.org/3/reference/datamodel.html). The remaining limits come from the language itself, for example chained comparisons and `and/or` are not supported as python casts the partial results to boolean to enable short-circuits. Details [here](./usage#lambda-expression-syntax).
  * Printability: expressions can be turned to string representation in order to (hopefully) get interpretable messages more easily, for example when the expression is used in a [validation context](https://github.com/smarie/python-valid8)
 
 

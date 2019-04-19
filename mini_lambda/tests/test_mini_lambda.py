@@ -123,7 +123,7 @@ def test_evaluator_repr():
     s = InputVar('s', str)
 
     # the repr operator cannot be overloaded
-    assert repr(s) == '<_LambdaExpression: s>'
+    assert repr(s) == '<LambdaExpression: s>'
     s.repr_on = False
     with pytest.raises(FunctionDefinitionError):
         repr(s)

@@ -16,13 +16,13 @@ from mini_lambda.generated_magic import _LambdaExpressionGenerated
 this_module = sys.modules[__name__]
 
 
-class _LambdaExpression(_LambdaExpressionGenerated):
+class LambdaExpression(_LambdaExpressionGenerated):
     """
     Represents a lambda function.
     * It can be evaluated by calling the 'evaluate' method. In such case it will apply its inner function (self._fun)
     on the inputs provided.
     * It can be transformed into a normal function (a callable object) with `self.as_function()`.
-    * Any other method called on this object will create a new _LambdaExpression instance with that same method
+    * Any other method called on this object will create a new LambdaExpression instance with that same method
     stacked on top of the current inner function. For example x.foo() will return a new expression, that, when
     executed, will call x._fun first and then perform .foo() on its results.
 
@@ -43,13 +43,13 @@ class _LambdaExpression(_LambdaExpressionGenerated):
 
     class LambdaFunction:
         """ A view on a lambda expression, that is only capable of evaluating but is able to do it in a more friendly
-        way: simply calling it with arguments is ok, instead of calling .evaluate() like for the _LambdaExpression.
+        way: simply calling it with arguments is ok, instead of calling .evaluate() like for the LambdaExpression.
         Another side effect is that this object is representable: you can call str() on it. You may return to the
         associated expression """
 
         def __init__(self, expression):
             """
-            Constructor from a mandatory existing _LambdaExpression.
+            Constructor from a mandatory existing LambdaExpression.
             :param expression:
             """
             self.expression = expression
@@ -82,12 +82,12 @@ class _LambdaExpression(_LambdaExpressionGenerated):
 
         :return: a callable object created by freezing this input expression
         """
-        return _LambdaExpression.LambdaFunction(self)
+        return LambdaExpression.LambdaFunction(self)
 
     # Special case: List comprehensions
     def __iter__(self):
         """ This method is forbidden so that we can detect and prevent usages in list/set/tuple/dict comprehensions """
-        raise FunctionDefinitionError('__iter__ cannot be used with a _LambdaExpression. If you meant to use iter() '
+        raise FunctionDefinitionError('__iter__ cannot be used with a LambdaExpression. If you meant to use iter() '
                                       'explicitly, please use the replacement method Iter() provided in mini_lambda. '
                                       'Otherwise you probably ended in this exception because there is a list/set/'
                                       'tuple/dict comprehension in your expression, such as [i for i in x]. These are '
@@ -98,9 +98,9 @@ class _LambdaExpression(_LambdaExpressionGenerated):
         """ This magic method is forbidden because python casts the result before returning """
 
         # see https://stackoverflow.com/questions/37140933/custom-chained-comparisons
-        raise FunctionDefinitionError('__bool__ cannot be used with a _LambdaExpression. Please use '
+        raise FunctionDefinitionError('__bool__ cannot be used with a LambdaExpression. Please use '
                                       'the Bool() method provided in mini_lambda instead. If you got this error message'
-                                      ' but you do not call bool(x) or x.__bool__() in your _LambdaExpression then you '
+                                      ' but you do not call bool(x) or x.__bool__() in your LambdaExpression then you '
                                       'probably'
                                       '\n * use a chained comparison such as 0 < x < 1, in such case please consider '
                                       'rewriting it without chained comparisons, such as in (0 < x) & (x < 1). '
@@ -113,10 +113,10 @@ class _LambdaExpression(_LambdaExpressionGenerated):
 
     def __and__(self, other):
         """
-        A logical AND between this _LambdaExpression and something else. The other part can either be
+        A logical AND between this LambdaExpression and something else. The other part can either be
         * a scalar
         * a callable
-        * a _LambdaExpression
+        * a LambdaExpression
 
         :param other:
         :return:
@@ -124,7 +124,7 @@ class _LambdaExpression(_LambdaExpressionGenerated):
         if not callable(other):
             # then the other part has already been evaluated, since this operator is not a short-circuit like the 'and'
             # keyword. This is probably an error from the developer ? Warn him/her
-            warn("One of the sides of an '&' operator is not a _LambdaExpression and therefore will always have the "
+            warn("One of the sides of an '&' operator is not a LambdaExpression and therefore will always have the "
                  "same value, whatever the input. This is most probably a mistake in the expression.")
             if not other:
                 # the other part is False, there will never be a need to evaluate.
@@ -136,7 +136,7 @@ class _LambdaExpression(_LambdaExpressionGenerated):
             # check that both work on the same variable
             root_var, _ = _get_root_var(self, other)
 
-            # create a new _LambdaExpression able to evaluate both sides with short-circuit capability
+            # create a new LambdaExpression able to evaluate both sides with short-circuit capability
             def evaluate_both_inner_functions_and_combine(input):
                 # first evaluate self
                 left = self.evaluate(input)
@@ -148,17 +148,17 @@ class _LambdaExpression(_LambdaExpressionGenerated):
                     return bool(evaluate(other, input))
 
             string_expr = get_repr(self, _PRECEDENCE_BITWISE_AND) + ' & ' + get_repr(other, _PRECEDENCE_BITWISE_AND)
-            return _LambdaExpression(fun=evaluate_both_inner_functions_and_combine,
-                                     precedence_level=_PRECEDENCE_BITWISE_AND,
-                                     str_expr=string_expr,
-                                     root_var=root_var, repr_on=self.repr_on)
+            return LambdaExpression(fun=evaluate_both_inner_functions_and_combine,
+                                    precedence_level=_PRECEDENCE_BITWISE_AND,
+                                    str_expr=string_expr,
+                                    root_var=root_var, repr_on=self.repr_on)
 
     def __or__(self, other):
         """
-        A logical OR between this _LambdaExpression and something else. The other part can either be
+        A logical OR between this LambdaExpression and something else. The other part can either be
         * a scalar
         * a callable
-        * a _LambdaExpression
+        * a LambdaExpression
 
         A special operation can be performed by doing '| _'. This will 'close' the expression and return a callable
         view of it
@@ -174,7 +174,7 @@ class _LambdaExpression(_LambdaExpressionGenerated):
         if not callable(other):
             # then the other part has already been evaluated, since this operator is not a short-circuit like the 'or'
             # keyword. This is probably an error from the developer ? Warn him/her
-            warn("One of the sides of an '|' operator is not a _LambdaExpression and therefore will always have the same"
+            warn("One of the sides of an '|' operator is not a LambdaExpression and therefore will always have the same"
                  " value, whatever the input. This is most probably a mistake in the expression.")
             if other:
                 # the other part is True, there will never be a need to evaluate.
@@ -186,7 +186,7 @@ class _LambdaExpression(_LambdaExpressionGenerated):
             # check that both work on the same variable
             root_var, _ = _get_root_var(self, other)
 
-            # create a new _LambdaExpression able to evaluate both sides with short-circuit capability
+            # create a new LambdaExpression able to evaluate both sides with short-circuit capability
             def evaluate_both_inner_functions_and_combine(input):
                 # first evaluate self
                 left = self.evaluate(input)
@@ -198,17 +198,17 @@ class _LambdaExpression(_LambdaExpressionGenerated):
                     return bool(evaluate(other, input))
 
             string_expr = get_repr(self, _PRECEDENCE_BITWISE_OR) + ' | ' + get_repr(other, _PRECEDENCE_BITWISE_OR)
-            return _LambdaExpression(fun=evaluate_both_inner_functions_and_combine,
-                                     precedence_level=_PRECEDENCE_BITWISE_OR,
-                                     str_expr=string_expr,
-                                     root_var=root_var, repr_on=self.repr_on)
+            return LambdaExpression(fun=evaluate_both_inner_functions_and_combine,
+                                    precedence_level=_PRECEDENCE_BITWISE_OR,
+                                    str_expr=string_expr,
+                                    root_var=root_var, repr_on=self.repr_on)
 
     def __xor__(self, other):
         """
-        A logical XOR between this _LambdaExpression and something else. The other part can either be
+        A logical XOR between this LambdaExpression and something else. The other part can either be
         * a scalar
         * a callable
-        * a _LambdaExpression
+        * a LambdaExpression
 
         :param other:
         :return:
@@ -216,7 +216,7 @@ class _LambdaExpression(_LambdaExpressionGenerated):
         if not callable(other):
             # then the other part has already been evaluated, since this operator is not a short-circuit like the 'or'
             # keyword. This is probably an error from the developer ? Warn him/her
-            warn("One of the sides of an '^' operator is not a _LambdaExpression and therefore will always have the "
+            warn("One of the sides of an '^' operator is not a LambdaExpression and therefore will always have the "
                  "same value, whatever the input. This is most probably a mistake in the expression.")
             if other:
                 # the other part is True, so this becomes a Not expression of self (The Not function is created later)
@@ -228,7 +228,7 @@ class _LambdaExpression(_LambdaExpressionGenerated):
             # check that both work on the same variable
             root_var, _ = _get_root_var(self, other)
 
-            # create a new _LambdaExpression able to evaluate both sides
+            # create a new LambdaExpression able to evaluate both sides
             def evaluate_both_inner_functions_and_combine(input):
                 # first evaluate self
                 left = self.evaluate(input)
@@ -239,56 +239,56 @@ class _LambdaExpression(_LambdaExpressionGenerated):
                 return (left and not right) or (not left and right)
 
             string_expr = get_repr(self, _PRECEDENCE_BITWISE_XOR) + ' ^ ' + get_repr(other, _PRECEDENCE_BITWISE_XOR)
-            return _LambdaExpression(fun=evaluate_both_inner_functions_and_combine,
-                                     precedence_level=_PRECEDENCE_BITWISE_XOR,
-                                     str_expr=string_expr,
-                                     root_var=root_var, repr_on=self.repr_on)
+            return LambdaExpression(fun=evaluate_both_inner_functions_and_combine,
+                                    precedence_level=_PRECEDENCE_BITWISE_XOR,
+                                    str_expr=string_expr,
+                                    root_var=root_var, repr_on=self.repr_on)
 
     def not_(self):
-        """ Returns a new _LambdaExpression performing 'not x' on the result of this expression's evaluation """
+        """ Returns a new LambdaExpression performing 'not x' on the result of this expression's evaluation """
         def __not(x):
             return not x
 
         return self.add_unbound_method_to_stack(__not)
 
     def any_(self):
-        """ Returns a new _LambdaExpression performing 'any(x)' on the result of this expression's evaluation """
+        """ Returns a new LambdaExpression performing 'any(x)' on the result of this expression's evaluation """
         return self.add_unbound_method_to_stack(any)
 
     def all_(self):
-        """ Returns a new _LambdaExpression performing 'all(x)' on the result of this expression's evaluation """
+        """ Returns a new LambdaExpression performing 'all(x)' on the result of this expression's evaluation """
         return self.add_unbound_method_to_stack(all)
 
     # Special case: indexing
     def __index__(self):
         """ This magic method is forbidden because python casts the result before returning """
-        raise FunctionDefinitionError('It is not currently possible to use a _LambdaExpression as an index, e.g.'
+        raise FunctionDefinitionError('It is not currently possible to use a LambdaExpression as an index, e.g.'
                                       'o[x], where x is the input variable. Instead, please use the equivalent operator'
                                       ' provided in mini_lambda : Get(o, x)')
 
     # Special case: membership testing
     def __contains__(self, item):
         """ This magic method is forbidden because python casts the result before returning """
-        raise FunctionDefinitionError('membership operators in/ not in cannot be used with a _LambdaExpression because '
+        raise FunctionDefinitionError('membership operators in/ not in cannot be used with a LambdaExpression because '
                                       'python casts the result as a bool. Therefore this __contains__ method is '
                                       'forbidden. Alternate x.contains() and x.is_in() methods are provided to replace it, '
                                       'as well as an In() method')
 
     def is_in(self, container):
-        """ Returns a new _LambdaExpression performing 'res in container' where res is the result of evaluating self"""
+        """ Returns a new LambdaExpression performing 'res in container' where res is the result of evaluating self"""
         def _item_in(x):
             return x in container
         return self.add_unbound_method_to_stack(_item_in)
 
     def contains(self, item):
-        """ Returns a new _LambdaExpression performing 'item in res' on the result of this expression's evaluation """
+        """ Returns a new LambdaExpression performing 'item in res' on the result of this expression's evaluation """
         def _item_in(x):
             return item in x
         return self.add_unbound_method_to_stack(_item_in)
 
     # Special case for the string representation
     def __getattr__(self, name):
-        """ Returns a new _LambdaExpression performing 'getattr(<r>, *args)' on the result <r> of this expression's evaluation """
+        """ Returns a new LambdaExpression performing 'getattr(<r>, *args)' on the result <r> of this expression's evaluation """
         root_var, _ = _get_root_var(self, name)
         def ___getattr__(input):
             # first evaluate the inner function
@@ -303,7 +303,7 @@ class _LambdaExpression(_LambdaExpressionGenerated):
 
     # Special case for the string representation
     def __call__(self, *args, **kwargs):
-        """ Returns a new _LambdaExpression performing '<r>.__call__(*args, **kwargs)' on the result <r> of this expression's evaluation """
+        """ Returns a new LambdaExpression performing '<r>.__call__(*args, **kwargs)' on the result <r> of this expression's evaluation """
         # return self.add_bound_method_to_stack('__call__', *args, **kwargs)
         root_var, _ = _get_root_var(self, *args, **kwargs)
         def ___call__(input):
@@ -324,7 +324,7 @@ class _LambdaExpression(_LambdaExpressionGenerated):
 
     # Special case for the string representation
     def __getitem__(self, key):
-        """ Returns a new _LambdaExpression performing '<r>.__getitem__(*args)' on the result <r> of this expression's evaluation """
+        """ Returns a new LambdaExpression performing '<r>.__getitem__(*args)' on the result <r> of this expression's evaluation """
         # return self.add_bound_method_to_stack('__getitem__', *args)
         root_var, _ = _get_root_var(self, key)
         def ___getitem__(input):
@@ -342,7 +342,7 @@ class _LambdaExpression(_LambdaExpressionGenerated):
 
     # Special case for string representation because pow is asymetric in precedence
     def __pow__(self, other):
-        """ Returns a new _LambdaExpression performing '<r> ** other' on the result <r> of this expression's evaluation """
+        """ Returns a new LambdaExpression performing '<r> ** other' on the result <r> of this expression's evaluation """
         root_var, _ = _get_root_var(self, other)
         def ___pow__(input):
             # first evaluate the inner function
@@ -358,7 +358,7 @@ class _LambdaExpression(_LambdaExpressionGenerated):
 
     # Special case for string representation because pow is asymetric in precedence
     def __rpow__(self, other):
-        """ Returns a new _LambdaExpression performing 'other ** <r>' on the result <r> of this expression's evaluation """
+        """ Returns a new LambdaExpression performing 'other ** <r>' on the result <r> of this expression's evaluation """
         root_var, _ = _get_root_var(self, other)
         def ___rpow__(input):
             # first evaluate the inner function
@@ -374,7 +374,7 @@ class _LambdaExpression(_LambdaExpressionGenerated):
 
     # Special case : unbound function call but with left/right
     def __divmod__(self, other):
-        """ Returns a new _LambdaExpression performing '<r>.__divmod__(*args)' on the result <r> of this expression's evaluation """
+        """ Returns a new LambdaExpression performing '<r>.__divmod__(*args)' on the result <r> of this expression's evaluation """
         # return self.add_bound_method_to_stack('__divmod__', *args)
         root_var, _ = _get_root_var(self, other)
         def ___divmod__(input):
@@ -391,7 +391,7 @@ class _LambdaExpression(_LambdaExpressionGenerated):
 
     # Special case : unbound function call but with left/right
     def __rdivmod__(self, other):
-        """ Returns a new _LambdaExpression performing '<r>.__rdivmod__(*args)' on the result <r> of this expression's evaluation """
+        """ Returns a new LambdaExpression performing '<r>.__rdivmod__(*args)' on the result <r> of this expression's evaluation """
         # return self.add_bound_method_to_stack('__rdivmod__', *args)
         root_var, _ = _get_root_var(self, other)
         def ___rdivmod__(input):
@@ -409,10 +409,10 @@ class _LambdaExpression(_LambdaExpressionGenerated):
     # special case: format(x, args) does not work but x.format() works
     def __format__(self, *args):
         """
-        This magic method can not be used on an _LambdaExpression, because unfortunately python checks the
+        This magic method can not be used on an LambdaExpression, because unfortunately python checks the
         result type and does not allow it to be a custom type.
         """
-        raise FunctionDefinitionError('__format__ is not supported by _LambdaExpression, since python raises an'
+        raise FunctionDefinitionError('__format__ is not supported by LambdaExpression, since python raises an'
                                       ' error when its output is not directly an object of the type it expects.'
                                       'Please either use the equivalent x.format() method if your variable is the '
                                       'string template, or the `Format` (for `format`) or `Str.format` '
@@ -424,10 +424,10 @@ class _LambdaExpression(_LambdaExpressionGenerated):
 
 
 # Special case: 'not' is not a function
-def Not(expression  # type: _LambdaExpression
+def Not(expression  # type: LambdaExpression
         ):
     """
-    Equivalent of 'not x' for a _LambdaExpression.
+    Equivalent of 'not x' for a LambdaExpression.
 
     :param expression:
     :return:
@@ -448,7 +448,7 @@ def And(a, b):
     :param b: right operand
     :return: expression evaluating the and combination
     """
-    return _LambdaExpression._get_expression_for_method_with_args(_and, a, b)
+    return LambdaExpression._get_expression_for_method_with_args(_and, a, b)
 
 
 def _or(a, b):
@@ -463,7 +463,7 @@ def Or(a, b):
     :param b: right operand
     :return: expression evaluating the or combination
     """
-    return _LambdaExpression._get_expression_for_method_with_args(_or, a, b)
+    return LambdaExpression._get_expression_for_method_with_args(_or, a, b)
 
 
 # Special case: we do not want to use format() but type(value).format. So we override the generated method
@@ -476,7 +476,7 @@ def Format(value, *args, **kwargs):
     :param kwargs:
     :return:
     """
-    return _LambdaExpression._get_expression_for_method_with_args(type(value).format, value, *args, **kwargs)
+    return LambdaExpression._get_expression_for_method_with_args(type(value).format, value, *args, **kwargs)
 
 
 # Special case: the unbound method 'getitem' does not exist, and we want type(value).__getitem__
@@ -493,7 +493,7 @@ def Get(container, key):
     :param key:
     :return:
     """
-    return _LambdaExpression._get_expression_for_method_with_args(type(container).__getitem__, container, key)
+    return LambdaExpression._get_expression_for_method_with_args(type(container).__getitem__, container, key)
 
 
 # ************** All of these could be generated
@@ -511,7 +511,7 @@ def In(item, container):
     :param container:
     :return:
     """
-    return _LambdaExpression._get_expression_for_method_with_args(_is_in, item, container)
+    return LambdaExpression._get_expression_for_method_with_args(_is_in, item, container)
 
 
 def Slice(*args, **kwargs):
@@ -522,14 +522,14 @@ def Slice(*args, **kwargs):
     :param kwargs:
     :return:
     """
-    return _LambdaExpression._get_expression_for_method_with_args(slice, *args, **kwargs)
+    return LambdaExpression._get_expression_for_method_with_args(slice, *args, **kwargs)
 
 # ************************
 
 
-def _(*expressions  # type: _LambdaExpression
+def _(*expressions  # type: LambdaExpression
       ):
-    # type: (...) -> Union[_LambdaExpression.LambdaFunction, Tuple[_LambdaExpression.LambdaFunction, ...]]
+    # type: (...) -> Union[LambdaExpression.LambdaFunction, Tuple[LambdaExpression.LambdaFunction, ...]]
     """
     'Closes' one or several lambda expressions, in other words, transforms them into callable functions.
 
@@ -551,7 +551,7 @@ F = _
 def InputVar(symbol=None,  # type: str
              typ=None      # type: Type[T]
              ):
-    # type: (...) -> Union[T, _LambdaExpression]
+    # type: (...) -> Union[T, LambdaExpression]
     """
     Creates a variable to use in validator expression. The optional `typ` argument may be used to get a variable with
     appropriate syntactic completion from your IDE, but is not used for anything else.
@@ -564,13 +564,13 @@ def InputVar(symbol=None,  # type: str
     if not isinstance(symbol, str):
         raise TypeError("symbol should be a string. It is recommended to use a very small string that is identical "
                         "to the python variable name, for example  s = InputVar('s')")
-    return _LambdaExpression(symbol)
+    return LambdaExpression(symbol)
 
 
 def Constant(value,     # type: T
              name=None  # type: str
              ):
-    # type: (...) -> Union[T, _LambdaExpression]
+    # type: (...) -> Union[T, LambdaExpression]
     """
     Creates a constant expression. This is useful when
     * you want to use a method on an object that is not an expression, as in 'toto'.prefix(x) where x is an expression.
@@ -585,7 +585,7 @@ def Constant(value,     # type: T
     :param name:
     :return:
     """
-    return _LambdaExpression.constant(value, name)
+    return LambdaExpression.constant(value, name)
 
 
 C = Constant
@@ -599,7 +599,7 @@ make_lambda_friendly = Constant
 def make_lambda_friendly_class(typ,       # type: Type[T]
                                name=None  # type: str
                                ):
-    # type: (...) -> Union[Type[T], _LambdaExpression]
+    # type: (...) -> Union[Type[T], LambdaExpression]
     """
     Utility method to transform a standard class into a class usable inside lambda expressions, as in
     DDataFrame = C(DataFrame), so as to be able to use it in expressions
@@ -614,7 +614,7 @@ def make_lambda_friendly_class(typ,       # type: Type[T]
 def make_lambda_friendly_method(method,    # type: Callable
                                 name=None  # type: str
                                 ):
-    # type: (...) -> _LambdaExpression
+    # type: (...) -> LambdaExpression
     """
     Utility method to transform any method whatever their signature (positional and/or keyword arguments,
     variable-length included) into a method usable inside lambda expressions, even if some of the arguments are

@@ -6,7 +6,7 @@ from sys import version_info
 import pytest
 
 from mini_lambda import FunctionDefinitionError, make_lambda_friendly_method
-from mini_lambda.main import _LambdaExpression
+from mini_lambda.main import LambdaExpression
 
 
 def test_doc_index_1():
@@ -76,8 +76,8 @@ def test_doc_usage_expressions_1():
     from mini_lambda import x
 
     # A variable is a lambda expression
-    print(type(x))  # <class 'mini_lambda.main._LambdaExpression'>
-    assert type(x) == _LambdaExpression
+    print(type(x))  # <class 'mini_lambda.main.LambdaExpression'>
+    assert type(x) == LambdaExpression
 
     # Evaluating the lambda expression applies the identity function
     print(x.evaluate(1234))  # 1234
@@ -177,7 +177,7 @@ def test_doc_usage_syntax_2():
         expr = 'hello'[0:i]                   # fails
     expr = Get('hello', Slice(0, i))      # OK
     # representing: Repr/Str/Bytes/Sizeof/Hash
-    assert repr(x) == '<_LambdaExpression: x>'
+    assert repr(x) == '<LambdaExpression: x>'
     x.repr_on = False
     with pytest.raises(FunctionDefinitionError):
         expr = repr(x)                        # fails

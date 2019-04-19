@@ -41,7 +41,7 @@ The simplest lambda expression is the variable itself. It is implemented with th
 from mini_lambda import x
 
 # A variable is a lambda expression
-type(x)           # <class 'mini_lambda.main._LambdaExpression'>
+type(x)           # <class 'mini_lambda.main.LambdaExpression'>
 
 # Evaluating the lambda expression applies the identity function
 x.evaluate(1234)  # 1234
@@ -85,7 +85,7 @@ Indeed, `<expr>(input)` would create a new expression instead of evaluating it:
 result = my_first_expr(-1/2)
 
 # still an expression !
-type(result)        # <class 'mini_lambda.main._LambdaExpression'>
+type(result)        # <class 'mini_lambda.main.LambdaExpression'>
 result.to_string()  # "(2 * x + 1 > 0)(-0.5)"
 ```
 
@@ -176,7 +176,7 @@ expr = 'hello'[0:i]                   # fails
 expr = Get('hello', Slice(0, i))      # OK
 # representing: Repr/Str/Bytes/Sizeof/Hash
 # -- by default repr show the to_string()
-assert repr(l) == '<_LambdaExpression: l>'
+assert repr(l) == '<LambdaExpression: l>'
 # -- but you can disable it
 l.repr_on = False
 expr = repr(l)                        # fails
