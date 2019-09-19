@@ -24,7 +24,9 @@ if [ "${TRAVIS_PYTHON_VERSION}" = "3.5" ]; then
    # full. add the ci_tools/ to path so that the conftest.py is found.
    export PATH=${TRAVIS_BUILD_DIR}/ci_tools/:${PATH}
    echo $PATH
-   python -m pytest --junitxml=reports/junit/junit.xml --html=reports/junit/report.html --cov-report term-missing --cov=./mini_lambda -v mini_lambda/tests/
+   coverage run --source mini_lambda -m pytest --junitxml=reports/junit/junit.xml --html=reports/junit/report.html -v mini_lambda/tests/
+   # pytest-cov bugs
+   # python -m pytest --junitxml=reports/junit/junit.xml --html=reports/junit/report.html --cov-report term-missing --cov=./mini_lambda -v mini_lambda/tests/
 else
    # faster - skip coverage and html report
    python -m pytest --junitxml=reports/junit/junit.xml -v mini_lambda/tests/
