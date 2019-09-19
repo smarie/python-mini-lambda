@@ -58,7 +58,7 @@ class LambdaExpression(_LambdaExpressionGenerated):
             """
             self.expression = expression
 
-        def __call__(self, *args, **kwargs):
+        def __call__(self, arg):
             """
             Calling this object is actually evaluating the inner expression with the given arguments.
             So it behaves like a normal function.
@@ -67,7 +67,7 @@ class LambdaExpression(_LambdaExpressionGenerated):
             :param kwargs:
             :return:
             """
-            return self.expression.evaluate(*args, **kwargs)
+            return self.expression.evaluate(arg)
 
         def as_expression(self):
             """
