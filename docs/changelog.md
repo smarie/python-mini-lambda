@@ -1,5 +1,9 @@
 # Changelog
 
+### 2.2.1 - `pyproject.toml`
+
+Added `pyproject.toml`.
+
 ### 2.2.0 - Better signature for mini-lambda functions
 
 When converting an expression into a function, the resulting callable object now has the same signature than inner `evaluate`. Fixes [#17](https://github.com/smarie/python-mini-lambda/issues/17).
