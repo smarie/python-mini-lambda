@@ -5,10 +5,7 @@ cache: pip
 matrix:
   fast_finish: true
   include:
-#    - python: 2.6
     - python: 2.7
-#    - python: 3.3
-#    - python: 3.4
     - python: 3.5
     - python: 3.6
     - python: 3.7
@@ -21,14 +18,12 @@ env:
 
 before_install:
   # (a) linux dependencies
-  - sudo apt-get install pandoc
   - sudo apt-get install ant
   - sudo apt-get install ant-optional
 
 install:
   - pip list
-  # needs to be installed beforehand
-  - pip install setuptools_scm
+  - pip install six setuptools_scm  # apparently python 2 requires this
   - python ci_tools/py_install.py pip ci_tools/requirements-pip.txt
   # travis-specific installs
   - pip install PyGithub  # for ci_tools/github_release.py

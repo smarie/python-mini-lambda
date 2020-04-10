@@ -31,7 +31,7 @@ if not all(path.exists(file_path) for file_path in generated_file_paths):
 # *************** Dependencies *********
 INSTALL_REQUIRES = []
 DEPENDENCY_LINKS = []
-SETUP_REQUIRES = ['pytest-runner', 'setuptools_scm', 'pypandoc', 'pandoc', 'ordered-set', 'mako']
+SETUP_REQUIRES = ['pytest-runner', 'setuptools_scm', 'pypandoc', 'pandoc', 'ordered-set', 'mako', 'six']
 TESTS_REQUIRE = ['pytest', 'pytest-logging', 'pytest-cov', 'numpy', 'pandas']
 EXTRAS_REQUIRE = {}
 
@@ -54,17 +54,9 @@ version_for_download_url = get_version()
 DOWNLOAD_URL = URL + '/tarball/' + version_for_download_url
 
 KEYWORDS = 'mini minimal lambda expr expression simple print string func function symbol symbolic'
-# --Get the long description from the README file
-# with open(path.join(here, 'README.md'), encoding='utf-8') as f:
-#    LONG_DESCRIPTION = f.read()
-try:
-    import pypandoc
-    LONG_DESCRIPTION = pypandoc.convert(path.join(here, 'docs', 'long_description.md'), 'rst').replace('\r', '')
-except(ImportError):
-    from warnings import warn
-    warn('WARNING pypandoc could not be imported - we recommend that you install it in order to package the '
-         'documentation correctly')
-    LONG_DESCRIPTION = open('README.md').read()
+
+with open(path.join(here, 'docs', 'long_description.md')) as f:
+    LONG_DESCRIPTION = f.read()
 
 # ************* VERSION **************
 # --Get the Version number from VERSION file, see https://packaging.python.org/single_source_version/ option 4.
@@ -77,6 +69,7 @@ setup(
     name=DISTNAME,
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
+    long_description_content_type='text/markdown',
 
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
@@ -174,4 +167,10 @@ setup(
     #         'sample=sample:main',
     #     ],
     # },
+
+    # explicitly setting the flag to avoid `ply` being downloaded
+    # see https://github.com/smarie/python-getversion/pull/5
+    # and to make mypy happy
+    # see https://mypy.readthedocs.io/en/latest/installed_packages.html
+    zip_safe=False,
 )
