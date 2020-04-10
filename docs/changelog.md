@@ -1,5 +1,11 @@
 # Changelog
 
+### 2.2.2 - Minor packaging improvements
+
+ - Added `__version__` attribute. Fixes [#20](https://github.com/smarie/python-mini-lambda/issues/20)
+ - Improved `setup.py`, in particular long description now uses markdown (no pandoc anymore) and zip_safe is false. Fixes [#18](https://github.com/smarie/python-mini-lambda/issues/18)
+ - Added `py.typed` file for PEP561 compliance. Fixes [#19](https://github.com/smarie/python-mini-lambda/issues/19)
+
 ### 2.2.1 - `pyproject.toml`
 
 Added `pyproject.toml`.
