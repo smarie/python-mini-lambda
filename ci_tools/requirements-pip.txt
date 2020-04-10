@@ -21,5 +21,6 @@ pytest-html==1.9.0  # otherwise requires pytest 5
 xunitparser
 
 # --- to generate the doc (see .travis)
-mkdocs-material  #==3.3.0
-mkdocs  # ==1.0.4  # this is to prevent a version non-compliant with mkdocs-material to be installed.
+# not supported in python 2 anymore, so now installed directly in travis.yml
+# mkdocs-material  #==3.3.0
+# mkdocs  # ==1.0.4  # this is to prevent a version non-compliant with mkdocs-material to be installed.
