@@ -70,6 +70,8 @@ after_success:
     else
       echo "File 'ci_tools/github_travis_rsa' has not been created, please check your encrypted repo token in .travis.yml, on the line starting with 'openssl aes-256-cbc...'"
     fi
+  # -- create the _version.py file: actually not needed, done in setup now
+  # - python ci_tools/write_version.py ./mini_lambda
 
 deploy:
   # Deploy on PyPI on tags
