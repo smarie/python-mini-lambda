@@ -1,5 +1,9 @@
 # Changelog
 
+### 2.2.3 - fixed packaging
+
+ - packaging improvements: set the "universal wheel" flag to 1, and cleaned up the `setup.py`. In particular removed dependency to `six` for setup. Fixes [#21](https://github.com/smarie/python-mini-lambda/issues/21)
+
 ### 2.2.2 - Minor packaging improvements
 
  - Added `__version__` attribute. Fixes [#20](https://github.com/smarie/python-mini-lambda/issues/20)
