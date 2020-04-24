@@ -3,10 +3,14 @@ See:
 https://packaging.python.org/en/latest/distributing.html
 https://github.com/pypa/sampleproject
 """
-from six import raise_from
 from os import path
-
+import pkg_resources
 from setuptools import setup, find_packages
+
+pkg_resources.require("setuptools>=39.2")
+pkg_resources.require("setuptools_scm")
+
+from setuptools_scm import get_version  # noqa: E402
 
 here = path.abspath(path.dirname(__file__))
 
@@ -31,15 +35,9 @@ if not all(path.exists(file_path) for file_path in generated_file_paths):
 # *************** Dependencies *********
 INSTALL_REQUIRES = []
 DEPENDENCY_LINKS = []
-SETUP_REQUIRES = ['pytest-runner', 'setuptools_scm', 'pypandoc', 'pandoc', 'ordered-set', 'mako', 'six']
-TESTS_REQUIRE = ['pytest', 'pytest-logging', 'pytest-cov', 'numpy', 'pandas']
+SETUP_REQUIRES = ['pytest-runner', 'setuptools_scm', 'ordered-set', 'mako']
+TESTS_REQUIRE = ['pytest', 'numpy', 'pandas']
 EXTRAS_REQUIRE = {}
-
-# simple check
-try:
-    from setuptools_scm import get_version
-except Exception as e:
-    raise_from(Exception('Required packages for setup not found. Please install `setuptools_scm`'), e)
 
 # ************** ID card *****************
 DISTNAME = 'mini_lambda'
@@ -47,23 +45,13 @@ DESCRIPTION = 'Simple lambda functions without `lambda x:` and with string conve
 MAINTAINER = 'Sylvain MARIE'
 MAINTAINER_EMAIL = 'sylvain.marie@schneider-electric.com'
 URL = 'https://github.com/smarie/python-mini-lambda'
+DOWNLOAD_URL = URL + '/tarball/' + get_version()
 LICENSE = 'BSD 3-Clause'
 LICENSE_LONG = 'License :: OSI Approved :: BSD License'
-
-version_for_download_url = get_version()
-DOWNLOAD_URL = URL + '/tarball/' + version_for_download_url
-
 KEYWORDS = 'mini minimal lambda expr expression simple print string func function symbol symbolic'
 
 with open(path.join(here, 'docs', 'long_description.md')) as f:
     LONG_DESCRIPTION = f.read()
-
-# ************* VERSION **************
-# --Get the Version number from VERSION file, see https://packaging.python.org/single_source_version/ option 4.
-# THIS IS DEPRECATED AS WE NOW USE GIT TO MANAGE VERSION
-# with open(path.join(here, 'VERSION')) as version_file:
-#    VERSION = version_file.read().strip()
-# OBSOLETES = []
 
 setup(
     name=DISTNAME,
@@ -109,6 +97,8 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+
+        # 'Framework :: Pytest'
     ],
 
     # What does your project relate to?
@@ -116,7 +106,7 @@ setup(
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
-    packages=find_packages(exclude=['contrib', 'docs', 'tests']),
+    packages=find_packages(exclude=['contrib', 'docs', '*tests*']),
 
     # Alternatively, if you want to distribute just a my_module.py, uncomment
     # this:
@@ -151,6 +141,9 @@ setup(
     # have to be included in MANIFEST.in as well.
     # Note: we use the empty string so that this also works with submodules
     package_data={"": ['py.typed', '*.pyi']},
+    # IMPORTANT: DO NOT set the `include_package_data` flag !! It triggers inclusion of all git-versioned files
+    # see https://github.com/pypa/setuptools_scm/issues/190#issuecomment-351181286
+    # include_package_data=True,
 
     # Although 'package_data' is the preferred approach, in some case you may
     # need to place data files outside of your packages. See:
